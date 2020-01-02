@@ -2,9 +2,11 @@
 /node_modules
 /public/hot
 /public/storage
+/public/error_log
 /storage/*.key
 /vendor
 .env
+.composer.lock
 .env.backup
 .phpunit.result.cache
 Homestead.json
