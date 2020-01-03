@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Exception;
-use App\Models\Question;
-use App\Models\Answer;
-use App\Models\UserAnswer;
+use App\Models\UserQuestionLike;
 
 class QuestionController extends Controller {
 
@@ -202,6 +200,46 @@ class QuestionController extends Controller {
         }
 
         return $this->successResponse("Answer's submitted succeffully.", (object) []);
+    }
+
+    /**
+     * @api {post} /api/like-question  Question Like
+     * @apiHeader {String} Accept application/json. 
+     * @apiName PostQuestionLike
+     * @apiGroup Question/Answer
+     * 
+     * @apiParam {String} user_id User ID*.
+     * @apiParam {String} question_id Question ID*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} Question Liked.
+     * @apiSuccess {JSON} data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Question Liked.",
+     *       "data": {}
+     *   }
+     * 
+     */
+    public function likeQuestion(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID missing.");
+        }
+        if (!$request->question_id) {
+            return $this->errorResponse("Question ID missing.");
+        }
+
+        $userQuesLike = new UserQuestionLike();
+        $userQuesLike->user_id = $request->user_id;
+        $userQuesLike->question_id = $request->question_id;
+        $userQuesLike->save();
+
+        return $this->successResponse("Question Liked.", (object) []);
     }
 
 }
