@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','mobile_number'
     ];
 
     /**
@@ -36,4 +36,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function role() {
+        return $this->belongsTo('App\Models\UserType', 'user_type_id');
+    }
+
+    public function hasRole($role) {
+        return $this->role->description === $role;
+    }
+
+    public function setPasswordAttribute($password) {
+        if (!empty($password)) {
+            $this->attributes['password'] = bcrypt($password);
+        }
+    }
+
+    public function getProfilePicAttribute($value) {
+        return $value ? asset('storage/profile_pic/' . $value) : asset('img/no-image.jpg');
+    }
+
 }
