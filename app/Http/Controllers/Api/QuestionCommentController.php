@@ -16,7 +16,7 @@ class QuestionCommentController extends Controller
      * @api {get} /api/comment  Comment
      * @apiHeader {String} Accept application/json.
      * @apiName GetComment
-     * @apiGroup Question
+     * @apiGroup Question/Answer
      *
      * @apiParam {String} user_id User ID.
      * @apiParam {String} question_id Question ID.
@@ -119,7 +119,7 @@ class QuestionCommentController extends Controller
      * @api {get} /api/comment-list  Comment List
      * @apiHeader {String} Accept application/json.
      * @apiName GetCommentList
-     * @apiGroup Question
+     * @apiGroup Question/Answer
      *
      * @apiParam {String} question_id Question ID.
      *

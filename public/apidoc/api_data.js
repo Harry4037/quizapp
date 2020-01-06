@@ -434,7 +434,7 @@ define({ "api": [
       }
     },
     "name": "GetComment",
-    "group": "Question",
+    "group": "Question_Answer",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -568,7 +568,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/QuestionCommentController.php",
-    "groupTitle": "Question"
+    "groupTitle": "Question_Answer"
   },
   {
     "type": "get",
@@ -588,7 +588,7 @@ define({ "api": [
       }
     },
     "name": "GetCommentList",
-    "group": "Question",
+    "group": "Question_Answer",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -664,7 +664,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/QuestionCommentController.php",
-    "groupTitle": "Question"
+    "groupTitle": "Question_Answer"
   },
   {
     "type": "get",
