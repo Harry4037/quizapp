@@ -24,12 +24,10 @@ Route::namespace("Api")->group(function() {
     Route::post('/like-question', 'QuestionController@likeQuestion');
     Route::get('/start-quiz', 'QuizController@startQuiz');
     Route::get('/subject-list', 'SubjectController@subjectList');
-<<<<<<< HEAD
     Route::get('/comment', 'QuestionCommentController@comment');
     Route::get('/comment-list', 'QuestionCommentController@commentList');
-=======
-    
->>>>>>> b468e49a3006f05668dcf2c2837dc24226fe5d95
+    Route::get('/notification', 'NotificationController@notificationlist');
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
