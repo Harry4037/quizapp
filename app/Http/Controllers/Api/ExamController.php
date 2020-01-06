@@ -35,24 +35,6 @@ class ExamController extends Controller {
      *               "created_at": null,
      *               "updated_at": null,
      *               "deleted_at": null,
-     *               "subject": [
-     *                   {
-     *                       "id": 1,
-     *                       "exam_id": 1,
-     *                       "name": "English",
-     *                       "created_at": null,
-     *                       "updated_at": null,
-     *                       "deleted_at": null
-     *                   },
-     *                   {
-     *                       "id": 2,
-     *                       "exam_id": 1,
-     *                       "name": "Maths",
-     *                       "created_at": null,
-     *                       "updated_at": null,
-     *                       "deleted_at": null
-     *                   }
-     *               ]
      *           },
      *           {
      *               "id": 2,
@@ -60,24 +42,6 @@ class ExamController extends Controller {
      *               "created_at": null,
      *               "updated_at": null,
      *               "deleted_at": null,
-     *               "exam": [
-     *                   {
-     *                       "id": 3,
-     *                       "exam_id": 2,
-     *                       "name": "English",
-     *                       "created_at": null,
-     *                       "updated_at": null,
-     *                       "deleted_at": null
-     *                   },
-     *                   {
-     *                       "id": 4,
-     *                       "exam_id": 2,
-     *                       "name": "Maths",
-     *                       "created_at": null,
-     *                       "updated_at": null,
-     *                       "deleted_at": null
-     *                   }
-     *               ]
      *           }
      *       ]
      *   }
