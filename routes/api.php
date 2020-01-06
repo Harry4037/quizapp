@@ -22,6 +22,7 @@ Route::namespace("Api")->group(function() {
     Route::post('/submit-answer', 'QuestionController@submitQuestion');
     Route::get('/exam-list', 'ExamController@examList');
     Route::post('/like-question', 'QuestionController@likeQuestion');
+    Route::get('/start-quiz', 'QuizController@startQuiz');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
