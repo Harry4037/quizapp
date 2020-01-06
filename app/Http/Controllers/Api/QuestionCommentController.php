@@ -18,6 +18,9 @@ class QuestionCommentController extends Controller
      * @apiName GetComment
      * @apiGroup Question
      *
+     * @apiParam {String} user_id User ID.
+     * @apiParam {String} question_id Question ID.
+     * @apiParam {String} comment Comment.
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -118,6 +121,7 @@ class QuestionCommentController extends Controller
      * @apiName GetCommentList
      * @apiGroup Question
      *
+     * @apiParam {String} question_id Question ID.
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).

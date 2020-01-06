@@ -19,19 +19,15 @@ class ExamTableSeeder extends Seeder {
 
         DB::table('subjects')->insert([
             'name' => "English",
-            'exam_id' => 1,
         ]);
         DB::table('subjects')->insert([
             'name' => "Maths",
-            'exam_id' => 1,
         ]);
         DB::table('subjects')->insert([
-            'name' => "English",
-            'exam_id' => 2,
+            'name' => "Hindi",
         ]);
         DB::table('subjects')->insert([
-            'name' => "Maths",
-            'exam_id' => 2,
+            'name' => "Gen. knowledge",
         ]);
     }
 
