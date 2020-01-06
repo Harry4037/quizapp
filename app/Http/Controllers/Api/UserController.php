@@ -12,10 +12,10 @@ class UserController extends Controller {
 
     /**
      * @api {post} /api/register  Register User
-     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Accept application/json.
      * @apiName PostRegisterUser
      * @apiGroup User
-     * 
+     *
      * @apiParam {String} name User name*.
      * @apiParam {String} email_id User email id*.
      * @apiParam {String} mobile_number User mobile number*.
@@ -24,12 +24,12 @@ class UserController extends Controller {
      * @apiParam {String} qualification User qualification*.
      * @apiParam {String} lang User language*. (English => 1, Hindi => 2)
      * @apiParam {String} user_type User type*. (Creator => 2, User => 3)
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message User registered successfully.
      * @apiSuccess {JSON} data blank object.
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -38,7 +38,7 @@ class UserController extends Controller {
      *       "message": "User registered successfully.",
      *       "data": {}
      *   }
-     * 
+     *
      * @apiError MobileNumberMissing The mobile number is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
@@ -48,7 +48,7 @@ class UserController extends Controller {
      *       "message": "Mobile number missing.",
      *       "data": {}
      *   }
-     * 
+     *
      * @apiError UserTypeMissing The User type is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
@@ -58,8 +58,8 @@ class UserController extends Controller {
      *     "message": "User type missing.",
      *     "data": {}
      *  }
-     * 
-     * 
+     *
+     *
      */
     public function userRegister(Request $request) {
         if (!$request->name) {
@@ -100,6 +100,10 @@ class UserController extends Controller {
         $user->name = $request->name;
         $user->email = $request->email_id;
         $user->mobile_number = $request->mobile_number;
+        $user->dob = $request->dob;
+        $user->designation = $request->designation;
+        $user->qualification = $request->qualification;
+        $user->lang = $request->lang;
         $user->user_type_id = $request->user_type;
 
         if ($user->save()) {
@@ -111,17 +115,17 @@ class UserController extends Controller {
 
     /**
      * @api {get} /api/user-profile  User Profile
-     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Accept application/json.
      * @apiName GetUserProfile
      * @apiGroup User
-     * 
+     *
      * @apiParam {String} user_id User ID*.
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message User Profile.
      * @apiSuccess {JSON} data blank object.
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
         {
@@ -150,7 +154,7 @@ class UserController extends Controller {
                 }
             }
         }
-     * 
+     *
      * @apiError UserIDMissing The user ID is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
@@ -160,8 +164,8 @@ class UserController extends Controller {
      *       "message": "User ID missing.",
      *       "data": {}
      *   }
-     * 
-     * 
+     *
+     *
      */
     public function userProfile(Request $request) {
         if (!$request->user_id) {

@@ -14,7 +14,7 @@ class SubjectController extends Controller {
      * @api {get} /api/subject-list  Subject List
      * @apiHeader {String} Accept application/json.
      * @apiName GetSubjectList
-     * @apiGroup Exam
+     * @apiGroup Subject
      *
      *
      * @apiSuccess {String} success true
