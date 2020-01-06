@@ -12,22 +12,22 @@ class ExamController extends Controller {
 
     /**
      * @api {get} /api/exam-list  Exam List
-     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Accept application/json.
      * @apiName GetExamList
      * @apiGroup Exam
-     * 
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     *
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message List of Exams.
      * @apiSuccess {JSON} data Array.
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
      *       "status": true,
      *       "status_code": 200,
-     *       "message": "List of Subjects",
+     *       "message": "List of Exams",
      *       "data": [
      *           {
      *               "id": 1,
@@ -60,7 +60,7 @@ class ExamController extends Controller {
      *               "created_at": null,
      *               "updated_at": null,
      *               "deleted_at": null,
-     *               "subject": [
+     *               "exam": [
      *                   {
      *                       "id": 3,
      *                       "exam_id": 2,
@@ -81,11 +81,11 @@ class ExamController extends Controller {
      *           }
      *       ]
      *   }
-     *  
-     * 
+     *
+     *
      */
     public function examList(Request $request) {
-        $exams = Exam::with("subject")->get();
+        $exams = Exam::get();
         return $this->successResponse("List of Exams", $exams);
     }
 
