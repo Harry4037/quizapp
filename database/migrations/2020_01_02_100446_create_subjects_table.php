@@ -15,11 +15,10 @@ class CreateSubjectsTable extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('exam_id');
             $table->string('name')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
         });
     }
 
