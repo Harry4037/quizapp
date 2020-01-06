@@ -23,6 +23,8 @@ Route::namespace("Api")->group(function() {
     Route::get('/exam-list', 'ExamController@examList');
     Route::post('/like-question', 'QuestionController@likeQuestion');
     Route::get('/subject-list', 'SubjectController@subjectList');
+    Route::get('/comment', 'QuestionCommentController@comment');
+    Route::get('/comment-list', 'QuestionCommentController@commentList');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

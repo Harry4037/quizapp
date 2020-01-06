@@ -311,8 +311,8 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/subject-list",
-    "title": "Subject List",
+    "url": "/api/comment",
+    "title": "Comment",
     "header": {
       "fields": {
         "Header": [
@@ -326,8 +326,8 @@ define({ "api": [
         ]
       }
     },
-    "name": "GetSubjectList",
-    "group": "Exam",
+    "name": "GetComment",
+    "group": "Question",
     "success": {
       "fields": {
         "Success 200": [
@@ -350,7 +350,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>List of Subjects.</p>"
+            "description": "<p>comment.</p>"
           },
           {
             "group": "Success 200",
@@ -364,14 +364,160 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"List of Subjects\",\n      \"data\": [\n          {\n              \"id\": 1,\n              \"name\": \"English\",\n              \"created_at\": null,\n              \"updated_at\": null,\n              \"deleted_at\": null,\n          },\n          {\n              \"id\": 2,\n              \"name\": \"Hindi\",\n              \"created_at\": null,\n              \"updated_at\": null,\n              \"deleted_at\": null,\n          }\n      ]\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Comment\",\n      \"data\": []\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>user id missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "QuestionIdMissing",
+            "description": "<p>Question Id missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentMissing",
+            "description": "<p>Comment missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>User Not Found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "QuestionNotFound",
+            "description": "<p>Question Not Found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"user id missing\",\n      \"data\": {}\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Question ID missing\",\n      \"data\": {}\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Comment missing\",\n      \"data\": {}\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"User not found.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Question not found.\",\n      \"data\": {}\n  }",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "app/Http/Controllers/Api/SubjectController.php",
-    "groupTitle": "Exam"
+    "filename": "app/Http/Controllers/Api/QuestionCommentController.php",
+    "groupTitle": "Question"
+  },
+  {
+    "type": "get",
+    "url": "/api/comment-list",
+    "title": "Comment List",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetCommentList",
+    "group": "Question",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>comment list.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Array.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Comment\",\n      \"data\": [\n          {\n              \"id\": 1,\n              \"name\": \"English\",\n              \"created_at\": null,\n              \"updated_at\": null,\n              \"deleted_at\": null,\n          },\n          {\n              \"id\": 2,\n              \"name\": \"Hindi\",\n              \"created_at\": null,\n              \"updated_at\": null,\n              \"deleted_at\": null,\n          }\n      ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "QuestionNotFound",
+            "description": "<p>Question Not Found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Question not found.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/QuestionCommentController.php",
+    "groupTitle": "Question"
   },
   {
     "type": "get",
@@ -631,6 +777,70 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/QuestionController.php",
     "groupTitle": "Question_Answer"
+  },
+  {
+    "type": "get",
+    "url": "/api/subject-list",
+    "title": "Subject List",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetSubjectList",
+    "group": "Subject",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>List of Subjects.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Array.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"List of Subjects\",\n      \"data\": [\n          {\n              \"id\": 1,\n              \"name\": \"English\",\n              \"created_at\": null,\n              \"updated_at\": null,\n              \"deleted_at\": null,\n          },\n          {\n              \"id\": 2,\n              \"name\": \"Hindi\",\n              \"created_at\": null,\n              \"updated_at\": null,\n              \"deleted_at\": null,\n          }\n      ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/SubjectController.php",
+    "groupTitle": "Subject"
   },
   {
     "type": "get",
