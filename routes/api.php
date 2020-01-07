@@ -27,6 +27,7 @@ Route::namespace("Api")->group(function() {
     Route::post('/comment', 'QuestionCommentController@comment');
     Route::get('/comment-list', 'QuestionCommentController@commentList');
     Route::get('/notification', 'NotificationController@notificationlist');
+    Route::get('/test-series', 'TestSeriesController@createTestSeries');
 
 });
 
