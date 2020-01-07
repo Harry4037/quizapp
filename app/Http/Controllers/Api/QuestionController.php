@@ -14,17 +14,17 @@ class QuestionController extends Controller {
 
     /**
      * @api {get} /api/question-list  Question list
-     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Accept application/json.
      * @apiName GetQuestionlist
      * @apiGroup Question/Answer
-     * 
+     *
      * @apiParam {String} user_id User ID.
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Question list.
      * @apiSuccess {JSON} data blank object.
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -122,10 +122,10 @@ class QuestionController extends Controller {
      *           }
      *       ]
      *   }
-     * 
+     *
      */
     public function questionList(Request $request) {
-        $questions = Question::all()->random(2);
+        $questions = Question::all()->random(10);
         $dataArray = [];
         foreach ($questions as $k => $question) {
             $answers = Answer::where("question_id", $question->id)->get();
@@ -141,20 +141,20 @@ class QuestionController extends Controller {
 
     /**
      * @api {post} /api/submit-answer  Submit Answer
-     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Accept application/json.
      * @apiName PostSubmitAnswer
      * @apiGroup Question/Answer
-     * 
+     *
      * @apiParam {String} user_id User ID*.
      * @apiParam {String} question_id Question ID's in Array Format*.
      * @apiParam {String} answer_id Answer ID's in Array Format*.
      * @apiParam {String} is_correct IsCorrect in Array Format* (0=> Incorrect Answer, 1 => Correct Answer).
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} Answer's submitted succeffully.
      * @apiSuccess {JSON} data blank object.
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -163,7 +163,7 @@ class QuestionController extends Controller {
      *       "message": "Answer's submitted succeffully.",
      *       "data": {}
      *   }
-     * 
+     *
      */
     public function submitQuestion(Request $request) {
 
@@ -206,18 +206,18 @@ class QuestionController extends Controller {
 
     /**
      * @api {post} /api/like-question  Question Like
-     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Accept application/json.
      * @apiName PostQuestionLike
      * @apiGroup Question/Answer
-     * 
+     *
      * @apiParam {String} user_id User ID*.
      * @apiParam {String} question_id Question ID*.
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} Question Liked.
      * @apiSuccess {JSON} data blank object.
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -226,7 +226,7 @@ class QuestionController extends Controller {
      *       "message": "Question Liked.",
      *       "data": {}
      *   }
-     * 
+     *
      */
     public function likeQuestion(Request $request) {
         if (!$request->user_id) {
