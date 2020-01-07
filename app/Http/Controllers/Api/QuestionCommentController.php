@@ -172,8 +172,8 @@ class QuestionCommentController extends Controller
         if (!$question) {
             return $this->errorResponse("Question not found.");
         }
-        $subjects = QuestionComment::get();
-        return $this->successResponse("List of Subjects", $subjects);
+        $comment = QuestionComment::where('question_id',$request->question_id)->get();
+        return $this->successResponse("List of Comments", $comment);
     }
 
 }
