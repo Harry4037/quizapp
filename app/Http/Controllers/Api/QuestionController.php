@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use App\Models\UserQuestionLike;
 use App\Models\Question;
+use App\Models\Answer;
 
 class QuestionController extends Controller {
 
