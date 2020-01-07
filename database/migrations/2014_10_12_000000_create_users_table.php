@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration {
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('mobile_number')->nullable();
-            $table->date("dob");
+            $table->date("dob")->nullable();
             $table->string("designation")->nullable();;
             $table->string("qualification")->nullable();;
             $table->tinyInteger("lang");
