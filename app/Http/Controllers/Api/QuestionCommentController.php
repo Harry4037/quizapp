@@ -10,12 +10,12 @@ use App\Models\QuestionComment;
 use App\Models\User;
 use App\Models\Question;
 
-class QuestionCommentController extends Controller
-{
+class QuestionCommentController extends Controller {
+
     /**
-     * @api {get} /api/comment  Comment
+     * @api {post} /api/comment  Comment
      * @apiHeader {String} Accept application/json.
-     * @apiName GetComment
+     * @apiName PostComment
      * @apiGroup Question/Answer
      *
      * @apiParam {String} user_id User ID.
@@ -172,7 +172,7 @@ class QuestionCommentController extends Controller
         if (!$question) {
             return $this->errorResponse("Question not found.");
         }
-        $subjects = QuestionComment::get();
+        $subjects = QuestionComment::where("question_id", $request->question_id)->get();
         return $this->successResponse("List of Subjects", $subjects);
     }
 
