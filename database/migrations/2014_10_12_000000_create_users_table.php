@@ -18,8 +18,8 @@ class CreateUsersTable extends Migration {
             $table->string('email')->nullable();
             $table->string('mobile_number')->nullable();
             $table->date("dob");
-            $table->string("designation");
-            $table->string("qualification");
+            $table->string("designation")->nullable();;
+            $table->string("qualification")->nullable();;
             $table->tinyInteger("lang");
             $table->string('password')->nullable();
             $table->bigInteger('user_type_id')->default(0);
