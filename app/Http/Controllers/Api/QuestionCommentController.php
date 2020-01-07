@@ -131,26 +131,28 @@ class QuestionCommentController extends Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
-     *       "status": true,
-     *       "status_code": 200,
-     *       "message": "Comment",
-     *       "data": [
-     *           {
-     *               "id": 1,
-     *               "name": "English",
-     *               "created_at": null,
-     *               "updated_at": null,
-     *               "deleted_at": null,
-     *           },
-     *           {
-     *               "id": 2,
-     *               "name": "Hindi",
-     *               "created_at": null,
-     *               "updated_at": null,
-     *               "deleted_at": null,
-     *           }
-     *       ]
-     *   }
+     *          "status":true,
+     *          "status_code":200,
+     *          "message":"List of Comments",
+     *          "data":[
+     *                 {
+     *                  "id":3,
+     *                  "user_id":2,
+     *                  "question_id":5,
+     *                  "description":"htrh",
+     *                  "created_at":"2020-01-07 10:26:42",
+     *                  "updated_at":"2020-01-07 10:26:42"
+     *                  },
+     *                  {
+     *                      "id":4,
+     *                      "user_id":2,
+     *                      "question_id":5,
+     *                      "description":"nice",
+     *                      "created_at":"2020-01-07 10:27:18",
+     *                      "updated_at":"2020-01-07 10:27:18"
+     *          }
+     *      ]
+     *  }
      *
      *
      * @apiError QuestionNotFound Question Not Found.

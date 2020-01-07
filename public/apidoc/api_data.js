@@ -645,7 +645,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Comment\",\n      \"data\": [\n          {\n              \"id\": 1,\n              \"name\": \"English\",\n              \"created_at\": null,\n              \"updated_at\": null,\n              \"deleted_at\": null,\n          },\n          {\n              \"id\": 2,\n              \"name\": \"Hindi\",\n              \"created_at\": null,\n              \"updated_at\": null,\n              \"deleted_at\": null,\n          }\n      ]\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n         \"status\":true,\n         \"status_code\":200,\n         \"message\":\"List of Comments\",\n         \"data\":[\n                {\n                 \"id\":3,\n                 \"user_id\":2,\n                 \"question_id\":5,\n                 \"description\":\"htrh\",\n                 \"created_at\":\"2020-01-07 10:26:42\",\n                 \"updated_at\":\"2020-01-07 10:26:42\"\n                 },\n                 {\n                     \"id\":4,\n                     \"user_id\":2,\n                     \"question_id\":5,\n                     \"description\":\"nice\",\n                     \"created_at\":\"2020-01-07 10:27:18\",\n                     \"updated_at\":\"2020-01-07 10:27:18\"\n         }\n     ]\n }",
           "type": "json"
         }
       ]
