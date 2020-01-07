@@ -125,4 +125,13 @@ class QuizController extends Controller {
         return $this->successResponse("Question list", $dataArray);
     }
 
+    public function createQuiz(Request $request) {
+        if(!$request->user_id){
+            return $this->errorResponse("User ID missing.");
+        }
+        if(!$request->subject_id){
+            return $this->errorResponse("Subject ID missing.");
+        }
+    }
+
 }
