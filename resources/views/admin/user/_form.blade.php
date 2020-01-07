@@ -31,6 +31,42 @@
             <input placeholder="Email" type="text" class="form-control" name="user_email" id="user_email" value="@if(isset($user)){{$user->email}}@endif">
         </div>
     </div>
+    <div class="form-group">
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Dob <span class="error">*</span></label>
+        <div class="col-md-4 col-sm-6 col-xs-6">
+            <input type="date" class="form-control valid" name="dob" id="dob" placeholder="Date Of Birth" value="@if(isset($user)){{$user->dob}}@endif">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Designation </label>
+        <div class="col-md-4 col-sm-6 col-xs-6">
+            <input placeholder="Email" type="text" class="form-control" name="designation" id="designation" value="@if(isset($user)){{$user->designation}}@endif">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Qualification </label>
+        <div class="col-md-4 col-sm-6 col-xs-6">
+            <input placeholder="Email" type="text" class="form-control" name="qualification" id="qualification" value="@if(isset($user)){{$user->qualification}}@endif">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Lang <span class="error">*</span></label>
+        <div class="col-md-4 col-sm-6 col-xs-6">
+            @if(isset($user))
+            <select class="form-control" id="lang_type" name="lang_type">
+                <option value="">Choose option</option>
+                <option value="1" @if($user->lang == "1"){{'selected'}}@endif>English</option>
+                <option value="2" @if($user->lang == "2"){{'selected'}}@endif>Hindi</option>
+            </select>
+            @else
+            <select class="form-control" id="lang_type" name="lang_type">
+                <option value="">Choose option</option>
+                <option value="1">English</option>
+                <option value="2">Hindi</option>
+            </select>
+            @endif
+        </div>
+    </div>
 </div>
 <!-- /.box-body -->
 <div class="box-footer">
