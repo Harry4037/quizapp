@@ -10,12 +10,12 @@ use App\Models\QuestionComment;
 use App\Models\User;
 use App\Models\Question;
 
-class QuestionCommentController extends Controller
-{
+class QuestionCommentController extends Controller {
+
     /**
-     * @api {get} /api/comment  Comment
+     * @api {post} /api/comment  Comment
      * @apiHeader {String} Accept application/json.
-     * @apiName GetComment
+     * @apiName PostComment
      * @apiGroup Question/Answer
      *
      * @apiParam {String} user_id User ID.
@@ -131,26 +131,28 @@ class QuestionCommentController extends Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
-     *       "status": true,
-     *       "status_code": 200,
-     *       "message": "Comment",
-     *       "data": [
-     *           {
-     *               "id": 1,
-     *               "name": "English",
-     *               "created_at": null,
-     *               "updated_at": null,
-     *               "deleted_at": null,
-     *           },
-     *           {
-     *               "id": 2,
-     *               "name": "Hindi",
-     *               "created_at": null,
-     *               "updated_at": null,
-     *               "deleted_at": null,
-     *           }
-     *       ]
-     *   }
+     *          "status":true,
+     *          "status_code":200,
+     *          "message":"List of Comments",
+     *          "data":[
+     *                 {
+     *                  "id":3,
+     *                  "user_id":2,
+     *                  "question_id":5,
+     *                  "description":"htrh",
+     *                  "created_at":"2020-01-07 10:26:42",
+     *                  "updated_at":"2020-01-07 10:26:42"
+     *                  },
+     *                  {
+     *                      "id":4,
+     *                      "user_id":2,
+     *                      "question_id":5,
+     *                      "description":"nice",
+     *                      "created_at":"2020-01-07 10:27:18",
+     *                      "updated_at":"2020-01-07 10:27:18"
+     *          }
+     *      ]
+     *  }
      *
      *
      * @apiError QuestionNotFound Question Not Found.
@@ -172,8 +174,10 @@ class QuestionCommentController extends Controller
         if (!$question) {
             return $this->errorResponse("Question not found.");
         }
+
         $comment = QuestionComment::where('question_id',$request->question_id)->get();
         return $this->successResponse("List of Comments", $comment);
+
     }
 
 }
