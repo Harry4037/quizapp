@@ -12,18 +12,19 @@ class AuthController extends Controller {
 
     /**
      * @api {post} /api/send-otp  Send OTP
-     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Accept application/json.
      * @apiName PostSendOtp
      * @apiGroup Auth
-     * 
+     *
      * @apiParam {String} mobile_number User unique mobile number*.
      * @apiParam {String} user_type User type*. (Creator => 2, User => 3).
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiParam {String} lang language. (English => 1, Hindi => 2).
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message OTP sent successfully.
      * @apiSuccess {JSON} data blank object.
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -32,7 +33,7 @@ class AuthController extends Controller {
      *       "message": "OTP sent successfully.",
      *       "data": {}
      *   }
-     * 
+     *
      * @apiError MobileNumberMissing The mobile number is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
@@ -42,7 +43,7 @@ class AuthController extends Controller {
      *       "message": "Mobile number missing.",
      *       "data": {}
      *   }
-     * 
+     *
      * @apiError UserTypeMissing The User type is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
@@ -52,8 +53,8 @@ class AuthController extends Controller {
      *     "message": "User type missing.",
      *     "data": {}
      *  }
-     * 
-     * 
+     *
+     *
      */
     public function sendOTP(Request $request) {
         if (!$request->mobile_number) {
@@ -62,6 +63,10 @@ class AuthController extends Controller {
         if (!$request->user_type) {
             return $this->errorResponse("User type missing");
         }
+        if (!$request->lang) {
+            return $this->errorResponse("Language missing");
+        }
+
 
         $otp = 1234;
 //        $otp = rand(1000, 9999);
@@ -80,6 +85,7 @@ class AuthController extends Controller {
                 $user = new User();
                 $user->mobile_number = $request->mobile_number;
                 $user->user_type_id = $request->user_type;
+                $user->lang = $request->lang;
                 $user->otp = $otp;
                 if ($request->device_token) {
                     $user->device_token = $request->device_token;
@@ -98,19 +104,19 @@ class AuthController extends Controller {
 
     /**
      * @api {post} /api/verify-otp  Verify OTP
-     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Accept application/json.
      * @apiName PostVerifyOtp
      * @apiGroup Auth
-     * 
+     *
      * @apiParam {String} mobile_number User unique mobile number*.
      * @apiParam {String} user_type User type*. (User => 3).
      * @apiParam {String} otp OTP*.
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message OTP verified successfully.
      * @apiSuccess {JSON} data blank object.
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -124,7 +130,7 @@ class AuthController extends Controller {
      *           }
      *      }
      *   }
-     * 
+     *
      * @apiError MobileNumberMissing The mobile number is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
@@ -134,7 +140,7 @@ class AuthController extends Controller {
      *       "message": "Mobile number missing.",
      *       "data": {}
      *   }
-     * 
+     *
      * @apiError UserTypeMissing The User type is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
@@ -144,7 +150,7 @@ class AuthController extends Controller {
      *     "message": "User type missing.",
      *     "data": {}
      *  }
-     * 
+     *
      * @apiError OTPMissing The OTP is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
@@ -154,8 +160,8 @@ class AuthController extends Controller {
      *     "message": "OTP missing.",
      *     "data": {}
      *  }
-     * 
-     * 
+     *
+     *
      */
     public function verifyOTP(Request $request) {
         if (!$request->mobile_number) {

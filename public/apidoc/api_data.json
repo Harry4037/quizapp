@@ -34,6 +34,13 @@
             "optional": false,
             "field": "user_type",
             "description": "<p>User type*. (Creator =&gt; 2, User =&gt; 3).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "lang",
+            "description": "<p>language. (English =&gt; 1, Hindi =&gt; 2).</p>"
           }
         ]
       }

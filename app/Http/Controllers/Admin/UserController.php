@@ -50,6 +50,7 @@ class UserController extends Controller {
                 $usersArray[$k]['mobile_number'] = $user->mobile_number;
                 $usersArray[$k]['name'] = $user->name;
                 $usersArray[$k]['email'] = $user->email;
+                $usersArray[$k]['lang'] = $user->lang;
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$k]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $usersArray[$k]['action'] = '<a href="' . route('admin.user.edit', $user) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;'
@@ -84,6 +85,8 @@ class UserController extends Controller {
                 $validator = Validator::make($request->all(), [
                             'profile_pic' => ['mimes:jpeg,jpg,png'],
                             'user_name' => ['required'],
+                            'lang_type' => ['required'],
+                            'dob' => ['required'],
                             'user_email' => ['email'],
                 ]);
                 if ($validator->fails()) {
@@ -100,6 +103,10 @@ class UserController extends Controller {
                 }
                 $user->name = $request->user_name;
                 $user->email = $request->user_email;
+                $user->lang = $request->lang_type;
+                $user->designation = $request->designation;
+                $user->qualification = $request->qualification;
+                $user->dob = $request->dob;
 
                 if ($user->save()) {
                     return redirect()->route('admin.user.index')->with('status', 'User has been updated successfully.');
@@ -149,6 +156,8 @@ class UserController extends Controller {
                             ],
                             'profile_pic' => ['mimes:jpeg,jpg,png'],
                             'user_name' => ['required'],
+                            'lang_type' => ['required'],
+                            'dob' => ['required'],
                             'user_email' => ['email'],
                 ]);
                 if ($validator->fails()) {
@@ -162,11 +171,14 @@ class UserController extends Controller {
                     $user->profile_pic = $user_file_name;
                 }
                 $user->user_type_id = 3;
-                $user->is_active = 0;
+                $user->is_active = 1;
                 $user->mobile_number = $request->mobile_number;
-                $user->referral_code = $this->getAlphaNumericString(8);
                 $user->email = $request->user_email;
                 $user->name = $request->user_name;
+                $user->lang = $request->lang_type;
+                $user->designation = $request->designation;
+                $user->qualification = $request->qualification;
+                $user->dob = $request->dob;
                 $user->created_by = auth()->user()->id;
                 $user->updated_by = auth()->user()->id;
 
