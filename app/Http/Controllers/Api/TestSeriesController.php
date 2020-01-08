@@ -22,7 +22,7 @@ class TestSeriesController extends Controller {
      * @apiParam {String} user_id User Id .
      * @apiParam {String} subject_id Subject Id.
      * @apiParam {String} series_name Test Series Name.
-     * @apiParam {String} ques_no Total no. of questions*.
+     * @apiParam {String} total_question Total no. of questions*.
      * @apiParam {String} lang Language(English=>1,Hindi=>2)*.
      *
      * @apiSuccess {String} success true
@@ -112,8 +112,8 @@ class TestSeriesController extends Controller {
         if (!$request->series_name) {
             return $this->errorResponse("Test Series Name missing");
         }
-        if (!$request->ques_no) {
-            return $this->errorResponse("Total no missing");
+        if (!$request->total_question) {
+            return $this->errorResponse("Total questin missing");
         }
         if (!$request->lang) {
             return $this->errorResponse("lang missing");
@@ -133,7 +133,7 @@ class TestSeriesController extends Controller {
         $series->user_id = $request->user_id;
         $series->subject_id = $request->subject_id;
         $series->name = $request->series_name;
-        $series->ques_no = $request->ques_no;
+        $series->total_question = $request->total_question;
         $series->lang = $request->lang;
 
         if ($series->save()) {
