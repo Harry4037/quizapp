@@ -1232,8 +1232,8 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "user_id",
-            "description": "<p>User Id .</p>"
+            "field": "description",
+            "description": "<p>Description.</p>"
           },
           {
             "group": "Parameter",
@@ -1246,22 +1246,57 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "series_name",
-            "description": "<p>Test Series Name.</p>"
+            "field": "ques_time",
+            "description": "<p>Question Time.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "ques_no",
-            "description": "<p>Total no. of questions*.</p>"
+            "field": "test_series_id",
+            "description": "<p>Test Series Id.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "lang",
-            "description": "<p>Language(English=&gt;1,Hindi=&gt;2)*.</p>"
+            "field": "ques_image",
+            "description": "<p>Question Image*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ans1",
+            "description": "<p>Subject Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ans2",
+            "description": "<p>Subject Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ans3",
+            "description": "<p>Subject Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ans4",
+            "description": "<p>Subject Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Correct_ans",
+            "description": "<p>Correct Answer (ans1,ans2,ans3,an4).</p>"
           }
         ]
       }

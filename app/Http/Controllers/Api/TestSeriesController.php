@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Question;
 use App\Models\TestSeries;
 use App\Models\Subject;
+use App\Models\Answer;
 
 class TestSeriesController extends Controller {
 
@@ -154,11 +155,16 @@ class TestSeriesController extends Controller {
      * @apiName GetSeriesQuestion
      * @apiGroup TestSeries
      *
-     * @apiParam {String} user_id User Id .
+     * @apiParam {String} description Description.
      * @apiParam {String} subject_id Subject Id.
-     * @apiParam {String} series_name Test Series Name.
-     * @apiParam {String} ques_no Total no. of questions*.
-     * @apiParam {String} lang Language(English=>1,Hindi=>2)*.
+     * @apiParam {String} ques_time Question Time.
+     * @apiParam {String} test_series_id Test Series Id.
+     * @apiParam {String} ques_image Question Image*.
+     * @apiParam {String} ans1 Subject Id.
+     * @apiParam {String} ans2 Subject Id.
+     * @apiParam {String} ans3 Subject Id.
+     * @apiParam {String} ans4 Subject Id.
+     * @apiParam {String} Correct_ans Correct Answer (ans1,ans2,ans3,an4).
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -229,6 +235,21 @@ class TestSeriesController extends Controller {
         if (!$request->description) {
             return $this->errorResponse("description missing");
         }
+        if (!$request->ans1) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans2) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans3) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans4) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->correct_ans) {
+            return $this->errorResponse("Correct Answer missing");
+        }
         if (!$request->ques_time) {
             return $this->errorResponse("Question Time missing");
         }
@@ -256,6 +277,17 @@ class TestSeriesController extends Controller {
        $question->subject_id = $request->subject_id;
        $question->test_series_id = $request->test_series_id;
        if ($question->save()) {
+           for($i=1;$i<=4;$i++){
+            $answer = new Answer();
+            $answer->question_id = $question->id;
+            $answer->description = $request->ans.$i;
+            if ($request->correct_ans == "ans".$i){
+                $answer->is_answer = 1;
+            }else{
+                $answer->is_answer = 0;
+            }
+            $answer->save();
+           }
         return $this->successResponse("Question Added successfully", (object) []);
     } else {
         return $this->errorResponse("Something went wrong.");
