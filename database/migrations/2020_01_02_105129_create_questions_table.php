@@ -17,7 +17,7 @@ class CreateQuestionsTable extends Migration {
             $table->bigInteger('exam_id');
             $table->bigInteger('subject_id');
             $table->longText('description');
-            $table->string('ques_image');
+            $table->string('ques_image')->nullable();;
             $table->integer("ques_time");
             $table->bigInteger("test_series_id")->default(0);
             $table->timestamps();
