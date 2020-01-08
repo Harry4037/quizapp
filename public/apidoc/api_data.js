@@ -1031,6 +1031,118 @@ define({ "api": [
     "groupTitle": "Quiz"
   },
   {
+    "type": "post",
+    "url": "/api/create-quiz",
+    "title": "Create Quiz",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostCreateQuiz",
+    "group": "Quiz",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User ID*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Quiz Name*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "total_questions",
+            "description": "<p>Total no. of questions*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "start_date_time",
+            "description": "<p>Start Date Time (YYYY-MM-DD H:i)*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "end_date_time",
+            "description": "<p>End Date Time (YYYY-MM-DD H:i)*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "lang",
+            "description": "<p>Language(English=&gt;1,Hindi=&gt;2)*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Quiz Created.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Quiz create successfully.\",\n      \"data\": {\n          \"user_id\": \"1\",\n          \"name\": \"SSC QUIZ\",\n          \"total_questions\": \"10\",\n          \"start_date_time\": \"2020-01-08 01:00\",\n          \"end_date_time\": \"2020-01-08 02:00\",\n          \"lang\": \"1\",\n          \"updated_at\": \"2020-01-08 06:56:01\",\n          \"created_at\": \"2020-01-08 06:56:01\",\n          \"id\": 1\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/QuizController.php",
+    "groupTitle": "Quiz"
+  },
+  {
     "type": "get",
     "url": "/api/subject-list",
     "title": "Subject List",
@@ -1141,7 +1253,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "ques_no",
+            "field": "total_question",
             "description": "<p>Total no. of questions*.</p>"
           },
           {

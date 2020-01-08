@@ -14,10 +14,12 @@ class CreateQuizzesTable extends Migration {
     public function up() {
         Schema::create('quizzes', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('user_id');
             $table->string('name');
-            $table->bigInteger('subject_id');
             $table->bigInteger('total_questions');
             $table->tinyInteger('lang');
+            $table->dateTime('start_date_time');
+            $table->dateTime('end_date_time');
             $table->timestamps();
         });
     }
