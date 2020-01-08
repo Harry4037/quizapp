@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Exception;
-use App\Models\Question;
-use App\Models\Answer;
+use App\Models\quiz;
 
 class QuizController extends Controller {
 
@@ -125,12 +124,79 @@ class QuizController extends Controller {
         return $this->successResponse("Question list", $dataArray);
     }
 
+    /**
+     * @api {post} /api/create-quiz  Create Quiz
+     * @apiHeader {String} Accept application/json. 
+     * @apiName PostCreateQuiz
+     * @apiGroup Quiz
+     * 
+     * @apiParam {String} user_id User ID*.
+     * @apiParam {String} name Quiz Name*.
+     * @apiParam {String} total_questions Total no. of questions*.
+     * @apiParam {String} start_date_time Start Date Time (YYYY-MM-DD H:i)*.
+     * @apiParam {String} end_date_time End Date Time (YYYY-MM-DD H:i)*.
+     * @apiParam {String} lang Language(English=>1,Hindi=>2)*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message Quiz Created.
+     * @apiSuccess {JSON} data object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Quiz create successfully.",
+     *       "data": {
+     *           "user_id": "1",
+     *           "name": "SSC QUIZ",
+     *           "total_questions": "10",
+     *           "start_date_time": "2020-01-08 01:00",
+     *           "end_date_time": "2020-01-08 02:00",
+     *           "lang": "1",
+     *           "updated_at": "2020-01-08 06:56:01",
+     *           "created_at": "2020-01-08 06:56:01",
+     *           "id": 1
+     *       }
+     *   } 
+     * 
+     */
     public function createQuiz(Request $request) {
-        if(!$request->user_id){
+        if (!$request->user_id) {
             return $this->errorResponse("User ID missing.");
         }
-        if(!$request->subject_id){
-            return $this->errorResponse("Subject ID missing.");
+        if (!$request->name) {
+            return $this->errorResponse("Name Missing.");
+        }
+        if (!$request->total_questions) {
+            return $this->errorResponse("Total No. of Questions Missing.");
+        }
+        if (!$request->start_date_time) {
+            return $this->errorResponse("Start Date Time Missing.");
+        }
+        if (!$request->end_date_time) {
+            return $this->errorResponse("End Date Time Missing.");
+        }
+        if (!$request->lang) {
+            return $this->errorResponse("Language Missing.");
+        }
+        if (!in_array($request->lang, [1, 2])) {
+            return $this->errorResponse("Invalid Language Type Missing.");
+        }
+        try {
+            $quiz = new quiz();
+            $quiz->user_id = $request->user_id;
+            $quiz->name = $request->name;
+            $quiz->total_questions = $request->total_questions;
+            $quiz->start_date_time = $request->start_date_time;
+            $quiz->end_date_time = $request->end_date_time;
+            $quiz->lang = $request->lang;
+            $quiz->save();
+
+            return $this->successResponse("Quiz create successfully.", $quiz);
+        } catch (\Exception $ex) {
+            return $this->errorResponse($ex->getMessage());
         }
     }
 
