@@ -35,4 +35,15 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/status', 'UserController@userStatus')->name('admin.user.status');
         Route::post('/check-mobile-number', 'UserController@checkMobileNumber')->name('admin.user.check-mobile-no');
     });
+
+
+    // Subject Routes
+    Route::prefix('subject')->group(function() {
+        Route::get('/', 'SubjectController@index')->name('admin.subject.index');
+        Route::get('/list', 'SubjectController@subjectList')->name('admin.subject.list');
+        Route::match(['get', 'post'], '/add', 'SubjectController@subjectAdd')->name('admin.subject.add');
+        Route::match(['get', 'post'], '/edit/{subject}', 'SubjectController@subjectEdit')->name('admin.subject.edit');
+        Route::post('/delete', 'SubjectController@subjectDelete')->name('admin.subject.delete');
+    });
+
 });

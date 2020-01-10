@@ -24,3 +24,18 @@ Breadcrumbs::for('admin.user.edit', function ($trail, $user) {
     $trail->push("Edit", route('admin.user.edit', $user));
 });
 
+
+// Home > [Subject]
+Breadcrumbs::for('admin.subject.index', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push("Subject", route('admin.subject.index'));
+});
+Breadcrumbs::for('admin.subject.add', function ($trail) {
+    $trail->parent('admin.subject.index');
+    $trail->push("Add", route('admin.subject.add'));
+});
+Breadcrumbs::for('admin.subject.edit', function ($trail, $subject) {
+    $trail->parent('admin.subject.index');
+    $trail->push("Edit", route('admin.subject.edit', $subject));
+});
+
