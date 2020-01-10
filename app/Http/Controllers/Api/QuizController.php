@@ -5,26 +5,28 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Exception;
-use App\Models\quiz;
+use App\Models\Quiz;
+use App\Models\Question;
+use App\Models\Answer;
 
 class QuizController extends Controller {
 
     /**
      * @api {get} /api/start-quiz  Start Quiz
-     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Accept application/json.
      * @apiName GetStartQuiz
      * @apiGroup Quiz
-     * 
+     *
      * @apiParam {String} exam_id Exam Id in array format*.
      * @apiParam {String} subject_id Subject Id in array format*.
      * @apiParam {String} total_questions Total no. of questions*.
      * @apiParam {String} lang Language(English=>1,Hindi=>2)*.
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Question list.
      * @apiSuccess {JSON} data blank object.
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -77,8 +79,8 @@ class QuizController extends Controller {
      *               ]
      *           },
      *       ]
-     *   } 
-     * 
+     *   }
+     *
      */
     public function startQuiz(Request $request) {
         if (!$request->exam_id) {
@@ -104,8 +106,8 @@ class QuizController extends Controller {
         }
 
         $query = Question::Query();
-        $query->whereIn('exam_id', $request->exam_id)
-                ->whereIn('subject_id', $request->subject_id);
+        // $query->whereIn('exam_id', $request->exam_id)
+        $query->whereIn('subject_id', $request->subject_id);
 
         $query->limit($request->total_questions);
 
@@ -126,22 +128,22 @@ class QuizController extends Controller {
 
     /**
      * @api {post} /api/create-quiz  Create Quiz
-     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Accept application/json.
      * @apiName PostCreateQuiz
      * @apiGroup Quiz
-     * 
+     *
      * @apiParam {String} user_id User ID*.
      * @apiParam {String} name Quiz Name*.
      * @apiParam {String} total_questions Total no. of questions*.
      * @apiParam {String} start_date_time Start Date Time (YYYY-MM-DD H:i)*.
      * @apiParam {String} end_date_time End Date Time (YYYY-MM-DD H:i)*.
      * @apiParam {String} lang Language(English=>1,Hindi=>2)*.
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Quiz Created.
      * @apiSuccess {JSON} data object.
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -159,8 +161,8 @@ class QuizController extends Controller {
      *           "created_at": "2020-01-08 06:56:01",
      *           "id": 1
      *       }
-     *   } 
-     * 
+     *   }
+     *
      */
     public function createQuiz(Request $request) {
         if (!$request->user_id) {
