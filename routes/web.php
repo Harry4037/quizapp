@@ -46,4 +46,13 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/delete', 'SubjectController@subjectDelete')->name('admin.subject.delete');
     });
 
+        // Exam Routes
+    Route::prefix('exam')->group(function() {
+        Route::get('/', 'ExamController@index')->name('admin.exam.index');
+        Route::get('/list', 'ExamController@examList')->name('admin.exam.list');
+        Route::match(['get', 'post'], '/add', 'ExamController@examAdd')->name('admin.exam.add');
+        Route::match(['get', 'post'], '/edit/{exam}', 'ExamController@examEdit')->name('admin.exam.edit');
+        Route::post('/delete', 'ExamController@examDelete')->name('admin.exam.delete');
+    });
+
 });

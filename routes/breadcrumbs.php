@@ -39,3 +39,16 @@ Breadcrumbs::for('admin.subject.edit', function ($trail, $subject) {
     $trail->push("Edit", route('admin.subject.edit', $subject));
 });
 
+// Home > [Exam]
+Breadcrumbs::for('admin.exam.index', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push("Exam", route('admin.exam.index'));
+});
+Breadcrumbs::for('admin.exam.add', function ($trail) {
+    $trail->parent('admin.subject.index');
+    $trail->push("Add", route('admin.subject.add'));
+});
+Breadcrumbs::for('admin.exam.edit', function ($trail, $exam) {
+    $trail->parent('admin.exam.index');
+    $trail->push("Edit", route('admin.exam.edit', $exam));
+});
