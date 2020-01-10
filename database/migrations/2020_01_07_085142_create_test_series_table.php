@@ -18,7 +18,6 @@ class CreateTestSeriesTable extends Migration
             $table->bigInteger("user_id");
             $table->bigInteger('subject_id');
             $table->string('name');
-            $table->bigInteger('ques_no');
             $table->integer('total_question');
             $table->tinyInteger('lang');
             $table->timestamps();
