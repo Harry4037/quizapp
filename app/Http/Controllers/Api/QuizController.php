@@ -107,7 +107,7 @@ class QuizController extends Controller {
 
         $query = Question::Query();
         // $query->whereIn('exam_id', $request->exam_id)
-        //         ->whereIn('subject_id', $request->subject_id);
+        $query->whereIn('subject_id', $request->subject_id);
 
         $query->limit($request->total_questions);
 
