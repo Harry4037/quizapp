@@ -27,13 +27,16 @@ Route::namespace("Api")->group(function() {
     Route::post('/comment', 'QuestionCommentController@comment');
     Route::get('/comment-list', 'QuestionCommentController@commentList');
     Route::get('/notification', 'NotificationController@notificationlist');
-    Route::get('/test-series', 'TestSeriesController@createTestSeries');
+    
     Route::get('/series-question', 'TestSeriesController@createTestSeriesQues');
     Route::post('/create-quiz', 'QuizController@createQuiz');
     
     //UserController
     Route::post('/update-language', 'UserController@updateLanguage');
     Route::post('/update-exam-selection', 'UserController@updateExamSelection');
+    
+    //TestSeries
+    Route::post('/create-test-series', 'TestSeriesController@createTestSeries');
 
 
 });

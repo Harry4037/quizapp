@@ -15,13 +15,14 @@ use App\Models\Answer;
 
 class TestSeriesController extends Controller {
 
-     /**
-     * @api {get} /api/test-series  Test Series
+    /**
+     * @api {post} /api/create-test-series  Create Test Series
      * @apiHeader {String} Accept application/json.
-     * @apiName GetTestSeries
+     * @apiName PostCreateTestSeries
      * @apiGroup TestSeries
      *
      * @apiParam {String} user_id User Id .
+     * @apiParam {String} exam_id Exam Id.
      * @apiParam {String} subject_id Subject Id.
      * @apiParam {String} series_name Test Series Name.
      * @apiParam {String} total_question Total no. of questions*.
@@ -108,7 +109,6 @@ class TestSeriesController extends Controller {
      *
      *
      */
-
     public function createTestSeries(Request $request) {
         if (!$request->user_id) {
             return $this->errorResponse("user id missing");
@@ -125,9 +125,16 @@ class TestSeriesController extends Controller {
         if (!$request->subject_id) {
             return $this->errorResponse("subject ID missing");
         }
+        if (!$request->exam_id) {
+            return $this->errorResponse("Exam ID missing");
+        }
         $user = User::find($request->user_id);
         if (!$user) {
             return $this->errorResponse("User not found.");
+        }
+        $exam = Exam::find($request->exam_id);
+        if (!$exam) {
+            return $this->errorResponse("Exam not found.");
         }
         $subject = Subject::find($request->subject_id);
         if (!$subject) {
@@ -135,6 +142,7 @@ class TestSeriesController extends Controller {
         }
         $series = new TestSeries();
         $series->user_id = $request->user_id;
+        $series->exam_id = $request->exam_id;
         $series->subject_id = $request->subject_id;
         $series->name = $request->series_name;
         $series->total_question = $request->total_question;
@@ -142,6 +150,7 @@ class TestSeriesController extends Controller {
 
         if ($series->save()) {
             $data['id'] = $series->id;
+            $data['exam_id'] = $request->exam_id;
             $data['subject_id'] = $request->subject_id;
             $data['subject_name'] = $subject->name;
             return $this->successResponse("Test Series Created successfully", $data);
@@ -149,7 +158,8 @@ class TestSeriesController extends Controller {
             return $this->errorResponse("Something went wrong.");
         }
     }
-     /**
+
+    /**
      * @api {get} /api/series-question  Series Question
      * @apiHeader {String} Accept application/json.
      * @apiName GetSeriesQuestion
@@ -268,31 +278,30 @@ class TestSeriesController extends Controller {
             $ques = Storage::disk('public')->put('ques_pic', $ques_image);
             $ques_file_name = basename($ques);
             $question->ques_image = $ques_file_name;
-        }else{
+        } else {
             $question->ques_image = NULL;
         }
-       $question->exam_id = 0;
-       $question->description = $request->description;
-       $question->ques_time = $request->ques_time;
-       $question->subject_id = $request->subject_id;
-       $question->test_series_id = $request->test_series_id;
-       if ($question->save()) {
-           for($i=1;$i<=4;$i++){
-            $answer = new Answer();
-            $answer->question_id = $question->id;
-            $answer->description = $request->ans.$i;
-            if ($request->correct_ans == "ans".$i){
-                $answer->is_answer = 1;
-            }else{
-                $answer->is_answer = 0;
+        $question->exam_id = 0;
+        $question->description = $request->description;
+        $question->ques_time = $request->ques_time;
+        $question->subject_id = $request->subject_id;
+        $question->test_series_id = $request->test_series_id;
+        if ($question->save()) {
+            for ($i = 1; $i <= 4; $i++) {
+                $answer = new Answer();
+                $answer->question_id = $question->id;
+                $answer->description = $request->ans . $i;
+                if ($request->correct_ans == "ans" . $i) {
+                    $answer->is_answer = 1;
+                } else {
+                    $answer->is_answer = 0;
+                }
+                $answer->save();
             }
-            $answer->save();
-           }
-        return $this->successResponse("Question Added successfully", (object) []);
-    } else {
-        return $this->errorResponse("Something went wrong.");
-    }
-
+            return $this->successResponse("Question Added successfully", (object) []);
+        } else {
+            return $this->errorResponse("Something went wrong.");
+        }
     }
 
 }
