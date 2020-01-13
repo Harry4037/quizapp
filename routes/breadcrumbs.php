@@ -45,10 +45,11 @@ Breadcrumbs::for('admin.exam.index', function ($trail) {
     $trail->push("Exam", route('admin.exam.index'));
 });
 Breadcrumbs::for('admin.exam.add', function ($trail) {
-    $trail->parent('admin.subject.index');
-    $trail->push("Add", route('admin.subject.add'));
+    $trail->parent('admin.exam.index');
+    $trail->push("Add", route('admin.exam.add'));
 });
 Breadcrumbs::for('admin.exam.edit', function ($trail, $exam) {
     $trail->parent('admin.exam.index');
     $trail->push("Edit", route('admin.exam.edit', $exam));
 });
+

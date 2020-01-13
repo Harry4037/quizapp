@@ -44,6 +44,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::match(['get', 'post'], '/add', 'SubjectController@subjectAdd')->name('admin.subject.add');
         Route::match(['get', 'post'], '/edit/{subject}', 'SubjectController@subjectEdit')->name('admin.subject.edit');
         Route::post('/delete', 'SubjectController@subjectDelete')->name('admin.subject.delete');
+        Route::get('/subject-questions', 'SubjectController@getSubjectQuestions')->name('admin.subject.questions');
     });
 
         // Exam Routes
@@ -53,6 +54,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::match(['get', 'post'], '/add', 'ExamController@examAdd')->name('admin.exam.add');
         Route::match(['get', 'post'], '/edit/{exam}', 'ExamController@examEdit')->name('admin.exam.edit');
         Route::post('/delete', 'ExamController@examDelete')->name('admin.exam.delete');
+        Route::get('/exam-questions', 'ExamController@getExamQuestions')->name('admin.exam.questions');
     });
 
 });
