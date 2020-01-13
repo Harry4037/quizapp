@@ -40,13 +40,13 @@
     <div class="form-group">
         <label class="control-label col-md-4 col-sm-4 col-xs-12">Designation </label>
         <div class="col-md-4 col-sm-6 col-xs-6">
-            <input placeholder="Email" type="text" class="form-control" name="designation" id="designation" value="@if(isset($user)){{$user->designation}}@endif">
+            <input placeholder="Designation" type="text" class="form-control" name="designation" id="designation" value="@if(isset($user)){{$user->designation}}@endif">
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-md-4 col-sm-4 col-xs-12">Qualification </label>
         <div class="col-md-4 col-sm-6 col-xs-6">
-            <input placeholder="Email" type="text" class="form-control" name="qualification" id="qualification" value="@if(isset($user)){{$user->qualification}}@endif">
+            <input placeholder="Qualification" type="text" class="form-control" name="qualification" id="qualification" value="@if(isset($user)){{$user->qualification}}@endif">
         </div>
     </div>
     <div class="form-group">
