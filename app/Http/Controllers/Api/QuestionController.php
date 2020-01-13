@@ -20,6 +20,11 @@ class QuestionController extends Controller {
      * @apiGroup Question/Answer
      *
      * @apiParam {String} user_id User ID.
+     * @apiParam {String} flag Flag*.(1=>Random question, 2=> Filtered Question)
+     * @apiParam {String} exam_id Exam Id in array format*.
+     * @apiParam {String} subject_id Subject Id in array format*.
+     * @apiParam {String} total_questions Total no. of questions*.
+     * @apiParam {String} lang Language(English=>1,Hindi=>2)*.
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -126,18 +131,68 @@ class QuestionController extends Controller {
      *
      */
     public function questionList(Request $request) {
-        $questions = Question::all()->random(10);
-        $dataArray = [];
-        foreach ($questions as $k => $question) {
-            $answers = Answer::where("question_id", $question->id)->get();
-            $dataArray[$k]['id'] = $question->id;
-            $dataArray[$k]['description'] = $question->description;
-            $dataArray[$k]['ques_image'] = $question->ques_image;
-            $dataArray[$k]['ques_time'] = $question->ques_time;
-            $dataArray[$k]['answers'] = $answers;
+        if (!$request->flag) {
+            return $this->errorResponse("Flag is missing.");
         }
 
-        return $this->successResponse("Question list.", $dataArray);
+        if ($request->flag == 1) {
+            $questions = Question::all()->random(10);
+            $dataArray = [];
+            foreach ($questions as $k => $question) {
+                $answers = Answer::where("question_id", $question->id)->get();
+                $dataArray[$k]['id'] = $question->id;
+                $dataArray[$k]['description'] = $question->description;
+                $dataArray[$k]['ques_image'] = $question->ques_image;
+                $dataArray[$k]['ques_time'] = $question->ques_time;
+                $dataArray[$k]['answers'] = $answers;
+            }
+
+            return $this->successResponse("Question list.", $dataArray);
+        } elseif ($request->flag == 2) {
+            if (!$request->exam_id) {
+                return $this->errorResponse("Exam Id missing.");
+            }
+            if (!is_array($request->exam_id)) {
+                return $this->errorResponse("Exam Id is not in proper format.");
+            }
+            if (!$request->subject_id) {
+                return $this->errorResponse("Subject Id missing.");
+            }
+            if (!is_array($request->subject_id)) {
+                return $this->errorResponse("Subject Id is not in proper format.");
+            }
+            if (!$request->total_questions) {
+                return $this->errorResponse("Number of total questions are missing.");
+            }
+            if (!$request->lang) {
+                return $this->errorResponse("Language Id is missing.");
+            }
+            if (!in_array($request->lang, [1, 2])) {
+                return $this->errorResponse("Invalid language Id.");
+            }
+
+            $query = Question::Query();
+            // $query->whereIn('exam_id', $request->exam_id)
+            $query->whereIn('subject_id', $request->subject_id);
+
+            $query->limit($request->total_questions);
+
+            $questions = $query->get();
+
+            $dataArray = [];
+            foreach ($questions as $k => $question) {
+                $answers = Answer::where("question_id", $question->id)->get();
+                $dataArray[$k]['id'] = $question->id;
+                $dataArray[$k]['description'] = $question->description;
+                $dataArray[$k]['ques_image'] = $question->ques_image;
+                $dataArray[$k]['ques_time'] = $question->ques_time;
+                $dataArray[$k]['answers'] = $answers;
+            }
+
+            return $this->successResponse("Question list", $dataArray);
+        } else {
+            return $this->errorResponse("Invlaid flag type.");
+        }
     }
 
     /**
