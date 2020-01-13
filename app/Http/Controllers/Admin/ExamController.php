@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Exam;
+use App\Models\Question;
 use Carbon\Carbon;
 use Validator;
 use Illuminate\Validation\Rule;
@@ -99,7 +100,7 @@ class ExamController extends Controller {
                 'exam' => $exam
             ]);
         } catch (\Exception $ex) {
-            return redirect()->route('admin.subjexamect.index')->with('error', $ex->getMessage());
+            return redirect()->route('admin.exam.index')->with('error', $ex->getMessage());
         }
     }
 

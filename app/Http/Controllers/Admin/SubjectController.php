@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Subject;
+use App\Models\Question;
 use Carbon\Carbon;
 use Validator;
 use Illuminate\Validation\Rule;
@@ -136,5 +137,7 @@ class SubjectController extends Controller {
             return redirect()->route('admin.subject.index')->with('error', $ex->getMessage());
         }
     }
+
+
 
 }
