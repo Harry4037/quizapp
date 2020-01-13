@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use App\Models\User;
 use App\Models\UserExam;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller {
 
@@ -25,6 +26,7 @@ class UserController extends Controller {
      * @apiParam {String} qualification User qualification*.
      * @apiParam {String} lang User language*. (English => 1, Hindi => 2)
      * @apiParam {String} user_type User type*. (Creator => 2, User => 3)
+     * @apiParam {String} profile_pic User Profile pic.(File Type)
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -98,6 +100,16 @@ class UserController extends Controller {
             return $this->errorResponse("User already registered with us", (object) []);
         }
         $user = new User();
+        if ($request->profile_pic) {
+            if (!$request->hasFile("profile_pic")) {
+                return $this->errorResponse("Profile pic not valid file type.");
+            }
+            $profile_pic = $request->file("profile_pic");
+            $profile = Storage::disk('public')->put('profile_pic', $profile_pic);
+            $profile_file_name = basename($profile);
+
+            $user->profile_pic = $profile_file_name;
+        }
         $user->name = $request->name;
         $user->email = $request->email_id;
         $user->mobile_number = $request->mobile_number;
