@@ -1347,9 +1347,9 @@ define({ "api": [
     "groupTitle": "TestSeries"
   },
   {
-    "type": "get",
-    "url": "/api/test-series",
-    "title": "Test Series",
+    "type": "post",
+    "url": "/api/create-test-series",
+    "title": "Create Test Series",
     "header": {
       "fields": {
         "Header": [
@@ -1363,7 +1363,7 @@ define({ "api": [
         ]
       }
     },
-    "name": "GetTestSeries",
+    "name": "PostCreateTestSeries",
     "group": "TestSeries",
     "parameter": {
       "fields": {
@@ -1374,6 +1374,13 @@ define({ "api": [
             "optional": false,
             "field": "user_id",
             "description": "<p>User Id .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "exam_id",
+            "description": "<p>Exam Id.</p>"
           },
           {
             "group": "Parameter",

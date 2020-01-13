@@ -16,6 +16,7 @@ class CreateTestSeriesTable extends Migration
         Schema::create('test_series', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger("user_id");
+            $table->bigInteger('exam_id');
             $table->bigInteger('subject_id');
             $table->string('name');
             $table->integer('total_question');
