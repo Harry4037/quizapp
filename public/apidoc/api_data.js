@@ -1761,6 +1761,13 @@ define({ "api": [
             "optional": false,
             "field": "user_type",
             "description": "<p>User type*. (Creator =&gt; 2, User =&gt; 3)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "profile_pic",
+            "description": "<p>User Profile pic.(File Type)</p>"
           }
         ]
       }
