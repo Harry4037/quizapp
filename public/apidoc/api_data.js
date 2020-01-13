@@ -547,6 +547,41 @@ define({ "api": [
             "optional": false,
             "field": "user_id",
             "description": "<p>User ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "flag",
+            "description": "<p>Flag*.(1=&gt;Random question, 2=&gt; Filtered Question)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "exam_id",
+            "description": "<p>Exam Id in array format*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "subject_id",
+            "description": "<p>Subject Id in array format*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "total_questions",
+            "description": "<p>Total no. of questions*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "lang",
+            "description": "<p>Language(English=&gt;1,Hindi=&gt;2)*.</p>"
           }
         ]
       }
@@ -931,104 +966,6 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/QuestionController.php",
     "groupTitle": "Question_Answer"
-  },
-  {
-    "type": "get",
-    "url": "/api/start-quiz",
-    "title": "Start Quiz",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Accept",
-            "description": "<p>application/json.</p>"
-          }
-        ]
-      }
-    },
-    "name": "GetStartQuiz",
-    "group": "Quiz",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "exam_id",
-            "description": "<p>Exam Id in array format*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "subject_id",
-            "description": "<p>Subject Id in array format*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "total_questions",
-            "description": "<p>Total no. of questions*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "lang",
-            "description": "<p>Language(English=&gt;1,Hindi=&gt;2)*.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "success",
-            "description": "<p>true</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status_code",
-            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Question list.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "data",
-            "description": "<p>blank object.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Question list\",\n      \"data\": [\n          {\n              \"id\": 1,\n              \"description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\",\n              \"ques_image\": \" \",\n              \"ques_time\": 20,\n              \"answers\": [\n                  {\n                      \"id\": 1,\n                      \"question_id\": 1,\n                      \"description\": \"Lorem Ipsum.\",\n                      \"is_answer\": 0,\n                      \"created_at\": null,\n                      \"updated_at\": null,\n                      \"deleted_at\": null\n                  },\n                  {\n                      \"id\": 2,\n                      \"question_id\": 1,\n                      \"description\": \"Lorem Ipsum.\",\n                      \"is_answer\": 0,\n                      \"created_at\": null,\n                      \"updated_at\": null,\n                      \"deleted_at\": null\n                  },\n                  {\n                      \"id\": 3,\n                      \"question_id\": 1,\n                      \"description\": \"Lorem Ipsum.\",\n                      \"is_answer\": 0,\n                      \"created_at\": null,\n                      \"updated_at\": null,\n                      \"deleted_at\": null\n                  },\n                  {\n                      \"id\": 4,\n                      \"question_id\": 1,\n                      \"description\": \"Lorem Ipsum.\",\n                      \"is_answer\": 1,\n                      \"created_at\": null,\n                      \"updated_at\": null,\n                      \"deleted_at\": null\n                  }\n              ]\n          },\n      ]\n  }",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "app/Http/Controllers/Api/QuizController.php",
-    "groupTitle": "Quiz"
   },
   {
     "type": "post",
