@@ -42,15 +42,18 @@ Route::namespace("Api")->group(function() {
     Route::get('/comment-list', 'QuestionCommentController@commentList');
     Route::get('/notification', 'NotificationController@notificationlist');
 
-    Route::get('/series-question', 'TestSeriesController@createTestSeriesQues');
+    
     Route::post('/create-quiz', 'QuizController@createQuiz');
 
     //UserController
     Route::post('/update-language', 'UserController@updateLanguage');
     Route::post('/update-exam-selection', 'UserController@updateExamSelection');
 
-    //TestSeries
+    //TestSeriesController
     Route::post('/create-test-series', 'TestSeriesController@createTestSeries');
+    
+    //QuestionController
+    Route::post('/create-question', 'QuestionController@createQuestion');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

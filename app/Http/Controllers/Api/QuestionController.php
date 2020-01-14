@@ -10,6 +10,7 @@ use App\Models\UserQuestionLike;
 use App\Models\Question;
 use App\Models\UserAnswer;
 use App\Models\Answer;
+use App\Models\TestSeries;
 
 class QuestionController extends Controller {
 
@@ -298,6 +299,154 @@ class QuestionController extends Controller {
         $userQuesLike->save();
 
         return $this->successResponse("Question Liked.", (object) []);
+    }
+
+    /**
+     * @api {post} /api/create-question  Create Question
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostCreateQuestion
+     * @apiGroup Question/Answer
+     *
+     * @apiParam {String} description Description.
+     * @apiParam {String} ques_time Question Time.
+     * @apiParam {String} test_series_id Test Series Id.
+     * @apiParam {String} ques_image Question Image*.
+     * @apiParam {String} ans1 First Answer.
+     * @apiParam {String} ans2 Second Answer.
+     * @apiParam {String} ans3 Third Answer.
+     * @apiParam {String} ans4 Fourth Answer.
+     * @apiParam {String} Correct_ans Correct Answer (ans1,ans2,ans3,an4).
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Create test series.
+     * @apiSuccess {JSON} data Array.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Test Series Created successfully",
+     *       "data": {}
+     *   }
+     *
+     * @apiError descriptionMissing The Description missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "description missing.",
+     *     "data": {}
+     *  }
+     *
+     * @apiError questionTimeMissing The Question Time missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Question Time missing",
+     *     "data": {}
+     *  }
+     *
+     * @apiError testSeriesIdMissing The Test Series Id missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Test Series Id missing",
+     *     "data": {}
+     *  }
+     *
+     * @apiError subjectIdmissing The SubjectId missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Subject Id missing",
+     *     "data": {}
+     *  }
+     *
+     * @apiError QuestionPicNot validtype Question pic not valid file type.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Question pic not valid file type.",
+     *     "data": {}
+     *  }
+     *
+     */
+    public function createQuestion(Request $request) {
+        if (!$request->description) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans1) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans2) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans3) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans4) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->correct_ans) {
+            return $this->errorResponse("Correct Answer missing");
+        }
+        if (!$request->ques_time) {
+            return $this->errorResponse("Question Time missing");
+        }
+        if (!$request->test_series_id) {
+            return $this->errorResponse("Test Series Id missing");
+        }
+        $testSeries = TestSeries::find($request->test_series_id);
+        if (!$testSeries) {
+            return $this->errorResponse("Test Series not found.");
+        }
+//        if (!$request->subject_id) {
+//            return $this->errorResponse("subject ID missing");
+//        }
+        $question = new Question();
+        if ($request->ques_pic) {
+            if (!$request->hasFile("ques_pic")) {
+                return $this->errorResponse("Question pic not valid file type.");
+            }
+            $ques_image = $request->file("ques_pic");
+            $ques = Storage::disk('public')->put('ques_pic', $ques_image);
+            $ques_file_name = basename($ques);
+            $question->ques_image = $ques_file_name;
+        } else {
+            $question->ques_image = NULL;
+        }
+        $question->exam_id = $testSeries->exam_id;
+        $question->description = $request->description;
+        $question->ques_time = $request->ques_time;
+        $question->subject_id = $testSeries->subject_id;
+        $question->test_series_id = $request->test_series_id;
+        if ($question->save()) {
+            for ($i = 1; $i <= 4; $i++) {
+                $answer = new Answer();
+                $answer->question_id = $question->id;
+                $answer->description = $request->ans . $i;
+                if ($request->correct_ans == "ans" . $i) {
+                    $answer->is_answer = 1;
+                } else {
+                    $answer->is_answer = 0;
+                }
+                $answer->save();
+            }
+            return $this->successResponse("Question Added successfully", (object) []);
+        } else {
+            return $this->errorResponse("Something went wrong.");
+        }
     }
 
 }
