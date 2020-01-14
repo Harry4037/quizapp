@@ -11,7 +11,6 @@ use App\Models\Question;
 use App\Models\UserAnswer;
 use App\Models\Answer;
 use App\Models\TestSeries;
-use App\Models\UserQuestionLike;
 
 class QuestionController extends Controller {
 
