@@ -12,6 +12,7 @@ use App\Models\Question;
 use App\Models\TestSeries;
 use App\Models\Subject;
 use App\Models\Answer;
+use App\Models\Exam;
 
 class TestSeriesController extends Controller {
 
