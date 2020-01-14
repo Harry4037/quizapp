@@ -14,6 +14,20 @@ use Illuminate\Http\Request;
  */
 
 Route::namespace("Api")->group(function() {
+
+    if (\Request::segment(1) == "api") {
+        $myfile = fopen(__DIR__ . "/../storage/input_data.txt", "a") or die("Unable to open file!");
+        fwrite($myfile, "----------------------------------------------------");
+        fwrite($myfile, "\n" . json_encode(date("d-m-Y H:i:s")));
+        fwrite($myfile, "\n" . json_encode(\Request::segment(2)));
+        fwrite($myfile, "\n" . json_encode($_REQUEST));
+        fwrite($myfile, "\n");
+        fwrite($myfile, "----------------------------------------------------");
+        fwrite($myfile, "\n");
+        fwrite($myfile, "----------------------------------------------------");
+        fclose($myfile);
+    }
+
     Route::post('/send-otp', 'AuthController@sendOTP');
     Route::post('/verify-otp', 'AuthController@verifyOTP');
     Route::post('/register', 'UserController@userRegister');
@@ -27,18 +41,16 @@ Route::namespace("Api")->group(function() {
     Route::post('/comment', 'QuestionCommentController@comment');
     Route::get('/comment-list', 'QuestionCommentController@commentList');
     Route::get('/notification', 'NotificationController@notificationlist');
-    
+
     Route::get('/series-question', 'TestSeriesController@createTestSeriesQues');
     Route::post('/create-quiz', 'QuizController@createQuiz');
-    
+
     //UserController
     Route::post('/update-language', 'UserController@updateLanguage');
     Route::post('/update-exam-selection', 'UserController@updateExamSelection');
-    
+
     //TestSeries
     Route::post('/create-test-series', 'TestSeriesController@createTestSeries');
-
-
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
