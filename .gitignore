@@ -3,7 +3,7 @@
 /public/hot
 /public/storage
 /public/error_log
-/storage/*.key
+/storage
 /vendor
 .env
 .composer.lock
