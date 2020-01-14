@@ -11,6 +11,7 @@ use App\Models\Question;
 use App\Models\UserAnswer;
 use App\Models\Answer;
 use App\Models\TestSeries;
+use App\Models\UserQuestionLike;
 
 class QuestionController extends Controller {
 
@@ -44,6 +45,7 @@ class QuestionController extends Controller {
      *               "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
      *               "ques_image": " ",
      *               "ques_time": 20,
+     *               "is_like" : true,
      *               "answers": [
      *                   {
      *                       "id": 29,
@@ -88,6 +90,7 @@ class QuestionController extends Controller {
      *               "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
      *               "ques_image": " ",
      *               "ques_time": 20,
+     *               "is_like" : true,
      *               "answers": [
      *                   {
      *                       "id": 77,
@@ -141,10 +144,12 @@ class QuestionController extends Controller {
             $dataArray = [];
             foreach ($questions as $k => $question) {
                 $answers = Answer::where("question_id", $question->id)->get();
+                $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
                 $dataArray[$k]['id'] = $question->id;
                 $dataArray[$k]['description'] = $question->description;
                 $dataArray[$k]['ques_image'] = $question->ques_image;
                 $dataArray[$k]['ques_time'] = $question->ques_time;
+                $dataArray[$k]['is_like'] = $isLike ? true : false;
                 $dataArray[$k]['answers'] = $answers;
             }
 
@@ -183,10 +188,12 @@ class QuestionController extends Controller {
             $dataArray = [];
             foreach ($questions as $k => $question) {
                 $answers = Answer::where("question_id", $question->id)->get();
+                $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
                 $dataArray[$k]['id'] = $question->id;
                 $dataArray[$k]['description'] = $question->description;
                 $dataArray[$k]['ques_image'] = $question->ques_image;
                 $dataArray[$k]['ques_time'] = $question->ques_time;
+                $dataArray[$k]['is_like'] = $isLike ? true : false;
                 $dataArray[$k]['answers'] = $answers;
             }
 
