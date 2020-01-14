@@ -141,32 +141,42 @@ class UserController extends Controller {
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-      {
-      "status": true,
-      "status_code": 200,
-      "message": "user Profile.",
-      "data": {
-      "user_profile": {
-      "id": 1,
-      "name": null,
-      "email": null,
-      "mobile_number": "8077575835",
-      "user_type_id": 2,
-      "otp": "1234",
-      "profile_pic": null,
-      "device_token": null,
-      "latitude": null,
-      "longitude": null,
-      "is_active": 1,
-      "email_verified_at": null,
-      "created_by": "0",
-      "updated_by": "0",
-      "created_at": "2019-12-30 08:15:25",
-      "updated_at": "2019-12-30 08:15:25",
-      "deleted_at": null
-      }
-      }
-      }
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "user Profile.",
+     *       "data": {
+     *           "user_profile": {
+     *               "id": 2,
+     *               "name": "Hariom",
+     *               "email": "hariom@mail.com",
+     *               "mobile_number": "8077575835",
+     *               "dob": "1991-02-04",
+     *               "designation": "Student",
+     *               "qualification": "M.Com",
+     *               "into_line": null,
+     *               "lang": 1,
+     *               "user_type_id": 2,
+     *               "otp": "12345",
+     *               "profile_pic": "http://127.0.0.1:8000/storage/profile_pic/1hbKjNG9nhvNTtJtWMn2t7hlsSE6GLsuKqtp3scX.jpeg",
+     *               "device_token": null,
+     *               "latitude": null,
+     *               "longitude": null,
+     *               "is_active": 1,
+     *               "email_verified_at": null,
+     *               "created_by": "0",
+     *               "updated_by": "0",
+     *               "created_at": "2020-01-13 06:57:03",
+     *               "updated_at": "2020-01-13 06:57:03",
+     *               "deleted_at": null
+     *           },
+     *           "user": {
+     *               "following": 10,
+     *               "follower": 50,
+     *               "post": 35
+     *           }
+     *       }
+     *   }
      *
      * @apiError UserIDMissing The user ID is missing.
      * @apiErrorExample Error-Response:
@@ -188,6 +198,9 @@ class UserController extends Controller {
         $user = User::where("id", $request->user_id)->first();
         if ($user) {
             $data['user_profile'] = $user;
+            $data['user']['following'] = 10;
+            $data['user']['follower'] = 50;
+            $data['user']['post'] = 35;
             return $this->successResponse("user Profile.", $data);
         } else {
             return $this->errorResponse("User not found.");
