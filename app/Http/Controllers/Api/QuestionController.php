@@ -11,6 +11,8 @@ use App\Models\Question;
 use App\Models\UserAnswer;
 use App\Models\Answer;
 use App\Models\TestSeries;
+use App\Models\Subject;
+use App\Models\Exam;
 
 class QuestionController extends Controller {
 
@@ -436,6 +438,167 @@ class QuestionController extends Controller {
         $question->description = $request->description;
         $question->ques_time = $request->ques_time;
         $question->subject_id = $testSeries->subject_id;
+        $question->test_series_id = $request->test_series_id;
+        if ($question->save()) {
+            for ($i = 1; $i <= 4; $i++) {
+                $answer = new Answer();
+                $answer->question_id = $question->id;
+                $answer->description = $request->ans . $i;
+                if ($request->correct_ans == "ans" . $i) {
+                    $answer->is_answer = 1;
+                } else {
+                    $answer->is_answer = 0;
+                }
+                $answer->save();
+            }
+            return $this->successResponse("Question Added successfully", (object) []);
+        } else {
+            return $this->errorResponse("Something went wrong.");
+        }
+    }
+
+    /**
+     * @api {post} /api/create-single-question  Create Single Question
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostCreateSingleQuestion
+     * @apiGroup Question/Answer
+     *
+     * @apiParam {String} exam_id Exam.
+     * @apiParam {String} subject_id Subject.
+     * @apiParam {String} lang language(1 => English,2 => Hindi) .
+     * @apiParam {String} description Description.
+     * @apiParam {String} ques_time Question Time.
+     * @apiParam {String} test_series_id Test Series Id.
+     * @apiParam {String} ques_image Question Image*.
+     * @apiParam {String} ans1 First Answer.
+     * @apiParam {String} ans2 Second Answer.
+     * @apiParam {String} ans3 Third Answer.
+     * @apiParam {String} ans4 Fourth Answer.
+     * @apiParam {String} Correct_ans Correct Answer (ans1,ans2,ans3,an4).
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Create test series.
+     * @apiSuccess {JSON} data Array.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Question added successfully",
+     *       "data": {}
+     *   }
+     *
+     * @apiError descriptionMissing The Description missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "description missing.",
+     *     "data": {}
+     *  }
+     *
+     * @apiError questionTimeMissing The Question Time missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Question Time missing",
+     *     "data": {}
+     *  }
+     *
+     * @apiError testSeriesIdMissing The Test Series Id missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Test Series Id missing",
+     *     "data": {}
+     *  }
+     *
+     * @apiError subjectIdmissing The SubjectId missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Subject Id missing",
+     *     "data": {}
+     *  }
+     *
+     * @apiError QuestionPicNot validtype Question pic not valid file type.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Question pic not valid file type.",
+     *     "data": {}
+     *  }
+     *
+     */
+    public function createSingleQuestion(Request $request) {
+        if (!$request->subject_id) {
+            return $this->errorResponse("Subject ID missing");
+        }
+        if (!$request->exam_id) {
+            return $this->errorResponse("Exam ID missing");
+        }
+        if (!$request->description) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans1) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans2) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans3) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->ans4) {
+            return $this->errorResponse("description missing");
+        }
+        if (!$request->correct_ans) {
+            return $this->errorResponse("Correct Answer missing");
+        }
+        if (!$request->ques_time) {
+            return $this->errorResponse("Question Time missing");
+        }
+        if (!$request->lang) {
+            return $this->errorResponse("Language missing");
+        }
+        if (!in_array($request->lang, [1,2])) {
+            return $this->errorResponse("Language Type missing");
+        }
+        $subject = Subject::find($request->subject_id);
+        if(!$subject){
+            return $this->errorResponse("subject not found.");
+        }
+        $exam = Exam::find($request->exam_id);
+        if(!$exam){
+            return $this->errorResponse("Exam not found.");
+        }
+        $question = new Question();
+        if ($request->ques_pic) {
+            if (!$request->hasFile("ques_pic")) {
+                return $this->errorResponse("Question pic not valid file type.");
+            }
+            $ques_image = $request->file("ques_pic");
+            $ques = Storage::disk('public')->put('ques_pic', $ques_image);
+            $ques_file_name = basename($ques);
+            $question->ques_image = $ques_file_name;
+        } else {
+            $question->ques_image = NULL;
+        }
+        $question->exam_id = $exam->id;
+        $question->description = $request->description;
+        $question->ques_time = $request->ques_time;
+        $question->subject_id = $subject->id;
         $question->test_series_id = $request->test_series_id;
         if ($question->save()) {
             for ($i = 1; $i <= 4; $i++) {

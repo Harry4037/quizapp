@@ -54,6 +54,7 @@ Route::namespace("Api")->group(function() {
     
     //QuestionController
     Route::post('/create-question', 'QuestionController@createQuestion');
+    Route::post('/create-single-question', 'QuestionController@createSingleQuestion');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
