@@ -124,11 +124,36 @@ class AuthController extends Controller {
      *       "status_code": 200,
      *       "message": "OTP verified successfully.",
      *       "data": {
-     *         "user_detail": {
+     *           "user_detail": {
      *               "id": 2,
-     *               "name": "Hariom gangwar",
+     *               "name": "Hariom",
+     *               "email": "hariom@mail.com",
+     *               "mobile_number": "8077575835",
+     *               "dob": "1991-02-04",
+     *               "designation": "Student",
+     *               "qualification": "M.Com",
+     *               "into_line": null,
+     *               "lang": 1,
+     *               "user_type_id": 2,
+     *               "otp": "12345",
+     *               "profile_pic": "http://127.0.0.1:8000/storage/profile_pic/1hbKjNG9nhvNTtJtWMn2t7hlsSE6GLsuKqtp3scX.jpeg",
+     *               "device_token": null,
+     *               "latitude": null,
+     *               "longitude": null,
+     *               "is_active": 1,
+     *               "email_verified_at": null,
+     *               "created_by": "0",
+     *               "updated_by": "0",
+     *               "created_at": "2020-01-13 06:57:03",
+     *               "updated_at": "2020-01-13 06:57:03",
+     *               "deleted_at": null
+     *           },
+     *           "user": {
+     *               "following": 10,
+     *               "follower": 50,
+     *               "post": 35
      *           }
-     *      }
+     *       }
      *   }
      *
      * @apiError MobileNumberMissing The mobile number is missing.
@@ -175,9 +200,10 @@ class AuthController extends Controller {
         }
         $user = User::where(["mobile_number" => $request->mobile_number, "user_type_id" => $request->user_type, "otp" => $request->otp])->first();
         if ($user) {
-            $data['user_detail']['id'] = $user->id;
-            $data['user_detail']['mobile_number'] = $user->mobile_number;
-            $data['user_detail']['profile_pic'] = $user->profile_pic ? $user->profile_pic : '';
+            $data['user_detail'] = $user;
+            $data['user']['following'] = 10;
+            $data['user']['follower'] = 50;
+            $data['user']['post'] = 35;
             return $this->successResponse("OTP verified successfully.", $data);
         } else {
             return $this->errorResponse("Incorrect OTP.", (object) []);
