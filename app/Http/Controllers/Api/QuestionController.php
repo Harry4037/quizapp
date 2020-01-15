@@ -15,6 +15,7 @@ use App\Models\Subject;
 use App\Models\Exam;
 use App\Models\UserTestSeries;
 use App\Models\UserTestSeriesQuestionAnswer;
+use App\Models\User;
 
 class QuestionController extends Controller {
 
@@ -148,7 +149,11 @@ class QuestionController extends Controller {
             foreach ($questions as $k => $question) {
                 $answers = Answer::where("question_id", $question->id)->get();
                 $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
+                $user = User::find($question->user_id);
                 $dataArray[$k]['id'] = $question->id;
+                $dataArray[$k]['user']['id'] = $user ? $user->id : 0;
+                $dataArray[$k]['user']['name'] = $user ? $user->name : '';
+                $dataArray[$k]['user']['profile_pic'] = $user ? $user->profile_pic : '';
                 $dataArray[$k]['description'] = $question->description;
                 $dataArray[$k]['ques_image'] = $question->ques_image;
                 $dataArray[$k]['ques_time'] = $question->ques_time;
@@ -573,6 +578,7 @@ class QuestionController extends Controller {
             $question->ques_image = NULL;
         }
         $question->exam_id = $testSeries->exam_id;
+        $question->user_id = $testSeries->user_id;
         $question->description = $request->description;
         $question->ques_time = $request->ques_time;
         $question->subject_id = $testSeries->subject_id;
@@ -601,6 +607,7 @@ class QuestionController extends Controller {
      * @apiName PostCreateSingleQuestion
      * @apiGroup Question/Answer
      *
+     * @apiParam {String} user_id User ID.
      * @apiParam {String} exam_id Exam.
      * @apiParam {String} subject_id Subject.
      * @apiParam {String} lang language(1 => English,2 => Hindi) .
@@ -680,6 +687,9 @@ class QuestionController extends Controller {
      *
      */
     public function createSingleQuestion(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID missing");
+        }
         if (!$request->subject_id) {
             return $this->errorResponse("Subject ID missing");
         }
@@ -733,6 +743,7 @@ class QuestionController extends Controller {
         } else {
             $question->ques_image = NULL;
         }
+        $question->user_id = $request->user_id;
         $question->exam_id = $exam->id;
         $question->description = $request->description;
         $question->ques_time = $request->ques_time;
