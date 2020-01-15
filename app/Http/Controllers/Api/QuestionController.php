@@ -50,6 +50,11 @@ class QuestionController extends Controller {
      *               "ques_image": " ",
      *               "ques_time": 20,
      *               "is_like" : true,
+     *                "user": {
+     *                   "id": 2,
+     *                   "name": "manish",
+     *                   "profile_pic": ""
+     *                },
      *               "answers": [
      *                   {
      *                       "id": 29,
@@ -95,6 +100,11 @@ class QuestionController extends Controller {
      *               "ques_image": " ",
      *               "ques_time": 20,
      *               "is_like" : true,
+     *                "user": {
+     *                   "id": 2,
+     *                   "name": "manish",
+     *                   "profile_pic": ""
+     *                },
      *               "answers": [
      *                   {
      *                       "id": 77,
