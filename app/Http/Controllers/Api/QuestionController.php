@@ -13,6 +13,8 @@ use App\Models\Answer;
 use App\Models\TestSeries;
 use App\Models\Subject;
 use App\Models\Exam;
+use App\Models\UserTestSeries;
+use App\Models\UserTestSeriesQuestionAnswer;
 
 class QuestionController extends Controller {
 
@@ -210,10 +212,27 @@ class QuestionController extends Controller {
      * @apiName PostSubmitAnswer
      * @apiGroup Question/Answer
      *
-     * @apiParam {String} user_id User ID*.
-     * @apiParam {String} question_id Question ID's in Array Format*.
-     * @apiParam {String} answer_id Answer ID's in Array Format*.
-     * @apiParam {String} is_correct IsCorrect in Array Format* (0=> Incorrect Answer, 1 => Correct Answer).
+     * @apiExample Example usage:
+     * body:
+     *   {
+     *           "user_id":1,
+     *           "name" : "SSC_1",
+     *           "exam_id":1,
+     *           "subject_id":1,
+     *           "lang":1,
+     *           "questions":[
+     *                   {
+     *                           "question_id":1,
+     *                           "answer_id":4,
+     *                           "is_correct":1
+     *                   },
+     *                   {
+     *                           "question_id":2,
+     *                           "answer_id":6,
+     *                           "is_correct":0
+     *                   }
+     *           ]
+     *   }
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -226,47 +245,166 @@ class QuestionController extends Controller {
      *       "status": true,
      *       "status_code": 200,
      *       "message": "Answer's submitted succeffully.",
-     *       "data": {}
+     *       "data": {
+     *           "test_series": {
+     *               "name": "SSC_1",
+     *               "your_score": 1,
+     *               "total_score": 2,
+     *               "your_rank": "2300",
+     *               "total_rank": "5000",
+     *               "questions": [
+     *                   {
+     *                       "question": {
+     *                           "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+     *                           "ques_image": " "
+     *                       },
+     *                       "your_answer_id": 4,
+     *                       "answers": [
+     *                           {
+     *                               "id": 1,
+     *                               "description": "Lorem Ipsum.",
+     *                               "is_answer": 0
+     *                           },
+     *                           {
+     *                               "id": 2,
+     *                               "description": "Lorem Ipsum.",
+     *                               "is_answer": 0
+     *                           },
+     *                           {
+     *                               "id": 3,
+     *                               "description": "Lorem Ipsum.",
+     *                               "is_answer": 0
+     *                           },
+     *                           {
+     *                               "id": 4,
+     *                               "description": "Lorem Ipsum.",
+     *                               "is_answer": 1
+     *                           }
+     *                       ]
+     *                   },
+     *                   {
+     *                       "question": {
+     *                           "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+     *                           "ques_image": " "
+     *                       },
+     *                       "your_answer_id": 6,
+     *                       "answers": [
+     *                           {
+     *                               "id": 5,
+     *                               "description": "Lorem Ipsum.",
+     *                               "is_answer": 0
+     *                           },
+     *                           {
+     *                               "id": 6,
+     *                               "description": "Lorem Ipsum.",
+     *                               "is_answer": 0
+     *                           },
+     *                           {
+     *                               "id": 7,
+     *                               "description": "Lorem Ipsum.",
+     *                               "is_answer": 0
+     *                           },
+     *                           {
+     *                               "id": 8,
+     *                               "description": "Lorem Ipsum.",
+     *                               "is_answer": 1
+     *                           }
+     *                       ]
+     *                   }
+     *               ]
+     *           }
+     *       }
      *   }
      *
      */
     public function submitQuestion(Request $request) {
-
-        if (!$request->user_id) {
+        if (empty($request->input())) {
+            return $this->errorResponse("Parameter Body Missing.");
+        }
+//        dd();
+        if (!$request->input("user_id")) {
             return $this->errorResponse("User Id missing.");
         }
-        if (!$request->question_id) {
-            return $this->errorResponse("Question Id's missing.");
+        if (!$request->input("name")) {
+            return $this->errorResponse("Name missing.");
         }
-        if (!is_array($request->question_id)) {
-            return $this->errorResponse("Question Id's not in proper format.");
+        if (!$request->input("exam_id")) {
+            return $this->errorResponse("Exam Id missing.");
         }
-        if (!$request->answer_id) {
-            return $this->errorResponse("Answer Id's missing.");
+        $exam = Exam::find($request->input("exam_id"));
+        if (!$exam) {
+            return $this->errorResponse("Exam not found.");
         }
-        if (!is_array($request->answer_id)) {
-            return $this->errorResponse("Answer Id's not in proper format.");
+        if (!$request->input("subject_id")) {
+            return $this->errorResponse("Exam Id missing.");
         }
-        if (!is_array($request->is_correct)) {
-            return $this->errorResponse("IsCorrect Id's not in proper format.");
+        $subject = Subject::find($request->input("subject_id"));
+        if (!$subject) {
+            return $this->errorResponse("Subject not found.");
         }
+        if (!$request->input("lang")) {
+            return $this->errorResponse("Language missing.");
+        }
+        if (!in_array($request->input("lang"), [1, 2])) {
+            return $this->errorResponse("Invalid Language Type.");
+        }
+        if (!$request->input("questions")) {
+            return $this->errorResponse("Questions missing.");
+        }
+        if (!is_array($request->input("questions"))) {
+            return $this->errorResponse("Questions missing.");
+        }
+        try {
+            $UserTestSeries = new UserTestSeries();
+            $UserTestSeries->user_id = $request->input("user_id");
+            $UserTestSeries->name = $request->input("name");
+            $UserTestSeries->exam_id = $request->input("exam_id");
+            $UserTestSeries->subject_id = $request->input("subject_id");
+            $UserTestSeries->lang = $request->input("lang");
+            if ($UserTestSeries->save()) {
+                $total = 0;
+                $correct = 0;
+                $questions = [];
+                foreach ($request->input("questions") as $k => $question) {
+                    $UserTestSeriesQuestionAnswer = new UserTestSeriesQuestionAnswer();
+                    $UserTestSeriesQuestionAnswer->user_test_series_id = $UserTestSeries->id;
+                    $UserTestSeriesQuestionAnswer->question_id = $question['question_id'];
+                    $UserTestSeriesQuestionAnswer->answer_id = $question['answer_id'];
+                    $UserTestSeriesQuestionAnswer->is_correct = $question['is_correct'];
+                    $UserTestSeriesQuestionAnswer->save();
+                    $questionDetail = Question::find($question['question_id']);
+                    $answers = Answer::where("question_id", $question['question_id'])->get();
+                    $questions[$k]['question']['description'] = $questionDetail->description;
+                    $questions[$k]['question']['ques_image'] = $questionDetail->ques_image;
 
-        $questionCount = count($request->question_id);
-        $answerCount = count($request->answer_id);
-        if ($questionCount != $answerCount) {
-            return $this->errorResponse("Question array length and answer array length is not equal.");
-        }
+                    $questions[$k]['your_answer_id'] = $question['answer_id'];
+                    if ($answers) {
+                        foreach ($answers as $j => $answer) {
+                            $questions[$k]['answers'][$j]['id'] = $answer->id;
+                            $questions[$k]['answers'][$j]['description'] = $answer->description;
+                            $questions[$k]['answers'][$j]['is_answer'] = $answer->is_answer;
+                        }
+                    }
+                    if ($UserTestSeriesQuestionAnswer->is_correct == 1) {
+                        $correct++;
+                    }
+                    $total++;
+                }
+                $dataArray['test_series']['name'] = $UserTestSeries->name;
+                $dataArray['test_series']['your_score'] = $correct;
+                $dataArray['test_series']['total_score'] = $total;
+                $dataArray['test_series']['your_rank'] = "2300";
+                $dataArray['test_series']['total_rank'] = "5000";
+                $dataArray['test_series']['questions'] = $questions;
 
-        foreach ($request->question_id as $k => $questionID) {
-            $userAnswer = new UserAnswer();
-            $userAnswer->user_id = $request->user_id;
-            $userAnswer->question_id = $questionID;
-            $userAnswer->is_correct = $request->is_correct[$k];
-            $userAnswer->answer_id = $request->answer_id[$k];
-            $userAnswer->save();
-        }
 
-        return $this->successResponse("Answer's submitted succeffully.", (object) []);
+                return $this->successResponse("Answer's submitted succeffully.", $dataArray);
+            } else {
+                return $this->errorResponse("Something went wrong.");
+            }
+        } catch (Exception $ex) {
+            return $this->errorResponse($ex->getMessage());
+        }
     }
 
     /**
@@ -572,15 +710,15 @@ class QuestionController extends Controller {
         if (!$request->lang) {
             return $this->errorResponse("Language missing");
         }
-        if (!in_array($request->lang, [1,2])) {
+        if (!in_array($request->lang, [1, 2])) {
             return $this->errorResponse("Language Type missing");
         }
         $subject = Subject::find($request->subject_id);
-        if(!$subject){
+        if (!$subject) {
             return $this->errorResponse("subject not found.");
         }
         $exam = Exam::find($request->exam_id);
-        if(!$exam){
+        if (!$exam) {
             return $this->errorResponse("Exam not found.");
         }
         $question = new Question();

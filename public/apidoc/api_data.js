@@ -1301,40 +1301,13 @@ define({ "api": [
     },
     "name": "PostSubmitAnswer",
     "group": "Question_Answer",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "user_id",
-            "description": "<p>User ID*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "question_id",
-            "description": "<p>Question ID's in Array Format*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "answer_id",
-            "description": "<p>Answer ID's in Array Format*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "is_correct",
-            "description": "<p>IsCorrect in Array Format* (0=&gt; Incorrect Answer, 1 =&gt; Correct Answer).</p>"
-          }
-        ]
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "body:\n  {\n          \"user_id\":1,\n          \"name\" : \"SSC_1\",\n          \"exam_id\":1,\n          \"subject_id\":1,\n          \"lang\":1,\n          \"questions\":[\n                  {\n                          \"question_id\":1,\n                          \"answer_id\":4,\n                          \"is_correct\":1\n                  },\n                  {\n                          \"question_id\":2,\n                          \"answer_id\":6,\n                          \"is_correct\":0\n                  }\n          ]\n  }",
+        "type": "json"
       }
-    },
+    ],
     "success": {
       "fields": {
         "Success 200": [
@@ -1371,7 +1344,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Answer's submitted succeffully.\",\n      \"data\": {}\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Answer's submitted succeffully.\",\n      \"data\": {\n          \"test_series\": {\n              \"name\": \"SSC_1\",\n              \"your_score\": 1,\n              \"total_score\": 2,\n              \"your_rank\": \"2300\",\n              \"total_rank\": \"5000\",\n              \"questions\": [\n                  {\n                      \"question\": {\n                          \"description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\",\n                          \"ques_image\": \" \"\n                      },\n                      \"your_answer_id\": 4,\n                      \"answers\": [\n                          {\n                              \"id\": 1,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0\n                          },\n                          {\n                              \"id\": 2,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0\n                          },\n                          {\n                              \"id\": 3,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0\n                          },\n                          {\n                              \"id\": 4,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 1\n                          }\n                      ]\n                  },\n                  {\n                      \"question\": {\n                          \"description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.\",\n                          \"ques_image\": \" \"\n                      },\n                      \"your_answer_id\": 6,\n                      \"answers\": [\n                          {\n                              \"id\": 5,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0\n                          },\n                          {\n                              \"id\": 6,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0\n                          },\n                          {\n                              \"id\": 7,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0\n                          },\n                          {\n                              \"id\": 8,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 1\n                          }\n                      ]\n                  }\n              ]\n          }\n      }\n  }",
           "type": "json"
         }
       ]
