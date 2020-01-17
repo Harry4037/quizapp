@@ -317,6 +317,147 @@ define({ "api": [
     "groupTitle": "Exam"
   },
   {
+    "type": "gwt",
+    "url": "/api/follow",
+    "title": "Follow",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetFollow",
+    "group": "Follow",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User user_id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "follow_user_id",
+            "description": "<p>Follow User Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Following.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>blank object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Following\",\n      \"data\": {\n           \"follow\": true,\n           \"count\": 1\n        }\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Unfollow\",\n      \"data\": {\n           \"follow\": false,\n           \"count\": 1\n        }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdmissing",
+            "description": "<p>User Id missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ProductIdmissing",
+            "description": "<p>Product Id missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Productnotfound",
+            "description": "<p>Product not found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "usernotfound",
+            "description": "<p>user not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"User Id missing.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Follow User Id Missing\",\n      \"data\": {}\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Follow User not found.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"user not found.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/FollowController.php",
+    "groupTitle": "Follow"
+  },
+  {
     "type": "get",
     "url": "/api/notification",
     "title": "Notification",

@@ -42,7 +42,7 @@ Route::namespace("Api")->group(function() {
     Route::get('/comment-list', 'QuestionCommentController@commentList');
     Route::get('/notification', 'NotificationController@notificationlist');
 
-    
+
     Route::post('/create-quiz', 'QuizController@createQuiz');
 
     //UserController
@@ -51,10 +51,12 @@ Route::namespace("Api")->group(function() {
 
     //TestSeriesController
     Route::post('/create-test-series', 'TestSeriesController@createTestSeries');
-    
+
     //QuestionController
     Route::post('/create-question', 'QuestionController@createQuestion');
     Route::post('/create-single-question', 'QuestionController@createSingleQuestion');
+
+    Route::get('/follow', 'FollowController@follow');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
