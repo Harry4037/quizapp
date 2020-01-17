@@ -6,11 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bookmark extends Model
 {
-    public function questionDetail(){
-		return $this->belongsTo('App\Models\Question', 'question_id');
+    public function testseriesDetail(){
+		return $this->belongsTo('App\Models\TestSeries', 'test_series_id');
   }
 
-    public function subjectDetail(){
-    return $this->belongsTo('App\Models\Subject', 'subject_id', 'id' );
-}
 }
