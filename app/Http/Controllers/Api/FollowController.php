@@ -11,7 +11,7 @@ class FollowController extends Controller
 {
 
      /**
-     * @api {gwt} /api/follow  Follow
+     * @api {get} /api/follow  Follow
      * @apiHeader {String} Accept application/json.
      * @apiName GetFollow
      * @apiGroup Follow

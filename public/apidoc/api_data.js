@@ -317,7 +317,7 @@ define({ "api": [
     "groupTitle": "Exam"
   },
   {
-    "type": "gwt",
+    "type": "get",
     "url": "/api/follow",
     "title": "Follow",
     "header": {
