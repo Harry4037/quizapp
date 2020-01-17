@@ -320,7 +320,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n   {\n     \"status\": true,\n     \"status_code\": 200,\n     \"message\": \"Bookmark List.\",\n     \"data\": {\n       \"Bookmark_list\": [\n         {\n           \"id\": 2,\n           \"question_id\": 1,\n           \"question_id\": 3,\n           \"created_at\": null,\n           \"subject_id\": 3,\n           \"description\": \"Lorem Ipsum is simply dummy text of the printing\",\n           \"ques_image\": 556,\n           \"ques_time\": 10,\n           \"subject_detail\": \"ssc\"\n          }\n        ]\n     }\n   }",
+          "content": "HTTP/1.1 200 OK\n   {\n     \"status\": true,\n     \"status_code\": 200,\n     \"message\": \"Bookmark List.\",\n     \"data\": {\n       \"Bookmark_list\": [\n         {\n           \"id\": 2,\n           \"test_series_id\": 1,\n           \"created_at\": null,\n           \"subject_id\": 3,\n           \"name\": \"Lorem Ipsum is simply dummy text of the printing\",\n           \"total_question\": 556,\n           \"lang\": 1,\n           \"subject_name\": \"ssc\"\n          }\n        ]\n     }\n   }",
           "type": "json"
         }
       ]
@@ -392,8 +392,8 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "question_id",
-            "description": "<p>Question_id.</p>"
+            "field": "test_series_id",
+            "description": "<p>Test Series Id.</p>"
           }
         ]
       }
@@ -420,7 +420,7 @@
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Question bookmarked successfully.</p>"
+            "description": "<p>test series bookmarked successfully.</p>"
           },
           {
             "group": "Success 200",
@@ -434,12 +434,12 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Question bookmarked successfully.\",\n      \"data\": {\n           \"favorite\": true,\n           \"count\": 1\n        }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Test Series bookmarked successfully.\",\n      \"data\": {\n           \"favorite\": true,\n           \"count\": 1\n        }\n  }",
           "type": "json"
         },
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Question bookmarked Removed.\",\n      \"data\": {\n           \"favorite\": false,\n           \"count\": 1\n        }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"test_series bookmarked Removed.\",\n      \"data\": {\n           \"favorite\": false,\n           \"count\": 1\n        }\n  }",
           "type": "json"
         }
       ]
@@ -456,14 +456,14 @@
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "QuestionIdmissing",
-            "description": "<p>Question Id missing.</p>"
+            "field": "test_seriesIdmissing",
+            "description": "<p>test_series Id missing.</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "Questionnotfound",
-            "description": "<p>Question not found.</p>"
+            "field": "test_seriesnotfound",
+            "description": "<p>test_series not found.</p>"
           },
           {
             "group": "Error 4xx",
@@ -481,12 +481,12 @@
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Question Id missing.\",\n      \"data\": {}\n  }",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"test_series Id missing.\",\n      \"data\": {}\n  }",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Question not found.\",\n      \"data\": {}\n  }",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"test_series not found.\",\n      \"data\": {}\n  }",
           "type": "json"
         },
         {
