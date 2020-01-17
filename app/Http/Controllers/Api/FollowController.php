@@ -14,7 +14,7 @@ class FollowController extends Controller
      * @api {get} /api/follow  Follow
      * @apiHeader {String} Accept application/json.
      * @apiName GetFollow
-     * @apiGroup Follow
+     * @apiGroup User
      *
      * @apiParam {String} user_id User user_id*.
      * @apiParam {String} follow_user_id Follow User Id.
