@@ -2597,5 +2597,124 @@
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/UserController.php",
     "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/api/user-update",
+    "title": "User Update",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostUserUpdate",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>user name*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email.*</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "profile_pic",
+            "description": "<p>picture file.*</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>User ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "dob",
+            "description": "<p>Date Of Birth(2020-01-08)*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "designation",
+            "description": "<p>Designation*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Profile Updated..</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>blank object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Profile Updated.\",\n      \"data\": {\n         \"user\": {\n              \"id\": 1,\n              \"name\": \"Ankit\",\n              \"email\": \"ankit@mail.com\",\n              \"mobile_number\": \"8077575835\",\n              \"dob\": \"2020-01-13\",\n              \"designation\": \"Student\",\n              \"qualification\": \"M.A.\",\n              \"lang\": \"2\",\n              \"user_type_id\": 1,\n              \"otp\": null,\n              \"profile_pic\": \"http://127.0.0.1:8000/img/no-image.jpg\",\n              \"device_token\": null,\n              \"latitude\": null,\n              \"longitude\": null,\n              \"is_active\": 1,\n              \"email_verified_at\": null,\n              \"created_by\": \"0\",\n              \"updated_by\": \"0\",\n              \"created_at\": null,\n              \"updated_at\": \"2020-01-13 06:19:55\",\n              \"deleted_at\": null\n         }\n     }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/UserController.php",
+    "groupTitle": "User"
   }
 ]
