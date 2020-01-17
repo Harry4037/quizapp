@@ -57,6 +57,9 @@ Route::namespace("Api")->group(function() {
     Route::post('/create-single-question', 'QuestionController@createSingleQuestion');
 
     Route::get('/follow', 'FollowController@follow');
+
+    Route::post('/add-bookmark', 'BookmarkController@addBookmark');
+    Route::get('/bookmark-list', 'BookmarkController@bookmarkList');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
