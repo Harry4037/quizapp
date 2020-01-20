@@ -10,7 +10,7 @@ use App\Models\User;
 use Validator;
 use Illuminate\Validation\Rule;
 
-class UserController extends Controller {
+class CreatorController extends Controller {
 
     public function index(Request $request) {
         $css = [
@@ -20,7 +20,7 @@ class UserController extends Controller {
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
             'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
         ];
-        return view('admin.user.index', [
+        return view('admin.creator.index', [
             'js' => $js,
             'css' => $css,
         ]);
@@ -32,7 +32,7 @@ class UserController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = User::query()->where("user_type_id", 2);
+            $query = User::query()->where("user_type_id", 3);
             if ($searchKeyword) {
                 $query->where(function($q) use($searchKeyword) {
                     $q->where("name", "LIKE", "%$searchKeyword%")
@@ -53,7 +53,7 @@ class UserController extends Controller {
                 $usersArray[$k]['lang'] = $user->lang;
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$k]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $usersArray[$k]['action'] = '<a href="' . route('admin.user.edit', $user) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;'
+                $usersArray[$k]['action'] = '<a href="' . route('admin.creator.edit', $user) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $user->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
@@ -90,7 +90,7 @@ class UserController extends Controller {
                             'user_email' => ['email'],
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.user.edit', $user->id)->withErrors($validator)->withInput();
+                    return redirect()->route('admin.creator.edit', $user->id)->withErrors($validator)->withInput();
                 }
 
                 if ($request->hasFile('profile_pic')) {
@@ -109,17 +109,17 @@ class UserController extends Controller {
                 $user->dob = $request->dob;
 
                 if ($user->save()) {
-                    return redirect()->route('admin.user.index')->with('status', 'User has been updated successfully.');
+                    return redirect()->route('admin.creator.index')->with('status', 'User has been updated successfully.');
                 } else {
-                    return redirect()->route('admin.user.index')->with('error', 'Something went be wrong.');
+                    return redirect()->route('admin.creator.index')->with('error', 'Something went be wrong.');
                 }
             }
 
-            return view('admin.user.edit', [
+            return view('admin.creator.edit', [
                 'user' => $user
             ]);
         } catch (\Exception $ex) {
-            return redirect()->route('admin.user.index')->with('error', $ex->getMessage());
+            return redirect()->route('admin.creator.index')->with('error', $ex->getMessage());
         }
     }
 
@@ -161,7 +161,7 @@ class UserController extends Controller {
                             'user_email' => ['email'],
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.user.add')->withErrors($validator)->withInput();
+                    return redirect()->route('admin.creator.add')->withErrors($validator)->withInput();
                 }
                 $user = new User();
                 if ($request->hasFile('profile_pic')) {
@@ -183,15 +183,15 @@ class UserController extends Controller {
                 $user->updated_by = auth()->user()->id;
 
                 if ($user->save()) {
-                    return redirect()->route('admin.user.index')->with('status', 'User has been added successfully.');
+                    return redirect()->route('admin.creator.index')->with('status', 'User has been added successfully.');
                 } else {
-                    return redirect()->route('admin.user.index')->with('error', 'Something went be wrong.');
+                    return redirect()->route('admin.creator.index')->with('error', 'Something went be wrong.');
                 }
             }
 
-            return view('admin.user.add');
+            return view('admin.creator.add');
         } catch (\Exception $ex) {
-            return redirect()->route('admin.user.index')->with('error', $ex->getMessage());
+            return redirect()->route('admin.creator.index')->with('error', $ex->getMessage());
         }
     }
 
