@@ -64,6 +64,7 @@ Route::namespace("Api")->group(function() {
     Route::get('/bookmark-list', 'BookmarkController@bookmarkList');
 
     Route::get('/search', 'TestSeriesController@search');
+    Route::post('/creator-user-profile', 'UserController@CreatorUserProfile');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
