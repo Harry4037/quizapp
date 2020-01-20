@@ -23,7 +23,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">Questions</span>
-                        <span class="info-box-number">12</span>
+                        <span class="info-box-number">{{$totalQuestionCount}}</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -36,7 +36,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">Creater</span>
-                        <span class="info-box-number">10</span>
+                        <span class="info-box-number">{{$creatorCount}}</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -56,20 +56,7 @@
                 </div>
                 <!-- /.info-box -->
             </div>
-            <!-- /.col -->
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
 
-                    <div class="info-box-content">
-                        <span class="info-box-text">Users</span>
-                        <span class="info-box-number">{{$usersCount}}</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
         </div>
         <!-- /.row -->
     </section>

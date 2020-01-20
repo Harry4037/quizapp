@@ -6,16 +6,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Menu;
+use App\Models\Question;
 
 class DashboardController extends Controller {
 
     public function index(Request $request) {
-        $usersCount = User::where('user_type_id', 3)->count();
-        $staffCount = User::where('user_type_id', 2)->count();
+        $totalQuestionCount = Question::count();
+        $usersCount = User::where('user_type_id', 2)->count();
+        $creatorCount = User::where('user_type_id', 3)->count();
         return view('admin.dashboard.index', [
             'usersCount' => $usersCount,
-            'staffCount' => $staffCount,
+            'creatorCount' => $creatorCount,
+            'totalQuestionCount' => $totalQuestionCount,
         ]);
     }
 
