@@ -376,7 +376,7 @@ class UserController extends Controller {
      * @apiParam {String} name user name*.
      * @apiParam {String} email email.*
      * @apiParam {String} profile_pic picture file.*
-     * @apiParam {String} id User ID.
+     * @apiParam {String} user_id User ID.
      * @apiParam {String} dob Date Of Birth(2020-01-08)*.
      * @apiParam {String} designation Designation*.
      *
@@ -422,6 +422,13 @@ class UserController extends Controller {
      *
      */
     public function userUpdate(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID Missing.");
+        }
+        $user = User::find($request->user_id);
+        if (!$user) {
+            return $this->errorResponse("User Not Found.");
+        }
         $userArray = [];
         if ($request->profile_pic) {
             if (!$request->hasFile("profile_pic")) {
@@ -445,7 +452,7 @@ class UserController extends Controller {
             $userArray['designation'] = $request->designation;
         }
         $userArray['updated_at'] = new \DateTime("now");
-        User::where('id', auth('api')->user()->id)->update($userArray);
+        User::where('id', $request->user_id)->update($userArray);
         return $this->successResponse("Profile Updated.", (object) []);
     }
 }
