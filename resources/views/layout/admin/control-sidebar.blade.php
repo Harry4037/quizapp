@@ -34,12 +34,6 @@
                     <li><a href="{{ route('admin.creator.index')}}"><i class="fa fa-user"></i>Creator</a></li>
                 </ul>
             </li>
-
-            <li>
-                <a href="{{ route('admin.user.index')}}">
-                    <i class="fa fa-users"></i> <span>Users</span>
-                </a>
-            </li>
             <li>
                 <a href="{{ route('admin.subject.index')}}">
                     <i class="fa fa-users"></i> <span>Subject</span>
