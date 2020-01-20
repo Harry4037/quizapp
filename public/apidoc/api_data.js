@@ -2479,7 +2479,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "id",
+            "field": "user_id",
             "description": "<p>User ID.</p>"
           },
           {
