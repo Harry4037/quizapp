@@ -32,7 +32,7 @@ class CreatorController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = User::query()->where("user_type_id", 3);
+            $query = User::query()->where("user_type_id", 2);
             if ($searchKeyword) {
                 $query->where(function($q) use($searchKeyword) {
                     $q->where("name", "LIKE", "%$searchKeyword%")
@@ -150,7 +150,7 @@ class CreatorController extends Controller {
                                 'bail',
                                 'required',
                                 Rule::unique('users', 'mobile_number')->where(function ($query) use($request) {
-                                            return $query->where(['mobile_number' => $request->mobile_number, 'user_type_id' => 3])
+                                            return $query->where(['mobile_number' => $request->mobile_number, 'user_type_id' => 2])
                                                             ->whereNull('deleted_at');
                                         }),
                             ],
@@ -196,7 +196,7 @@ class CreatorController extends Controller {
     }
 
     public function checkMobileNumber(Request $request) {
-        $existing = User::where(['mobile_number' => $request->mobile_number, 'user_type_id' => 3])->first();
+        $existing = User::where(['mobile_number' => $request->mobile_number, 'user_type_id' => 2])->first();
         if ($existing) {
             return response()->json(false);
         } else {

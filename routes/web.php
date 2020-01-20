@@ -1,5 +1,4 @@
 <?php
-
 /*
   |--------------------------------------------------------------------------
   | Web Routes
@@ -24,7 +23,6 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
     Route::match(['get', 'post'], '/profile', 'LoginController@profile')->name('admin.profile');
     Route::match(['get', 'post'], '/change-password', 'LoginController@changePassword')->name('admin.change-password');
 
-
     // User Routes
     Route::prefix('user')->group(function() {
         Route::get('/', 'UserController@index')->name('admin.user.index');
@@ -35,6 +33,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/status', 'UserController@userStatus')->name('admin.user.status');
         Route::post('/check-mobile-number', 'UserController@checkMobileNumber')->name('admin.user.check-mobile-no');
     });
+
     //creator
     Route::prefix('creator')->group(function() {
         Route::get('/', 'CreatorController@index')->name('admin.creator.index');
@@ -46,7 +45,6 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/check-mobile-number', 'CreatorController@checkMobileNumber')->name('admin.creator.check-mobile-no');
     });
 
-
     // Subject Routes
     Route::prefix('subject')->group(function() {
         Route::get('/', 'SubjectController@index')->name('admin.subject.index');
@@ -57,7 +55,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::get('/subject-questions', 'SubjectController@getSubjectQuestions')->name('admin.subject.questions');
     });
 
-        // Exam Routes
+    // Exam Routes
     Route::prefix('exam')->group(function() {
         Route::get('/', 'ExamController@index')->name('admin.exam.index');
         Route::get('/list', 'ExamController@examList')->name('admin.exam.list');

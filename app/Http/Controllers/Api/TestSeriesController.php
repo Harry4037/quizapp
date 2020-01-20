@@ -208,4 +208,76 @@ class TestSeriesController extends Controller {
         dd($testSeries->toArray());
     }
 
+        /**
+     * @api {get} /api/search search
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetSearch
+     * @apiGroup Search
+     *
+     * @apiParam {String} name Name*.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message 1=>testseries, 2=>usertest series.
+     * @apiSuccess {JSON} data response.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "Search Results",
+     *    "data": {
+     *        "search_list": [
+     *        {
+     *            "id": 1,
+     *            "name": "fdgfdg",
+     *            "created_at": null,
+     *            "flag": 1,
+     *            "total_ques_no": 12
+     *        }
+     *      ]
+     *   }
+     * }
+     *
+     * @apiError InputMissing Input missing
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "Input Missing.",
+     *       "data": {}
+     *   }
+     *
+     */
+    public function search(Request $request) {
+        if (!$request->name) {
+            return $this->errorResponse("Input Missing.");
+        }else{
+            $searchKeyword = $request->name;
+            $dataArray = [];
+            $dataArray1 = [];
+            $result = TestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id','name','total_question','created_at')->get();
+             foreach ($result as $k => $test) {
+                $dataArray[$k]['id'] = $test->id;
+                $dataArray[$k]['name'] = $test->name;
+                $dataArray[$k]['created_at'] = $test->created_at;
+                $dataArray[$k]['flag'] = 1;
+                $dataArray[$k]['total_ques_no'] = $test->total_question;
+            }
+            $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id','name','created_at')->get();
+            foreach ($result1 as $k => $test1) {
+                $dataArray1[$k]['id'] = $test1->id;
+                $dataArray1[$k]['name'] = $test1->name;
+                $dataArray1[$k]['created_at'] = $test1->created_at;
+                $dataArray1[$k]['flag'] = 2;
+                $dataArray1[$k]['total_ques_no'] = NULL;
+            }
+            $res = array_merge($dataArray, $dataArray1);
+            $data['search_list']=$res;
+            return $this->successResponse("Search Results", $data);
+        }
+
+    }
 }

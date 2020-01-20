@@ -431,8 +431,6 @@ class UserController extends Controller {
             $profile = Storage::disk('public')->put('profile_pic', $profile_image);
             $profile_file_name = basename($profile);
             $userArray['profile_pic'] = $profile_file_name;
-
-            $data = User::find($request->id);
         }
         if ($request->name) {
             $userArray['name'] = $request->name;
@@ -448,7 +446,6 @@ class UserController extends Controller {
         }
         $userArray['updated_at'] = new \DateTime("now");
         User::where('id', auth('api')->user()->id)->update($userArray);
-        $data['user'] = User::find(auth('api')->user()->id);
-        return $this->successResponse("Profile Updated.", $data);
+        return $this->successResponse("Profile Updated.", (object) []);
     }
 }
