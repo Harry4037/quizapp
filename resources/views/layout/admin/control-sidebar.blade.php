@@ -17,31 +17,39 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
-            @if(Session::has('menus'))
-            @foreach(Session::get('menus')[0] as $menu)
-            @if(is_array($menu['child_menu']) && !empty($menu['child_menu']))
+            <li>
+                <a href="{{ route('admin.dashboard')}}">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                </a>
+            </li>
             <li class="treeview">
                 <a href="#">
-                    <i class="{{$menu['menu_icon']}}"></i> <span>{{$menu['menu_name']}}</span>
+                    <i class="fa fa-users"></i> <span>Users</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    @foreach($menu['child_menu'] as $child)
-                    <li><a href="{{ route($child['menu_link'])}}"><i class="{{$child['menu_icon']}}"></i>{{$child['menu_name']}}</a></li>
-                    @endforeach
+                    <li><a href="{{ route('admin.user.index')}}"><i class="fa fa-user"></i>User</a></li>
+                    <li><a href="{{ route('admin.creator.index')}}"><i class="fa fa-user"></i>Creator</a></li>
                 </ul>
             </li>
-            @else
+
             <li>
-                <a href="{{ route($menu['menu_link'])}}">
-                    <i class="{{$menu['menu_icon']}}"></i> <span>{{$menu['menu_name']}}</span>
+                <a href="{{ route('admin.user.index')}}">
+                    <i class="fa fa-users"></i> <span>Users</span>
                 </a>
             </li>
-            @endif
-            @endforeach
-            @endif
+            <li>
+                <a href="{{ route('admin.subject.index')}}">
+                    <i class="fa fa-users"></i> <span>Subject</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.exam.index')}}">
+                    <i class="fa fa-users"></i> <span>Exam</span>
+                </a>
+            </li>
         </ul>
     </section>
     <!-- /.sidebar -->

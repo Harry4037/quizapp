@@ -35,6 +35,16 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/status', 'UserController@userStatus')->name('admin.user.status');
         Route::post('/check-mobile-number', 'UserController@checkMobileNumber')->name('admin.user.check-mobile-no');
     });
+    //creator
+    Route::prefix('creator')->group(function() {
+        Route::get('/', 'CreatorController@index')->name('admin.creator.index');
+        Route::get('/list', 'CreatorController@userList')->name('admin.creator.list');
+        Route::match(['get', 'post'], '/add', 'CreatorController@userAdd')->name('admin.creator.add');
+        Route::match(['get', 'post'], '/edit/{user}', 'CreatorController@userEdit')->name('admin.creator.edit');
+        Route::post('/delete', 'CreatorController@userDelete')->name('admin.creator.delete');
+        Route::post('/status', 'CreatorController@userStatus')->name('admin.creator.status');
+        Route::post('/check-mobile-number', 'CreatorController@checkMobileNumber')->name('admin.creator.check-mobile-no');
+    });
 
 
     // Subject Routes

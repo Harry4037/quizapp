@@ -13,6 +13,7 @@ use App\Models\TestSeries;
 use App\Models\Subject;
 use App\Models\Answer;
 use App\Models\Exam;
+use App\Models\UserTestSeries;
 
 class TestSeriesController extends Controller {
 
@@ -22,17 +23,28 @@ class TestSeriesController extends Controller {
      * @apiName PostCreateTestSeries
      * @apiGroup TestSeries
      *
-     * @apiParam {String} user_id User Id .
-     * @apiParam {String} exam_id Exam Id.
-     * @apiParam {String} subject_id Subject Id.
-     * @apiParam {String} series_name Test Series Name.
-     * @apiParam {String} total_question Total no. of questions*.
-     * @apiParam {String} lang Language(English=>1,Hindi=>2)*.
-     *
-     * @apiSuccess {String} success true
-     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
-     * @apiSuccess {String} message Create test series.
-     * @apiSuccess {JSON} data Array.
+     * @apiExample Example usage:
+     * body:
+     *   {
+     *           "user_id":1,
+     *           "series_name" : "SSC_1",
+     *           "exam_id":1,
+     *           "subject_id":1,
+     *           "question_count":10,
+     *           "lang":1,
+     *           "questions":[
+     *                   {
+     *                           "question_discription":"Detail of question",
+     *                           "ans_1":"detail ans 1",
+     *                           "ans_2":"detail ans 2",
+     *                           "ans_3":"detail ans 3",
+     *                           "ans_4":"detail ans 4",
+     *                           "image_path":"sdafsadfasdfasdfs",
+     *                           "correct_ans":1,
+     *                           "time_per_question":1
+     *                   }
+     *           ]
+     *   }
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -111,53 +123,89 @@ class TestSeriesController extends Controller {
      *
      */
     public function createTestSeries(Request $request) {
-        if (!$request->user_id) {
-            return $this->errorResponse("user id missing");
-        }
-        if (!$request->series_name) {
-            return $this->errorResponse("Test Series Name missing");
-        }
-        if (!$request->total_question) {
-            return $this->errorResponse("Total questin missing");
-        }
-        if (!$request->lang) {
-            return $this->errorResponse("lang missing");
-        }
-        if (!$request->subject_id) {
-            return $this->errorResponse("subject ID missing");
-        }
-        if (!$request->exam_id) {
-            return $this->errorResponse("Exam ID missing");
-        }
-        $user = User::find($request->user_id);
-        if (!$user) {
-            return $this->errorResponse("User not found.");
-        }
-        $exam = Exam::find($request->exam_id);
-        if (!$exam) {
-            return $this->errorResponse("Exam not found.");
-        }
-        $subject = Subject::find($request->subject_id);
-        if (!$subject) {
-            return $this->errorResponse("Subject not found.");
-        }
-        $series = new TestSeries();
-        $series->user_id = $request->user_id;
-        $series->exam_id = $request->exam_id;
-        $series->subject_id = $request->subject_id;
-        $series->name = $request->series_name;
-        $series->total_question = $request->total_question;
-        $series->lang = $request->lang;
 
-        if ($series->save()) {
-            $data['id'] = $series->id;
-            $data['exam_id'] = $request->exam_id;
-            $data['subject_id'] = $request->subject_id;
-            $data['subject_name'] = $subject->name;
-            return $this->successResponse("Test Series Created successfully", $data);
+        if (!$request->input()) {
+            return $this->errorResponse("Body Json not found.");
+        }
+        if (!$request->input("user_id")) {
+            return $this->errorResponse("User ID Missing.");
+        }
+        if (!$request->input("series_name")) {
+            return $this->errorResponse("Series Name Missing.");
+        }
+        if (!$request->input("exam_id")) {
+            return $this->errorResponse("Exam ID Missing.");
+        }
+        $exam = Exam::find($request->input("exam_id"));
+        if (!$exam) {
+            return $this->errorResponse("Invalid Exam ID");
+        }
+        if (!$request->input("subject_id")) {
+            return $this->errorResponse("Subject ID Missing.");
+        }
+        $subject = Subject::find($request->input("subject_id"));
+        if (!$subject) {
+            return $this->errorResponse("Invalid Subject ID.");
+        }
+        if (!$request->input("question_count")) {
+            return $this->errorResponse("Question Count Missing.");
+        }
+        if (!$request->input("lang")) {
+            return $this->errorResponse("Language Missing.");
+        }
+        if (!in_array($request->input("lang"), [1, 2])) {
+            return $this->errorResponse("Invalid Language Type.");
+        }
+        if (!$request->input("questions")) {
+            return $this->errorResponse("Questions missing.");
+        }
+
+        $testSeries = new TestSeries();
+        $testSeries->user_id = $request->input("user_id");
+        $testSeries->exam_id = $request->input("exam_id");
+        $testSeries->subject_id = $request->input("subject_id");
+        $testSeries->name = $request->input("series_name");
+        $testSeries->total_question = $request->input("question_count");
+        $testSeries->lang = $request->input("lang");
+        if ($testSeries->save()) {
+            foreach ($request->input("questions") as $question) {
+                $testSeriesQuestion = new Question();
+                $testSeriesQuestion->user_id = $request->input("user_id");
+                $testSeriesQuestion->exam_id = $request->input("exam_id");
+                $testSeriesQuestion->subject_id = $request->input("subject_id");
+                $testSeriesQuestion->description = $question["question_discription"];
+                $testSeriesQuestion->ques_image = '';
+                $testSeriesQuestion->ques_time = $question["time_per_question"];
+                $testSeriesQuestion->test_series_id = $testSeries->id;
+                if ($testSeriesQuestion->save()) {
+                    for ($i = 1; $i <= 4; $i++) {
+                        $kk = 'ans_' . $i;
+                        $answer = new Answer();
+                        $answer->question_id = $testSeriesQuestion->id;
+                        $answer->description = $question[$kk];
+                        if ($question['correct_ans'] == $i) {
+                            $answer->is_answer = 1;
+                        } else {
+                            $answer->is_answer = 0;
+                        }
+                        $answer->save();
+                    }
+                }
+            }
+            return $this->errorResponse("Test Series created succesfully.");
         } else {
             return $this->errorResponse("Something went wrong.");
         }
+    }
+
+    public function testSeriesList(Request $request) {
+        if (!$request->input("user_id")) {
+            return $this->errorResponse("User ID Missing.");
+        }
+        $testSeries = TestSeries::where("user_id", $request->input("user_id"))->get();
+        $userTestSeries = UserTestSeries::where("user_id", $request->input("user_id"))->get();
+
+        dd($testSeries->toArray());
     }
 
 }
