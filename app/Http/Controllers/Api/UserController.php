@@ -366,4 +366,89 @@ class UserController extends Controller {
         return $this->successResponse("Exam's updated successfully.", (object) []);
     }
 
+    /**
+     * @api {post} /api/user-update  User Update
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostUserUpdate
+     * @apiGroup User
+     *
+     * @apiParam {String} name user name*.
+     * @apiParam {String} email email.*
+     * @apiParam {String} profile_pic picture file.*
+     * @apiParam {String} id User ID.
+     * @apiParam {String} dob Date Of Birth(2020-01-08)*.
+     * @apiParam {String} designation Designation*.
+     *
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Profile Updated..
+     * @apiSuccess {JSON} data blank object.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Profile Updated.",
+     *       "data": {
+     *          "user": {
+     *               "id": 1,
+     *               "name": "Ankit",
+     *               "email": "ankit@mail.com",
+     *               "mobile_number": "8077575835",
+     *               "dob": "2020-01-13",
+     *               "designation": "Student",
+     *               "qualification": "M.A.",
+     *               "lang": "2",
+     *               "user_type_id": 1,
+     *               "otp": null,
+     *               "profile_pic": "http://127.0.0.1:8000/img/no-image.jpg",
+     *               "device_token": null,
+     *               "latitude": null,
+     *               "longitude": null,
+     *               "is_active": 1,
+     *               "email_verified_at": null,
+     *               "created_by": "0",
+     *               "updated_by": "0",
+     *               "created_at": null,
+     *               "updated_at": "2020-01-13 06:19:55",
+     *               "deleted_at": null
+     *          }
+     *      }
+     *   }
+     *
+     *
+     */
+    public function userUpdate(Request $request) {
+        $userArray = [];
+        if ($request->profile_pic) {
+            if (!$request->hasFile("profile_pic")) {
+                return $this->errorResponse("Profile pic not valid file type.");
+            }
+            $profile_image = $request->file("profile_pic");
+            $profile = Storage::disk('public')->put('profile_pic', $profile_image);
+            $profile_file_name = basename($profile);
+            $userArray['profile_pic'] = $profile_file_name;
+
+            $data = User::find($request->id);
+        }
+        if ($request->name) {
+            $userArray['name'] = $request->name;
+        }
+        if ($request->email) {
+            $userArray['email'] = $request->email;
+        }
+        if ($request->dob) {
+            $userArray['dob'] = $request->dob;
+        }
+        if ($request->designation) {
+            $userArray['designation'] = $request->designation;
+        }
+        $userArray['updated_at'] = new \DateTime("now");
+        User::where('id', auth('api')->user()->id)->update($userArray);
+        $data['user'] = User::find(auth('api')->user()->id);
+        return $this->successResponse("Profile Updated.", $data);
+    }
 }
