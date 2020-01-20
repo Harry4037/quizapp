@@ -453,6 +453,8 @@ class UserController extends Controller {
         }
         $userArray['updated_at'] = new \DateTime("now");
         User::where('id', $request->user_id)->update($userArray);
-        return $this->successResponse("Profile Updated.", (object) []);
+        $user = User::find($request->user_id);
+        $data['user'] = $user;
+        return $this->successResponse("Profile Updated.", $data);
     }
 }
