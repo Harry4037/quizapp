@@ -61,6 +61,8 @@ Route::namespace("Api")->group(function() {
 
     Route::post('/add-bookmark', 'BookmarkController@addBookmark');
     Route::get('/bookmark-list', 'BookmarkController@bookmarkList');
+
+    Route::get('/search', 'TestSeriesController@search');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
