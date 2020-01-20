@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Exception;
 use App\Models\User;
+use App\Models\TestSeries;
 use App\Models\UserExam;
 use Illuminate\Support\Facades\Storage;
 
@@ -457,4 +458,114 @@ class UserController extends Controller {
         $data['user'] = $user;
         return $this->successResponse("Profile Updated.", $data);
     }
+
+    /**
+     * @api {post} /api/creator-user-profile Creator User Profile
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostCreatorUserProfile
+     * @apiGroup Creator
+     *
+     * @apiParam {String} user_id User ID*.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message 1=>testseries, 2=>usertest series.
+     * @apiSuccess {JSON} data response.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "TestSeries List",
+     *    "data":{
+     *      "user_profile":{
+     *      "id": 1,
+     *      "name": "quiz",
+     *      "email": "admin@mail.com",
+     *          "mobile_number": null,
+     *      "dob": "2020-01-08",
+     *      "designation": null,
+     *      "qualification": null,
+     *      "lang": 1,
+     *      "user_type_id": 2,
+     *      "otp": null,
+     *      "profile_pic": "http://127.0.0.1:8000/img/no-image.jpg",
+     *      "device_token": null,
+     *      "latitude": null,
+     *      "longitude": null,
+     *      "is_active": 1,
+     *      "email_verified_at": null,
+     *      "created_by": "0",
+     *      "updated_by": "0",
+     *      "created_at": null,
+     *      "updated_at": null,
+     *      "deleted_at": null
+     *      },
+     *      "user":{
+     *              "following": 10,
+     *              "follower": 50,
+     *              "post": 2,
+     *              "Test_series":[
+     *              {
+     *                     "id": 1,
+     *                      "name": "grhfghrt",
+     *                      "created_at": null,
+     *                      "flag": 1,
+     *                      "total_ques_no": 12
+     *              },
+     *              {
+     *                      "id": 2,
+     *                      "name": "grhfgh",
+     *                      "created_at": null,
+     *                      "flag": 1,
+     *                      "total_ques_no": 12
+     *              }
+     *          ]
+     *      }
+     *    }
+     *   }
+     * }
+     *
+     * @apiError UserIdMissing User Id missing
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "User Id Missing.",
+     *       "data": {}
+     *   }
+     *
+     */
+
+    public function CreatorUserProfile(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID missing");
+        }
+        $user = User::where("id", $request->user_id)->first();
+        if ($user) {
+            $dataArray = [];
+            $count = 0;
+            $result = TestSeries::where("user_id", $request->user_id)->select('id','name','total_question','created_at')->get();
+            foreach ($result as $k => $test) {
+               $dataArray[$k]['id'] = $test->id;
+               $dataArray[$k]['name'] = $test->name;
+               $dataArray[$k]['created_at'] = $test->created_at;
+               $dataArray[$k]['flag'] = 1;
+               $dataArray[$k]['total_ques_no'] = $test->total_question;
+               $count++;
+           }
+            $data['user_profile'] = $user;
+            $data['user']['following'] = 10;
+            $data['user']['follower'] = 50;
+            $data['user']['post'] = $count;
+            $data['user']['Test_series'] = $dataArray;
+
+            return $this->successResponse("user Profile.", $data);
+        } else {
+            return $this->errorResponse("User not found.");
+        }
+    }
+
 }

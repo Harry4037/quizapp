@@ -501,6 +501,102 @@ define({ "api": [
     "groupTitle": "Bookmark"
   },
   {
+    "type": "post",
+    "url": "/api/creator-user-profile",
+    "title": "Creator User Profile",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostCreatorUserProfile",
+    "group": "Creator",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User ID*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>1=&gt;testseries, 2=&gt;usertest series.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"TestSeries List\",\n   \"data\":{\n     \"user_profile\":{\n     \"id\": 1,\n     \"name\": \"quiz\",\n     \"email\": \"admin@mail.com\",\n         \"mobile_number\": null,\n     \"dob\": \"2020-01-08\",\n     \"designation\": null,\n     \"qualification\": null,\n     \"lang\": 1,\n     \"user_type_id\": 2,\n     \"otp\": null,\n     \"profile_pic\": \"http://127.0.0.1:8000/img/no-image.jpg\",\n     \"device_token\": null,\n     \"latitude\": null,\n     \"longitude\": null,\n     \"is_active\": 1,\n     \"email_verified_at\": null,\n     \"created_by\": \"0\",\n     \"updated_by\": \"0\",\n     \"created_at\": null,\n     \"updated_at\": null,\n     \"deleted_at\": null\n     },\n     \"user\":{\n             \"following\": 10,\n             \"follower\": 50,\n             \"post\": 2,\n             \"Test_series\":[\n             {\n                    \"id\": 1,\n                     \"name\": \"grhfghrt\",\n                     \"created_at\": null,\n                     \"flag\": 1,\n                     \"total_ques_no\": 12\n             },\n             {\n                     \"id\": 2,\n                     \"name\": \"grhfgh\",\n                     \"created_at\": null,\n                     \"flag\": 1,\n                     \"total_ques_no\": 12\n             }\n         ]\n     }\n   }\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>User Id missing</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"User Id Missing.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/UserController.php",
+    "groupTitle": "Creator"
+  },
+  {
     "type": "get",
     "url": "/api/exam-list",
     "title": "Exam List",
