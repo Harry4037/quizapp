@@ -135,10 +135,15 @@ class QuestionController extends Controller {
                     return redirect()->route('admin.question.index')->with('error', 'Something went be wrong.');
                 }
             }
-
-            return view('admin.question.add');
+            $subjects = Subject::get();
+            $exams = Exam::get();
+            return view('admin.question.add', [
+                'subjects' => $subjects,
+                'exams' => $exams
+            ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.question.index')->with('error', $ex->getMessage());
         }
     }
+
 }

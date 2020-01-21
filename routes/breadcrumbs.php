@@ -24,6 +24,20 @@ Breadcrumbs::for('admin.user.edit', function ($trail, $user) {
     $trail->push("Edit", route('admin.user.edit', $user));
 });
 
+// Home > [Creator]
+Breadcrumbs::for('admin.creator.index', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push("Creator", route('admin.creator.index'));
+});
+Breadcrumbs::for('admin.creator.add', function ($trail) {
+    $trail->parent('admin.creator.index');
+    $trail->push("Add", route('admin.creator.add'));
+});
+Breadcrumbs::for('admin.creator.edit', function ($trail, $user) {
+    $trail->parent('admin.creator.index');
+    $trail->push("Edit", route('admin.creator.edit', $user));
+});
+
 
 // Home > [Subject]
 Breadcrumbs::for('admin.subject.index', function ($trail) {
@@ -51,5 +65,19 @@ Breadcrumbs::for('admin.exam.add', function ($trail) {
 Breadcrumbs::for('admin.exam.edit', function ($trail, $exam) {
     $trail->parent('admin.exam.index');
     $trail->push("Edit", route('admin.exam.edit', $exam));
+});
+
+// Home > [Question]
+Breadcrumbs::for('admin.question.index', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push("Question", route('admin.question.index'));
+});
+Breadcrumbs::for('admin.exam.add', function ($trail) {
+    $trail->parent('admin.question.index');
+    $trail->push("Add", route('admin.question.add'));
+});
+Breadcrumbs::for('admin.question.edit', function ($trail, $exam) {
+    $trail->parent('admin.question.index');
+    $trail->push("Edit", route('admin.question.edit', $exam));
 });
 
