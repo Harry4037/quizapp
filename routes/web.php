@@ -52,7 +52,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::match(['get', 'post'], '/add', 'SubjectController@subjectAdd')->name('admin.subject.add');
         Route::match(['get', 'post'], '/edit/{subject}', 'SubjectController@subjectEdit')->name('admin.subject.edit');
         Route::post('/delete', 'SubjectController@subjectDelete')->name('admin.subject.delete');
-        Route::get('/subject-questions', 'SubjectController@getSubjectQuestions')->name('admin.subject.questions');
+
     });
 
     // Exam Routes
@@ -62,7 +62,18 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::match(['get', 'post'], '/add', 'ExamController@examAdd')->name('admin.exam.add');
         Route::match(['get', 'post'], '/edit/{exam}', 'ExamController@examEdit')->name('admin.exam.edit');
         Route::post('/delete', 'ExamController@examDelete')->name('admin.exam.delete');
-        Route::get('/exam-questions', 'ExamController@getExamQuestions')->name('admin.exam.questions');
+
+    });
+
+    // Question Routes
+    Route::prefix('question')->group(function() {
+        Route::get('/', 'QuestionController@index')->name('admin.question.index');
+        Route::get('/list', 'QuestionController@questionList')->name('admin.question.list');
+        Route::match(['get', 'post'], '/add', 'QuestionController@questionAdd')->name('admin.question.add');
+        Route::match(['get', 'post'], '/edit/{question}', 'QuestionController@questionEdit')->name('admin.question.edit');
+        Route::post('/delete', 'QuestionController@questionDelete')->name('admin.question.delete');
+        Route::get('/question-exam', 'QuestionController@getQuestionExam')->name('admin.question.exam');
+        Route::get('/question-subject', 'QuestionController@getQuestionSubject')->name('admin.question.subject');
     });
 
 });
