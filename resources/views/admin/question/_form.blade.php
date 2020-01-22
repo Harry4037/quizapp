@@ -52,7 +52,7 @@
     </div>
     @endif
 <div class="form-group">
-    <label class="control-label col-md-4 col-sm-4 col-xs-12">Description <span class="error">*</span></label>
+    <label class="control-label col-md-4 col-sm-4 col-xs-12">Question Name <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
         <input placeholder="Description" type="text" required class="form-control" name="description" id="description" value="@if(isset($question)){{$question->description}}@endif">
     </div>

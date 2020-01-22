@@ -31,7 +31,7 @@
                                      <th>Sr. No.</th>
                                     <th>Exam</th>
                                     <th>Subject</th>
-                                    <th>Description</th>
+                                    <th>Question</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
