@@ -4,7 +4,7 @@
             <input placeholder="Name" type="text" class="form-control" name="exam_name" id="exam_name" value="@if(isset($exam)){{$exam->name}}@endif">
         </div>
     </div>
-</div>
+
 <!-- /.box-body -->
 <div class="box-footer">
     <div class="form-group">
@@ -15,3 +15,4 @@
     </div>
 </div>
 <!-- /.box-footer -->
+</div>

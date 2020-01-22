@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Question;
@@ -170,6 +171,7 @@ class QuestionController extends Controller {
                 }
                 $question = new Question();
                 $question->ques_time = 1;
+                $question->user_id = 1;
                 $question->description = $request->description;
                 $question->exam_id = $request->exam_id;
                 $question->subject_id = $request->subject_id;
