@@ -67,7 +67,7 @@
             @endif
         </div>
     </div>
-</div>
+
 <!-- /.box-body -->
 <div class="box-footer">
     <div class="form-group">
@@ -78,3 +78,4 @@
     </div>
 </div>
 <!-- /.box-footer -->
+</div>
