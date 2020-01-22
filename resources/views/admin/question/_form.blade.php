@@ -54,34 +54,34 @@
 <div class="form-group">
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Description <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
-        <input placeholder="Description" type="text" class="form-control" name="description" id="description" value="@if(isset($question)){{$question->description}}@endif">
+        <input placeholder="Description" type="text" required class="form-control" name="description" id="description" value="@if(isset($question)){{$question->description}}@endif">
     </div>
 </div>
 <div class="form-group">
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Option1 <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
-        <input  type="text" class="form-control" name="ans1" id="ans1" value="@if(isset($answers)){{$answers[0]->description}}@endif">
+        <input  type="text" class="form-control" required name="ans1" id="ans1" value="@if(isset($answers)){{$answers[0]->description}}@endif">
         <input type="hidden" id="custId" name="answer1" value="@if(isset($answers)){{$answers[0]->id}}@endif">
     </div>
 </div>
 <div class="form-group">
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Option2 <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
-        <input  type="text" class="form-control" name="ans2" id="ans2" value="@if(isset($answers)){{$answers[1]->description}}@endif">
+        <input  type="text" class="form-control" required name="ans2" id="ans2" value="@if(isset($answers)){{$answers[1]->description}}@endif">
         <input type="hidden" id="custId" name="answer2" value="@if(isset($answers)){{$answers[1]->id}}@endif">
     </div>
 </div>
 <div class="form-group">
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Option3 <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
-        <input  type="text" class="form-control" name="ans3" id="ans3" value="@if(isset($answers)){{$answers[2]->description}}@endif">
+        <input  type="text" class="form-control" required name="ans3" id="ans3" value="@if(isset($answers)){{$answers[2]->description}}@endif">
         <input type="hidden" id="custId" name="answer3" value="@if(isset($answers)){{$answers[2]->id}}@endif">
     </div>
 </div>
 <div class="form-group">
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Option4 <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
-        <input  type="text" class="form-control" name="ans4" id="ans4" value="@if(isset($answers)){{$answers[3]->description}}@endif">
+        <input  type="text" class="form-control"required  name="ans4" id="ans4" value="@if(isset($answers)){{$answers[3]->description}}@endif">
         <input type="hidden" id="custId" name="answer4" value="@if(isset($answers)){{$answers[3]->id}}@endif">
     </div>
 </div>
