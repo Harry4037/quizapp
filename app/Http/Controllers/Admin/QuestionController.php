@@ -83,7 +83,6 @@ class QuestionController extends Controller {
                             'description' => [
                                 'bail',
                                 'required',
-                                'ques_image' => ['mimes:jpeg,jpg,png'],
                             'description' => ['required'],
                                 Rule::unique('questions', 'description')->ignore($question->id)->where(function ($query) use($request) {
                                             return $query->where(['description' => $request->description])
