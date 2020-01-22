@@ -13,7 +13,7 @@ class Question extends Model
         return $this->belongsTo('App\Models\Exam', 'exam_id');
     }
 
-    public function getImageNameAttribute($value) {
+    public function getQuesImageAttribute($value) {
         return $value ? asset('storage/ques_image/' . $value) : "";
     }
 }
