@@ -108,7 +108,6 @@ class QuestionController extends Controller {
                 $question->description = $request->description;
                 $question->ques_time = 1;
                 $question->test_series_id = 0;
-                $question->ques_image = NULL;
 
                 if ($question->save()) {
                     if($request->correct_answer == "opt1"){
@@ -161,10 +160,9 @@ class QuestionController extends Controller {
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
                             'description' => [
-                                'bail',
                                 'required',
                                 Rule::unique('questions', 'description')->where(function ($query) use($request) {
-                                            return $query->where(['description' => $request->question_name])
+                                            return $query->where(['description' => $request->description])
                                                             ->whereNull('deleted_at');
                                         }),
                             ],
@@ -175,7 +173,6 @@ class QuestionController extends Controller {
                 $question = new Question();
                 $question->ques_time = 1;
                 $question->test_series_id = 0;
-                $question->ques_image = NULL;
                 $question->description = $request->description;
                 $question->exam_id = $request->exam_id;
                 $question->subject_id = $request->subject_id;
