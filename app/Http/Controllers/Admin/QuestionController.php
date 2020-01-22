@@ -107,7 +107,6 @@ class QuestionController extends Controller {
                 $question->subject_id = $request->subject_id;
                 $question->description = $request->description;
                 $question->ques_time = 1;
-                $question->test_series_id = 0;
 
                 if ($question->save()) {
                     if($request->correct_answer == "opt1"){
@@ -172,7 +171,6 @@ class QuestionController extends Controller {
                 }
                 $question = new Question();
                 $question->ques_time = 1;
-                $question->test_series_id = 0;
                 $question->description = $request->description;
                 $question->exam_id = $request->exam_id;
                 $question->subject_id = $request->subject_id;
@@ -182,9 +180,7 @@ class QuestionController extends Controller {
                     $ques_file_name = basename($quesImage);
                     $question->ques_image = $ques_file_name;
                 }
-
                 if ($question->save()) {
-
                         $answer = new Answer();
                         $answer->question_id = $question->id;
                         $answer->description = $request->ans1;
