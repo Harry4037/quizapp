@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Answer;
@@ -64,6 +65,7 @@ class QuestionController extends Controller {
             $question = Question::find($request->id);
             if ($question) {
                 $question->delete();
+                Answer::where('question_id',$request->id)->delete();
                 return ['status' => true, "message" => "Question deleted."];
             } else {
                 return ['status' => false, "message" => "Something went be wrong."];
@@ -81,6 +83,8 @@ class QuestionController extends Controller {
                             'description' => [
                                 'bail',
                                 'required',
+                                'ques_image' => ['mimes:jpeg,jpg,png'],
+                            'description' => ['required'],
                                 Rule::unique('questions', 'description')->ignore($question->id)->where(function ($query) use($request) {
                                             return $query->where(['description' => $request->description])
                                                             ->whereNull('deleted_at');
@@ -91,6 +95,16 @@ class QuestionController extends Controller {
                 if ($validator->fails()) {
                     return redirect()->route('admin.question.edit', $question->id)->withErrors($validator)->withInput();
                 }
+                if ($request->hasFile('ques_image')) {
+                    $quesImg = Question::selectRaw('ques_image img')->find($question->id);
+                    Storage::disk('public')->delete('ques_image/' . $quesImg->img);
+                    $ques_image = $request->file("ques_image");
+                    $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                    $ques_file_name = basename($quesImage);
+                    $question->ques_image = $ques_file_name;
+                }
+                $question->exam_id = $request->exam_id;
+                $question->subject_id = $request->subject_id;
                 $question->description = $request->description;
                 $question->ques_time = 1;
                 $question->test_series_id = 0;
@@ -146,7 +160,7 @@ class QuestionController extends Controller {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'question_name' => [
+                            'description' => [
                                 'bail',
                                 'required',
                                 Rule::unique('questions', 'description')->where(function ($query) use($request) {
@@ -159,9 +173,58 @@ class QuestionController extends Controller {
                     return redirect()->route('admin.question.add')->withErrors($validator)->withInput();
                 }
                 $question = new Question();
-                $question->description = $request->question_name;
+                $question->ques_time = 1;
+                $question->test_series_id = 0;
+                $question->ques_image = NULL;
+                $question->description = $request->description;
+                $question->exam_id = $request->exam_id;
+                $question->subject_id = $request->subject_id;
+                if ($request->hasFile('ques_image')) {
+                    $ques_image = $request->file("ques_image");
+                    $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                    $ques_file_name = basename($quesImage);
+                    $question->ques_image = $ques_file_name;
+                }
 
                 if ($question->save()) {
+
+                        $answer = new Answer();
+                        $answer->question_id = $question->id;
+                        $answer->description = $request->ans1;
+                        if ($request->correct_answer == "opt1") {
+                            $answer->is_answer = 1;
+                        } else {
+                            $answer->is_answer = 0;
+                        }
+                        $answer->save();
+                        $answer = new Answer();
+                        $answer->question_id = $question->id;
+                        $answer->description = $request->ans2;
+                        if ($request->correct_answer == "opt2") {
+                            $answer->is_answer = 1;
+                        } else {
+                            $answer->is_answer = 0;
+                        }
+                        $answer->save();
+                        $answer = new Answer();
+                        $answer->question_id = $question->id;
+                        $answer->description = $request->ans3;
+                        if ($request->correct_answer == "opt3") {
+                            $answer->is_answer = 1;
+                        } else {
+                            $answer->is_answer = 0;
+                        }
+                        $answer->save();
+                        $answer = new Answer();
+                        $answer->question_id = $question->id;
+                        $answer->description = $request->ans4;
+                        if ($request->correct_answer == "opt4") {
+                            $answer->is_answer = 1;
+                        } else {
+                            $answer->is_answer = 0;
+                        }
+                        $answer->save();
+
                     return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
                 } else {
                     return redirect()->route('admin.question.index')->with('error', 'Something went be wrong.');
