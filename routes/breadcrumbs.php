@@ -72,7 +72,7 @@ Breadcrumbs::for('admin.question.index', function ($trail) {
     $trail->parent('admin.dashboard');
     $trail->push("Question", route('admin.question.index'));
 });
-Breadcrumbs::for('admin.exam.add', function ($trail) {
+Breadcrumbs::for('admin.question.add', function ($trail) {
     $trail->parent('admin.question.index');
     $trail->push("Add", route('admin.question.add'));
 });
