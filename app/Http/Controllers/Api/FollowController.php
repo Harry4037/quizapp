@@ -117,7 +117,7 @@ class FollowController extends Controller
             $Follow->created_at = new \DateTime("now");
             $Follow->save();
             $follow_count = Follow::where('follow_user_id', $request->follow_user_id)->count();
-            $arr = array('follow' => false, 'count' => $follow_count);
+            $arr = array('follow' => true, 'count' => $follow_count);
             return $this->successResponse("Following", $arr);
         }
     }

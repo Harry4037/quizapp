@@ -78,11 +78,11 @@ class QuestionController extends Controller {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'question_name' => [
+                            'description' => [
                                 'bail',
                                 'required',
                                 Rule::unique('questions', 'description')->ignore($question->id)->where(function ($query) use($request) {
-                                            return $query->where(['description' => $request->question_name])
+                                            return $query->where(['description' => $request->description])
                                                             ->whereNull('deleted_at');
                                         }),
                             ],
@@ -91,17 +91,50 @@ class QuestionController extends Controller {
                 if ($validator->fails()) {
                     return redirect()->route('admin.question.edit', $question->id)->withErrors($validator)->withInput();
                 }
-                $question->description = $request->question_name;
+                $question->description = $request->description;
+                $question->ques_time = 1;
+                $question->test_series_id = 0;
+                $question->ques_image = NULL;
 
                 if ($question->save()) {
+                    if($request->correct_answer == "opt1"){
+                        Answer::where('id',$request->answer1)->update(['description' => $request->ans1, 'is_answer' => 1]);
+                        Answer::where('id',$request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                        Answer::where('id',$request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                        Answer::where('id',$request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+                    }
+                    if($request->correct_answer == "opt2"){
+                        Answer::where('id',$request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                        Answer::where('id',$request->answer2)->update(['description' => $request->ans2, 'is_answer' => 1]);
+                        Answer::where('id',$request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                        Answer::where('id',$request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+
+                    }
+                    if($request->correct_answer == "opt3"){
+                        Answer::where('id',$request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                        Answer::where('id',$request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                        Answer::where('id',$request->answer3)->update(['description' => $request->ans3, 'is_answer' => 1]);
+                        Answer::where('id',$request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+                    }
+                    if($request->correct_answer == "opt4"){
+                        Answer::where('id',$request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                        Answer::where('id',$request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                        Answer::where('id',$request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                        Answer::where('id',$request->answer4)->update(['description' => $request->ans4, 'is_answer' => 1]);
+                    }
                     return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
                 } else {
                     return redirect()->route('admin.question.index')->with('error', 'Something went be wrong.');
                 }
             }
-
+            $subjects = Subject::get();
+            $exams = Exam::get();
+            $answers = Answer::where('question_id',$question->id)->get();
             return view('admin.question.edit', [
-                'question' => $question
+                'question' => $question,
+                'subjects' => $subjects,
+                'exams' => $exams,
+                'answers' => $answers
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.question.index')->with('error', $ex->getMessage());
@@ -126,7 +159,6 @@ class QuestionController extends Controller {
                     return redirect()->route('admin.question.add')->withErrors($validator)->withInput();
                 }
                 $question = new Question();
-
                 $question->description = $request->question_name;
 
                 if ($question->save()) {
