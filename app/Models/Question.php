@@ -12,4 +12,8 @@ class Question extends Model
     public function exam() {
         return $this->belongsTo('App\Models\Exam', 'exam_id');
     }
+
+    public function getImageNameAttribute($value) {
+        return $value ? asset('storage/ques_image/' . $value) : "";
+    }
 }
