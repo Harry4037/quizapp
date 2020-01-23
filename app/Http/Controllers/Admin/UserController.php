@@ -107,7 +107,7 @@ class UserController extends Controller {
                 $user->designation = $request->designation;
                 $user->qualification = $request->qualification;
                 $user->dob = $request->dob;
-                $user->into_line = $request->about;
+
 
                 if ($user->save()) {
                     return redirect()->route('admin.user.index')->with('status', 'User has been updated successfully.');
