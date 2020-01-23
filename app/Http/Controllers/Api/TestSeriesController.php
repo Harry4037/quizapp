@@ -192,7 +192,8 @@ class TestSeriesController extends Controller {
                     }
                 }
             }
-            return $this->errorResponse("Test Series created succesfully.");
+            $idd['test_series_id'] = $testSeries->id;
+            return $this->errorResponse("Test Series created succesfully.", $idd);
         } else {
             return $this->errorResponse("Something went wrong.");
         }
@@ -345,5 +346,92 @@ class TestSeriesController extends Controller {
             return $this->successResponse("Search Results", $data);
         }
 
+    }
+
+
+    /**
+     * @api {post} /api/publish-test-series Publish Test Series
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostPublishTestSeries
+     * @apiGroup TestSeries
+     *
+     * @apiParam {String} test_series_id Test Series ID*.
+     * @apiParam {String} user_id User ID*.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message 1=>testseries, 2=>usertest series.
+     * @apiSuccess {JSON} data response.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "Publish Successfully",
+     *    "data": {}
+     * }
+     *
+     * @apiError userIDMissing The user id missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "User id missing.",
+     *     "data": {}
+     *  }
+     *
+     * @apiError testSeriesidMissing The Test series id missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Test Series Id missing",
+     *     "data": {}
+     *  }
+     *
+     * @apiError TestSeriesNotFound Test Series Not Found.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "Test Series not found.",
+     *       "data": {}
+     *   }
+     *
+     * @apiError UserNotFound User Not Found.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "User not found.",
+     *       "data": {}
+     *   }
+     *
+     */
+    public function publishTestSeries(Request $request) {
+        if (!$request->test_series_id) {
+            return $this->errorResponse("Test Series ID Missing.");
+        }
+        if (!$request->user__id) {
+            return $this->errorResponse("User ID Missing.");
+        }
+        $user = User::find($request->user_id);
+        if (!$user) {
+            return $this->errorResponse("Invalid User ID");
+        }
+        $series = TestSeries::find($request->test_series_id);
+        if (!$series) {
+            return $this->errorResponse("Invalid Test Series ID");
+        }
+        $questions = Question::where("test_series_id", $request->test_series_id)->get();
+        foreach ($questions as $k => $question) {
+            Question::where('id',$question->id)->where('test_series_id',$question->test_series_id)->update(['is_approve' => 1]);
+        }
+        return $this->successResponse("Publish Successfully",(object) []);
     }
 }
