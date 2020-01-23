@@ -282,13 +282,11 @@ class QuestionController extends Controller {
     public function comment(Request $request, Question $question) {
 
         $comm = QuestionComment::where('question_id', $question->id)->with(['user'])->get();
-        if(!$comm){
+
 
             return view('admin.question.comment-list', [
                 'comments' => $comm
             ]);
-              }  else {
-                return redirect()->route('admin.question.index')->with('error', 'No Comment Yet.');
-            }
+
     }
 }
