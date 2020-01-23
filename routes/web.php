@@ -1,4 +1,5 @@
 <?php
+
 /*
   |--------------------------------------------------------------------------
   | Web Routes
@@ -52,7 +53,6 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::match(['get', 'post'], '/add', 'SubjectController@subjectAdd')->name('admin.subject.add');
         Route::match(['get', 'post'], '/edit/{subject}', 'SubjectController@subjectEdit')->name('admin.subject.edit');
         Route::post('/delete', 'SubjectController@subjectDelete')->name('admin.subject.delete');
-
     });
 
     // Exam Routes
@@ -62,7 +62,6 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::match(['get', 'post'], '/add', 'ExamController@examAdd')->name('admin.exam.add');
         Route::match(['get', 'post'], '/edit/{exam}', 'ExamController@examEdit')->name('admin.exam.edit');
         Route::post('/delete', 'ExamController@examDelete')->name('admin.exam.delete');
-
     });
 
     // Question Routes
@@ -76,4 +75,12 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::get('/question-subject', 'QuestionController@getQuestionSubject')->name('admin.question.subject');
     });
 
+    // Exam Routes
+    Route::prefix('quiz')->group(function() {
+        Route::get('/', 'QuizController@index')->name('admin.quiz.index');
+        Route::get('/list', 'QuizController@quizList')->name('admin.quiz.list');
+        Route::match(['get', 'post'], '/add', 'QuizController@quizAdd')->name('admin.quiz.add');
+        Route::match(['get', 'post'], '/edit/{exam}', 'QuizController@examEdit')->name('admin.quiz.edit');
+        Route::post('/delete', 'QuizController@examDelete')->name('admin.quiz.delete');
+    });
 });

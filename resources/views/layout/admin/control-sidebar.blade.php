@@ -44,6 +44,11 @@
                     <i class="fa fa-users"></i> <span>Exam</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.quiz.index')}}">
+                    <i class="fa fa-users"></i> <span>Quiz</span>
+                </a>
+            </li>
         </ul>
     </section>
     <!-- /.sidebar -->
