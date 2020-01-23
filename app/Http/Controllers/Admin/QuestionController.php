@@ -49,6 +49,14 @@ class QuestionController extends Controller {
                 $questionsArray[$k]['description'] = $question->description;
                 $questionsArray[$k]['exam'] = $question->exam->name;
                 $questionsArray[$k]['subject'] = $question->subject->name;
+                if($question->is_approve == 2){
+                    $questionsArray[$k]['status'] = '<label class="btn btn-success btn-xs disabled">Approved</label>';
+                }elseif($question->is_approve == 3){
+                    $questionsArray[$k]['status'] = '<label class="btn btn-danger btn-xs disabled">Rejected</label>';
+                }else{
+                    $questionsArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $question->id . '" data-status="' . $question->is_approve .'"><i class="fa fa-pencil"></i> Accept </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                    . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $question->id . '" data-status="' . $question->is_approve .'"><i class="fa fa-trash"></i> Reject </a>';
+                }
                 $questionsArray[$k]['action'] = '<a href="' . route('admin.question.edit', $question) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $question->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
@@ -105,7 +113,7 @@ class QuestionController extends Controller {
                 $question->exam_id = $request->exam_id;
                 $question->subject_id = $request->subject_id;
                 $question->description = $request->description;
-                $question->ques_time = 1;
+                $question->ques_time = $request->time;
 
                 if ($question->save()) {
                     if($request->correct_answer == "opt1"){
@@ -169,7 +177,7 @@ class QuestionController extends Controller {
                     return redirect()->route('admin.question.add')->withErrors($validator)->withInput();
                 }
                 $question = new Question();
-                $question->ques_time = 1;
+                $question->ques_time = $request->time;
                 $question->user_id = 1;
                 $question->description = $request->description;
                 $question->exam_id = $request->exam_id;
@@ -234,4 +242,38 @@ class QuestionController extends Controller {
         }
     }
 
+    public function acceptQues(Request $request) {
+        try {
+            if ($request->isMethod('post')) {
+                $question = Question::findOrFail($request->record_id);
+                $question->is_approve = $request->status;
+                if ($question->save()) {
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Question Approve successfully."]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
+                }
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
+            }
+        } catch (\Exception $e) {
+            return ['status' => false, "message" => $e->getMessage()];
+        }
+    }
+    public function rejectQues(Request $request) {
+        try {
+            if ($request->isMethod('post')) {
+                $question = Question::findOrFail($request->record_id);
+                $question->is_approve = $request->status;
+                if ($question->save()) {
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Question Rejected."]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
+                }
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
+            }
+        } catch (\Exception $e) {
+            return ['status' => false, "message" => $e->getMessage()];
+        }
+    }
 }

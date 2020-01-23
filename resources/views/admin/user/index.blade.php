@@ -33,7 +33,6 @@
                                     <th>Mobile No.</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th style="width: 44px">Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -77,7 +76,6 @@
             {"data": "mobile_number", sortable: false},
             {"data": "name", sortable: false},
             {"data": "email", sortable: false},
-            {"data": "status", sortable: false},
             {"data": "action", sortable: false},
         ]
     });
