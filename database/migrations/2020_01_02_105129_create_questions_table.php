@@ -21,6 +21,7 @@ class CreateQuestionsTable extends Migration {
             $table->string('ques_image')->nullable();;
             $table->integer("ques_time");
             $table->bigInteger("test_series_id")->default(0);
+            $table->bigInteger("is_approve")->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
