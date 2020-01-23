@@ -193,7 +193,7 @@ class TestSeriesController extends Controller {
                 }
             }
             $idd['test_series_id'] = $testSeries->id;
-            return $this->errorResponse("Test Series created succesfully.", $idd);
+            return $this->successResponse("Test Series created succesfully.", $idd);
         } else {
             return $this->errorResponse("Something went wrong.");
         }
