@@ -21,6 +21,7 @@ class CreateTestSeriesTable extends Migration
             $table->string('name');
             $table->integer('total_question');
             $table->tinyInteger('lang');
+            $table->bigInteger("is_approve")->default(0);
             $table->timestamps();
         });
     }
