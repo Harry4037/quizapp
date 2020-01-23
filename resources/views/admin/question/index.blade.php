@@ -32,6 +32,7 @@
                                     <th>Exam</th>
                                     <th>Subject</th>
                                     <th>Question</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -74,21 +75,73 @@
             {"data": "exam", sortable: false},
             {"data": "subject", sortable: false},
             {"data": "description", sortable: false},
+            {"data": "status", sortable: false},
             {"data": "action", sortable: false},
         ]
     });
 
     $(document).ready(function () {
 
-        $(document).on("click", ".delete", function () {
+        $(document).on("click", ".accept_ques", function () {
+
             var record_id = this.id;
-            deletePopup(
-                    "Deleting Question",
-                    "Are you sure want to delete this Question?",
-                    record_id,
-                    "{{route('admin.question.delete')}}"
-                    );
+            var th = $(this);
+            var status = th.attr('data-status');
+            var update_status = (status == '1') ? 1 : 2;
+            $.ajax({
+                url: "{{route('admin.question.accept-ques')}}",
+                type: 'post',
+                data: {status: update_status, record_id: record_id},
+                dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
+                success: function (res) {
+
+                    if (res.status)
+                    {
+                        th.attr('data-status', res.data.status);
+                        showSuccessMessage(res.data.message);
+                        $(".overlay").hide();
+                    } else {
+                        showErrorMessage(res.message);
+                        $(".overlay").hide();
+                    }
+                }
+            });
+
         });
+
+        $(document).on("click", ".reject_ques", function () {
+
+            var record_id = this.id;
+            var th = $(this);
+            var status = th.attr('data-status');
+            var update_status = (status == '1') ? 2 : 3;
+            $.ajax({
+                url: "{{route('admin.question.reject-ques')}}",
+                type: 'post',
+                data: {status: update_status, record_id: record_id},
+                dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
+                success: function (res) {
+
+                    if (res.status)
+                    {
+                        th.attr('data-status', res.data.status);
+                        showSuccessMessage(res.data.message);
+                        $(".overlay").hide();
+                    } else {
+                        showErrorMessage(res.message);
+                        $(".overlay").hide();
+                    }
+                }
+            });
+
+        });
+
     });
 </script>
 @endsection

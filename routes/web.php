@@ -73,6 +73,8 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/delete', 'QuestionController@questionDelete')->name('admin.question.delete');
         Route::get('/question-exam', 'QuestionController@getQuestionExam')->name('admin.question.exam');
         Route::get('/question-subject', 'QuestionController@getQuestionSubject')->name('admin.question.subject');
+        Route::post('/accept-ques', 'QuestionController@acceptQues')->name('admin.question.accept-ques');
+        Route::post('/reject-ques', 'QuestionController@rejectQues')->name('admin.question.reject-ques');
     });
 
     // Exam Routes
