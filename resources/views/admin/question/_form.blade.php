@@ -63,22 +63,22 @@
         @if(isset($question))
         <select class="form-control" id="time" name="time" required>
             <option value="">Choose option</option>
-            <option value="10" @if($question->ques_time == "10"){{'selected'}}@endif>10</option>
-            <option value="20" @if($question->ques_time == "20"){{'selected'}}@endif>20</option>
-            <option value="30" @if($question->ques_time == "30"){{'selected'}}@endif>30</option>
-            <option value="40" @if($question->ques_time == "40"){{'selected'}}@endif>40</option>
-            <option value="50" @if($question->ques_time == "50"){{'selected'}}@endif>50</option>
-            <option value="60" @if($question->ques_time == "60"){{'selected'}}@endif>60</option>
+            <option value="10" @if($question->ques_time == "10"){{'selected'}}@endif>10 Sec</option>
+            <option value="20" @if($question->ques_time == "20"){{'selected'}}@endif>20 Sec</option>
+            <option value="30" @if($question->ques_time == "30"){{'selected'}}@endif>30 Sec</option>
+            <option value="40" @if($question->ques_time == "40"){{'selected'}}@endif>40 Sec</option>
+            <option value="50" @if($question->ques_time == "50"){{'selected'}}@endif>50 Sec</option>
+            <option value="60" @if($question->ques_time == "60"){{'selected'}}@endif>60 Sec</option>
         </select>
         @else
         <select class="form-control" id="time" name="time" required>
             <option value="">Choose option</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">10</option>
-            <option value="40">20</option>
-            <option value="50">10</option>
-            <option value="60">20</option>
+            <option value="10">10 Sec</option>
+            <option value="20">20 Sec</option>
+            <option value="30">30 Sec</option>
+            <option value="40">40 Sec</option>
+            <option value="50">50 Sec</option>
+            <option value="60">60 Sec</option>
         </select>
         @endif
     </div>
