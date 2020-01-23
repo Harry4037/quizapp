@@ -155,7 +155,7 @@ class QuestionController extends Controller {
         }
 
         if ($request->flag == 1) {
-            $questions = Question::whereIn('is_approve', [1, 2, 3])->all()->random(10);
+            $questions = Question::all()->random(10);
             $dataArray = [];
             foreach ($questions as $k => $question) {
                 $answers = Answer::where("question_id", $question->id)->get();
@@ -202,7 +202,7 @@ class QuestionController extends Controller {
 
             $query->limit($request->total_questions);
 
-            $questions = $query->whereIn('is_approve', [1, 2, 3])->get();
+            $questions = $query->get();
 
             $dataArray = [];
             foreach ($questions as $k => $question) {

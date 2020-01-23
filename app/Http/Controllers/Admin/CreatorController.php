@@ -107,7 +107,7 @@ class CreatorController extends Controller {
                 $user->designation = $request->designation;
                 $user->qualification = $request->qualification;
                 $user->dob = $request->dob;
-
+                $user->into_line = $request->about;
                 if ($user->save()) {
                     return redirect()->route('admin.creator.index')->with('status', 'User has been updated successfully.');
                 } else {
@@ -179,6 +179,7 @@ class CreatorController extends Controller {
                 $user->designation = $request->designation;
                 $user->qualification = $request->qualification;
                 $user->dob = $request->dob;
+                $user->into_line = $request->about;
                 $user->created_by = auth()->user()->id;
                 $user->updated_by = auth()->user()->id;
 
