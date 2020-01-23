@@ -1509,9 +1509,9 @@
     "groupTitle": "Question_Answer"
   },
   {
-    "type": "post",
-    "url": "/api/create-quiz",
-    "title": "Create Quiz",
+    "type": "get",
+    "url": "/api/quiz-detail",
+    "title": "Quiz Detail",
     "header": {
       "fields": {
         "Header": [
@@ -1525,56 +1525,8 @@
         ]
       }
     },
-    "name": "PostCreateQuiz",
+    "name": "GetQuizDetail",
     "group": "Quiz",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "user_id",
-            "description": "<p>User ID*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>Quiz Name*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "total_questions",
-            "description": "<p>Total no. of questions*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "start_date_time",
-            "description": "<p>Start Date Time (YYYY-MM-DD H:i)*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "end_date_time",
-            "description": "<p>End Date Time (YYYY-MM-DD H:i)*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "lang",
-            "description": "<p>Language(English=&gt;1,Hindi=&gt;2)*.</p>"
-          }
-        ]
-      }
-    },
     "success": {
       "fields": {
         "Success 200": [
@@ -1597,7 +1549,7 @@
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Quiz Created.</p>"
+            "description": "<p>Daily Quiz Found.</p>"
           },
           {
             "group": "Success 200",
@@ -1611,7 +1563,142 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Quiz create successfully.\",\n      \"data\": {\n          \"user_id\": \"1\",\n          \"name\": \"SSC QUIZ\",\n          \"total_questions\": \"10\",\n          \"start_date_time\": \"2020-01-08 01:00\",\n          \"end_date_time\": \"2020-01-08 02:00\",\n          \"lang\": \"1\",\n          \"updated_at\": \"2020-01-08 06:56:01\",\n          \"created_at\": \"2020-01-08 06:56:01\",\n          \"id\": 1\n      }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Daily Quiz Found\",\n      \"data\": {\n          \"quiz\": {\n              \"id\": 1,\n              \"name\": \"ABC\",\n              \"total_question\": 10,\n              \"lang\": \"English\",\n              \"start_date_time\": \"2020-01-23 16:00:00\",\n              \"end_date_time\": \"2020-01-23 17:00:00\"\n          }\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/QuizController.php",
+    "groupTitle": "Quiz"
+  },
+  {
+    "type": "get",
+    "url": "/api/start-quiz",
+    "title": "Start Quiz",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetQuizQuestion",
+    "group": "Quiz",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Daily Quiz Found.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Daily Quiz Found.\",\n      \"data\": {\n          \"quiz\": {\n              \"id\": 1,\n              \"name\": \"ABC\",\n              \"total_question\": 10,\n              \"lang\": \"English\",\n              \"start_date_time\": \"2020-01-23 16:00:00\",\n              \"end_date_time\": \"2020-01-23 17:00:00\",\n              \"questions\": [\n                  {\n                      \"id\": 1,\n                      \"description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\",\n                      \"ques_image\": \"http://127.0.0.1:8000/storage/ques_image/ \",\n                      \"answers\": [\n                          {\n                              \"id\": 1,\n                              \"question_id\": 1,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0,\n                              \"created_at\": null,\n                              \"updated_at\": null,\n                              \"deleted_at\": null\n                          },\n                          {\n                              \"id\": 2,\n                              \"question_id\": 1,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0,\n                              \"created_at\": null,\n                              \"updated_at\": null,\n                              \"deleted_at\": null\n                          },\n                          {\n                              \"id\": 3,\n                              \"question_id\": 1,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0,\n                              \"created_at\": null,\n                              \"updated_at\": null,\n                              \"deleted_at\": null\n                          },\n                          {\n                              \"id\": 4,\n                              \"question_id\": 1,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 1,\n                              \"created_at\": null,\n                              \"updated_at\": null,\n                              \"deleted_at\": null\n                          }\n                      ]\n                  }\n              ]\n          }\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/QuizController.php",
+    "groupTitle": "Quiz"
+  },
+  {
+    "type": "post",
+    "url": "/api/submit-quiz",
+    "title": "Submit Quiz",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostSubmitQuiz",
+    "group": "Quiz",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "body:\n  {\n          \"user_id\":1,\n          \"quiz_id\":1,\n          \"questions\":[\n          {\n            \"question_id\":1,\n            \"answer_id\":4,\n            \"is_correct\":1\n          },\n          {\n            \"question_id\":2,\n            \"answer_id\":6,\n            \"is_correct\":0\n          }\n      ]\n  }",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Daily Quiz Submitted.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Daily Quiz Submitted.\",\n      \"data\": {\n         \n       }\n  }",
           "type": "json"
         }
       ]

@@ -43,8 +43,10 @@ Route::namespace("Api")->group(function() {
     Route::get('/comment-list', 'QuestionCommentController@commentList');
     Route::get('/notification', 'NotificationController@notificationlist');
 
-
-    Route::post('/create-quiz', 'QuizController@createQuiz');
+    //Quiz
+    Route::get('/quiz-detail', 'QuizController@quizDetail');
+    Route::get('/start-quiz', 'QuizController@startQuiz');
+    Route::post('/submit-quiz', 'QuizController@submitQuiz');
 
     //UserController
     Route::post('/update-language', 'UserController@updateLanguage');
