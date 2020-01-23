@@ -417,7 +417,7 @@ class TestSeriesController extends Controller {
         if (!$request->test_series_id) {
             return $this->errorResponse("Test Series ID Missing.");
         }
-        if (!$request->user__id) {
+        if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
         $user = User::find($request->user_id);
