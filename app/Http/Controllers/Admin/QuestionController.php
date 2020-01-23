@@ -11,6 +11,7 @@ use App\Models\Answer;
 use App\Models\Exam;
 use App\Models\Subject;
 use Carbon\Carbon;
+use App\Models\QuestionComment;
 use Validator;
 use Illuminate\Validation\Rule;
 
@@ -57,7 +58,7 @@ class QuestionController extends Controller {
                     $questionsArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $question->id . '" data-status="' . $question->is_approve .'"><i class="fa fa-pencil"></i> Accept </a>&nbsp;&nbsp;'
                     . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $question->id . '" data-status="' . $question->is_approve .'"><i class="fa fa-trash"></i> Reject </a>';
                 }
-                $questionsArray[$k]['action'] = '<a href="' . route('admin.question.edit', $question) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;<a href="' . route('admin.question.edit', $question) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Comment </a>&nbsp;&nbsp;&nbsp;'
+                $questionsArray[$k]['action'] = '<a href="' . route('admin.question.edit', $question) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;<a href="' . route('admin.question.comment-list', $question) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Comment </a>&nbsp;&nbsp;&nbsp;'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $question->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
@@ -179,6 +180,7 @@ class QuestionController extends Controller {
                 $question = new Question();
                 $question->ques_time = $request->time;
                 $question->user_id = 1;
+                $question->is_approve = 2;
                 $question->description = $request->description;
                 $question->exam_id = $request->exam_id;
                 $question->subject_id = $request->subject_id;
@@ -275,5 +277,18 @@ class QuestionController extends Controller {
         } catch (\Exception $e) {
             return ['status' => false, "message" => $e->getMessage()];
         }
+    }
+
+    public function comment(Request $request, Question $question) {
+
+        $comm = QuestionComment::where('question_id', $question->id)->with(['user'])->get();
+        if(!$comm){
+
+            return view('admin.question.comment-list', [
+                'comments' => $comm
+            ]);
+              }  else {
+                return redirect()->route('admin.question.index')->with('error', 'No Comment Yet.');
+            }
     }
 }

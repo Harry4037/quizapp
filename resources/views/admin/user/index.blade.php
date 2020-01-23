@@ -19,9 +19,7 @@
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title">User List</h3>
-                        <div class="pull-right">
-                            <a href="{{route('admin.user.add')}}" class="btn btn-block btn-primary">Add</a>
-                        </div>
+
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">

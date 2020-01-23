@@ -148,6 +148,16 @@
 
         });
 
+        $(document).on("click", ".delete", function () {
+            var record_id = this.id;
+            deletePopup(
+                    "Deleting Question",
+                    "Are you sure want to delete this Question?",
+                    record_id,
+                    "{{route('admin.question.delete')}}"
+                    );
+        });
+
     });
 </script>
 @endsection
