@@ -288,11 +288,11 @@ class QuestionController extends Controller {
 
         $comm = QuestionComment::where('question_id', $question->id)->with(['user'])->get();
         if($comm){
+            return redirect()->route('admin.question.index')->with('error', 'No Comment Yet.');
+        } else {
             return view('admin.question.comment-list', [
                 'comments' => $comm
             ]);
-        } else {
-            return redirect()->route('admin.question.index')->with('error', 'No Comment Yet.');
         }
     }
 }
