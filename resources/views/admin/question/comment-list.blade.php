@@ -39,7 +39,7 @@
                                     <td>{{$comment->description}}</td>
                                 </tr>
                                 @endforeach
-                                @else
+                                @elseif($k == 0)
                                 <tr>
                                     <td></td>
                                     <td>No Comments Found</td>
