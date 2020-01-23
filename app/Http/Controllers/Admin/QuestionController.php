@@ -48,7 +48,7 @@ class QuestionController extends Controller {
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
-            $questions = $query->take($limit)->offset($offset)->latest()->get();
+            $questions = $query->take($limit)->offset($offset)->whereIn('is_approve', [1, 2, 3])->latest()->get();
 
             $questionsArray = [];
             foreach ($questions as $k => $question) {
