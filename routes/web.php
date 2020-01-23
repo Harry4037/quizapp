@@ -75,7 +75,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::get('/question-subject', 'QuestionController@getQuestionSubject')->name('admin.question.subject');
         Route::post('/accept-ques', 'QuestionController@acceptQues')->name('admin.question.accept-ques');
         Route::post('/reject-ques', 'QuestionController@rejectQues')->name('admin.question.reject-ques');
-        Route::match(['get', 'post'], '/comment/{question}', 'QuestionController@comment')->name('admin.question.comment');
+        Route::get('/{question}/comment-list', 'QuestionController@comment')->name('admin.question.comment-list');
     });
 
     // Exam Routes

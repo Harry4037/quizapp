@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use App\Models\UserQuestionLike;
 use App\Models\Question;
+use Illuminate\Support\Facades\Storage;
 use App\Models\UserAnswer;
 use App\Models\Answer;
 use App\Models\TestSeries;
