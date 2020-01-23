@@ -39,7 +39,12 @@ class QuestionController extends Controller {
 
             $query = Question::query()->with('subject')->with('exam');
             if ($searchKeyword) {
-                $query->where('description', 'LIKE', "%$searchKeyword%");
+                $query->whereHas("subject", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                 });
+                 $query->orWhereHas("exam", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+              });
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
