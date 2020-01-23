@@ -28,12 +28,12 @@
                         <table id="list" class="table table-bordered table-hover text-center">
                             <thead>
                                 <tr>
-                                     <th>Sr. No.</th>
-                                    <th>Exam</th>
-                                    <th>Subject</th>
-                                    <th>Question</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th style="width: 4%;">Sr. No.</th>
+                                    <th style="width: 8%;">Exam</th>
+                                    <th style="width: 10%;">Subject</th>
+                                    <th style="width: 44%;">Question</th>
+                                    <th style="width: 14%;">Status</th>
+                                    <th style="width: 20%;">Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -103,6 +103,9 @@
                         th.attr('data-status', res.data.status);
                         showSuccessMessage(res.data.message);
                         $(".overlay").hide();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
                     } else {
                         showErrorMessage(res.message);
                         $(".overlay").hide();
@@ -133,6 +136,9 @@
                         th.attr('data-status', res.data.status);
                         showSuccessMessage(res.data.message);
                         $(".overlay").hide();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
                     } else {
                         showErrorMessage(res.message);
                         $(".overlay").hide();

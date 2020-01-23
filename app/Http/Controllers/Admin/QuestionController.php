@@ -54,10 +54,10 @@ class QuestionController extends Controller {
                 }elseif($question->is_approve == 3){
                     $questionsArray[$k]['status'] = '<label class="btn btn-danger btn-xs disabled">Rejected</label>';
                 }else{
-                    $questionsArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $question->id . '" data-status="' . $question->is_approve .'"><i class="fa fa-pencil"></i> Accept </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                    $questionsArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $question->id . '" data-status="' . $question->is_approve .'"><i class="fa fa-pencil"></i> Accept </a>&nbsp;&nbsp;'
                     . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $question->id . '" data-status="' . $question->is_approve .'"><i class="fa fa-trash"></i> Reject </a>';
                 }
-                $questionsArray[$k]['action'] = '<a href="' . route('admin.question.edit', $question) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                $questionsArray[$k]['action'] = '<a href="' . route('admin.question.edit', $question) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;<a href="' . route('admin.question.edit', $question) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Comment </a>&nbsp;&nbsp;&nbsp;'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $question->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
