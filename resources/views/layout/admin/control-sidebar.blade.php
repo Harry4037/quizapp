@@ -36,7 +36,7 @@
             </li>
             <li>
                 <a href="{{ route('admin.subject.index')}}">
-                    <i class="fa fa-list"></i> <span>Subject</span>
+                    <i class="fa fa-map-o"></i> <span>Subject</span>
                 </a>
             </li>
             <li>
