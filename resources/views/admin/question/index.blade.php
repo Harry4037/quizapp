@@ -31,7 +31,7 @@
                                      <th>Sr. No.</th>
                                     <th>Exam</th>
                                     <th>Subject</th>
-                                    <th>Description</th>
+                                    <th>Question</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -83,7 +83,7 @@
         $(document).on("click", ".delete", function () {
             var record_id = this.id;
             deletePopup(
-                    "Deleting User",
+                    "Deleting Question",
                     "Are you sure want to delete this Question?",
                     record_id,
                     "{{route('admin.question.delete')}}"
