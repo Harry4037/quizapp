@@ -49,9 +49,10 @@
                     <i class="fa fa-users"></i> <span>Quiz</span>
                 </a>
             </li>
-            <a href="{{ route('admin.question.index')}}">
-                <i class="fa fa-users"></i> <span>Question Management</span>
-            </a>
+            <li>
+                <a href="{{ route('admin.question.index')}}">
+                    <i class="fa fa-users"></i> <span>Question Management</span>
+                </a>
             </li>
         </ul>
     </section>
