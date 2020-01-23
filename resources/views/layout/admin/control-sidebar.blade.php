@@ -36,22 +36,22 @@
             </li>
             <li>
                 <a href="{{ route('admin.subject.index')}}">
-                    <i class="fa fa-users"></i> <span>Subject</span>
+                    <i class="fa fa-list"></i> <span>Subject</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('admin.exam.index')}}">
-                    <i class="fa fa-users"></i> <span>Exam</span>
+                    <i class="fa fa-list"></i> <span>Exam</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('admin.quiz.index')}}">
-                    <i class="fa fa-users"></i> <span>Quiz</span>
+                    <i class="fa fa-question"></i> <span>Quiz</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('admin.question.index')}}">
-                    <i class="fa fa-users"></i> <span>Question Management</span>
+                    <i class="fa fa-question-circle"></i> <span>Question Management</span>
                 </a>
             </li>
         </ul>
