@@ -16,17 +16,42 @@
         <div class="row">
             <div class="col-xs-12">
                 @include('errors.errors-and-messages')
-                <div class="box box-info">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Quiz Add</h3>
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Add Question</h3>
                     </div>
                     <!-- /.box-header -->
-                    <!-- form start -->
-                    <form class="form-horizontal form-label-left" action="{{ route('admin.quiz.add') }}" method="post" id="quizForm" enctype="multipart/form-data">
-                        @csrf
-                        @include('admin.quiz._form')
-                    </form>
+                    <div class="box-body">
+                        <form class="form-horizontal form-label-left" action="{{ route('admin.quiz.add-question', $quiz) }}" method="post" id="quizForm" enctype="multipart/form-data">
+                            @csrf
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 col-sm-4 col-xs-12">Total Question <span class="error">*</span></label>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input placeholder="Total Question" type="number" class="form-control" name="total_question" id="total_question" value="0">
+                                    </div>
+                                </div>
+
+                                <div id="question_div"></div>
+
+                            </div>
+
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <div class="form-group">
+                                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-5">
+                                        <a class="btn btn-default" href="{{ route('admin.quiz.index') }}">Cancel</a>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-footer -->
+
+                        </form>
+                    </div>
+                    <!-- /.box-body -->
                 </div>
+
             </div>
             <!-- /.col -->
         </div>
@@ -39,69 +64,16 @@
 
 @section('script')
 <script>
+
     $(document).ready(function () {
-
-        $('#start_date_time').daterangepicker({
-            singleDatePicker: true,
-            timePicker: true,
-            startDate: new Date(),
-            minDate: new Date(),
-            singleClasses: "picker_2",
-            locale: {
-                format: 'YYYY/M/DD hh:mm:ss A'
-            }
-        }, function (start, end, label) {
-            $('#end_date_time').daterangepicker({
-                singleDatePicker: true,
-                timePicker: true,
-                singleClasses: "picker_2",
-                startDate: start,
-                minDate: start,
-                locale: {
-                    format: 'YYYY/M/DD hh:mm:ss A'
-                }});
-
-        });
-
-        $('#end_date_time').daterangepicker({
-            singleDatePicker: true,
-            timePicker: true,
-            startDate: new Date(),
-            minDate: new Date(),
-            singleClasses: "picker_2",
-            locale: {
-                format: 'YYYY/M/DD hh:mm:ss A'
-            }
-        });
 
         $("#quizForm").validate({
             rules: {
-                quiz_name: {
-                    required: true
-                },
-                exam_id: {
-                    required: true
-                },
-                subject_id: {
-                    required: true
-                },
-                start_date_time: {
-                    required: true
-                },
-                end_date_time: {
-                    required: true
-                },
-                lang: {
-                    required: true
-                },
                 total_question: {
                     required: true,
                     min: 1
                 },
             },
-            messages: {
-
-            }
         });
 
         $(document).on("keyup", "#total_question", function () {
