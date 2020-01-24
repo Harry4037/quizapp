@@ -46,7 +46,8 @@ class QuizController extends Controller {
      *
      */
     public function quizDetail(Request $request) {
-        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
+//        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
+        $quiz = Quiz::where('id', 1)->first();
         if ($quiz) {
             $dataArray = [];
             $dataArray['quiz']['id'] = $quiz->id;
@@ -138,13 +139,13 @@ class QuizController extends Controller {
      *
      */
     public function startQuiz(Request $request) {
-        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
-
+//        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
+        $quiz = Quiz::where('id', 1)->first();
         if ($quiz) {
-            $startDateTime = Carbon::parse($quiz->start_date_time);
-            $endDateTime = Carbon::parse($quiz->start_date_time)->addMinutes(5);
-            $currentDateTime = Carbon::now();
-            if ($currentDateTime->between($startDateTime, $endDateTime)) {
+//            $startDateTime = Carbon::parse($quiz->start_date_time);
+//            $endDateTime = Carbon::parse($quiz->start_date_time)->addMinutes(5);
+//            $currentDateTime = Carbon::now();
+//            if ($currentDateTime->between($startDateTime, $endDateTime)) {
                 $dataArray = [];
                 $dataArray['quiz']['id'] = $quiz->id;
                 $dataArray['quiz']['name'] = $quiz->name;
@@ -165,9 +166,9 @@ class QuizController extends Controller {
                     $dataArray['quiz']['questions'] = [];
                 }
                 return $this->successResponse("Daily Quiz Found.", $dataArray);
-            } else {
-                return $this->errorResponse("You can not participate in this quiz.");
-            }
+//            } else {
+//                return $this->errorResponse("You can not participate in this quiz.");
+//            }
         } else {
             return $this->errorResponse("No Daily Quiz Found.");
         }
@@ -215,7 +216,6 @@ class QuizController extends Controller {
      *   }
      *
      */
-    
     public function submitQuiz(Request $request) {
         if (empty($request->input())) {
             return $this->errorResponse("Parameter Body Missing.");
