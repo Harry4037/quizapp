@@ -54,6 +54,11 @@
                     <i class="fa fa-question-circle"></i> <span>Question Management</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.test-series.index')}}">
+                    <i class="fa fa-question-circle"></i> <span>TestSeries Management</span>
+                </a>
+            </li>
         </ul>
     </section>
     <!-- /.sidebar -->
