@@ -18,9 +18,9 @@
                 @include('errors.errors-and-messages')
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Quiz List</h3>
+                        <h3 class="box-title">Question List</h3>
                         <div class="pull-right">
-                            <a href="{{route('admin.quiz.add')}}" class="btn btn-block btn-primary">Add</a>
+                            <a href="{{ route('admin.quiz.add-question', $quiz) }}" class="btn btn-block btn-primary">Add</a>
                         </div>
                     </div>
                     <!-- /.box-header -->
@@ -28,15 +28,24 @@
                         <table id="list" class="table table-bordered table-hover text-center">
                             <thead>
                                 <tr>
-                                     <th>Sr. No.</th>
-                                    <th>Name</th>
-                                    <th>Total Questions</th>
-                                    <th>Start At</th>
-                                    <th>End At</th>
+                                    <th>Sr. No.</th>
+                                    <th>Question</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                @if($questions)
+                                @foreach($questions as $k => $question)
+                                <tr>
+                                    <td>{{ $k+1 }}</td>
+                                    <td>{{ $question->description }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.quiz.edit-question', $question->id) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                @endif
+                            </tbody>
                         </table>
                     </div>
                     <!-- /.box-body -->
@@ -58,26 +67,7 @@
     var t = $('#list').DataTable({
         lengthMenu: [[10, 25, 50], [10, 25, 50]],
         searching: true,
-        processing: true,
-        serverSide: true,
-        stateSave: true,
-        language: {
-            'loadingRecords': '&nbsp;',
-            'processing': '<i class="fa fa-refresh fa-spin"></i>'
-        },
-        ajax: "{{route('admin.quiz.list')}}",
-        "columns": [
-            {"data": null,
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            {"data": "name", sortable: false},
-            {"data": "total_question", sortable: false},
-            {"data": "start_at", sortable: false},
-            {"data": "end_at", sortable: false},
-            {"data": "action", sortable: false},
-        ]
+        sorting: false
     });
 
     $(document).ready(function () {

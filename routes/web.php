@@ -83,7 +83,10 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::get('/', 'QuizController@index')->name('admin.quiz.index');
         Route::get('/list', 'QuizController@quizList')->name('admin.quiz.list');
         Route::match(['get', 'post'], '/add', 'QuizController@quizAdd')->name('admin.quiz.add');
-        Route::match(['get', 'post'], '/edit/{exam}', 'QuizController@examEdit')->name('admin.quiz.edit');
+        Route::match(['get', 'post'], '/edit/{quiz}', 'QuizController@quizEdit')->name('admin.quiz.edit');
+        Route::match(['get', 'post'], '/question-list/{quiz}', 'QuizController@quizQuestionList')->name('admin.quiz.question-list');
+        Route::match(['get', 'post'], '/question/add/{quiz}', 'QuizController@quizQuestionAdd')->name('admin.quiz.add-question');
+        Route::match(['get', 'post'], '/question/edit/{question}', 'QuizController@quizQuestionEdit')->name('admin.quiz.edit-question');
         Route::post('/delete', 'QuizController@examDelete')->name('admin.quiz.delete');
     });
 
