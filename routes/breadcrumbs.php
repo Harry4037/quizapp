@@ -81,3 +81,17 @@ Breadcrumbs::for('admin.question.edit', function ($trail, $exam) {
     $trail->push("Edit", route('admin.question.edit', $exam));
 });
 
+// Home > [TestSeries]
+Breadcrumbs::for('admin.testseries.index', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push("Testseries", route('admin.testseries.index'));
+});
+Breadcrumbs::for('admin.testseries.add', function ($trail) {
+    $trail->parent('admin.testseries.index');
+    $trail->push("Add", route('admin.testseries.add'));
+});
+Breadcrumbs::for('admin.testseries.edit', function ($trail, $testseries) {
+    $trail->parent('admin.testseries.index');
+    $trail->push("Edit", route('admin.testseries.edit', $testseries));
+});
+

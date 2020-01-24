@@ -86,4 +86,15 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::match(['get', 'post'], '/edit/{exam}', 'QuizController@examEdit')->name('admin.quiz.edit');
         Route::post('/delete', 'QuizController@examDelete')->name('admin.quiz.delete');
     });
+
+    // Test Series Routes
+    Route::prefix('test-series')->group(function() {
+        Route::get('/', 'TestSeriesController@index')->name('admin.test-series.index');
+        Route::get('/list', 'TestSeriesController@testSeriesList')->name('admin.test-series.list');
+        Route::match(['get', 'post'], '/add', 'TestSeriesController@testSeriesAdd')->name('admin.test-series.add');
+        Route::match(['get', 'post'], '/edit/{testseries}', 'TestSeriesController@testSeriesEdit')->name('admin.test-series.edit');
+        Route::post('/delete', 'TestSeriesController@testSeriesDelete')->name('admin.test-series.delete');
+        Route::post('/accept-series', 'TestSeriesController@acceptTestSeries')->name('admin.test-series.accept-ques');
+        Route::post('/reject-series', 'TestSeriesController@rejectTestSeries')->name('admin.test-series.reject-ques');
+    });
 });
