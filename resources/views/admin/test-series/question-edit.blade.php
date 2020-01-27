@@ -16,17 +16,87 @@
         <div class="row">
             <div class="col-xs-12">
                 @include('errors.errors-and-messages')
-                <div class="box box-info">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Test Series Add</h3>
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Add Question</h3>
                     </div>
                     <!-- /.box-header -->
-                    <!-- form start -->
-                    <form class="form-horizontal form-label-left" action="{{ route('admin.test-series.add') }}" method="post" id="testseriesForm" enctype="multipart/form-data">
-                        @csrf
-                        @include('admin.test-series._form')
-                    </form>
+                    <div class="box-body">
+                        <form class="form-horizontal form-label-left" action="{{ route('admin.test-series.edit-question', $question) }}" method="post" id="quizForm" enctype="multipart/form-data">
+                            @csrf
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 col-sm-4 col-xs-12">Question Name <span class="error">*</span></label>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <textarea class="form-control" name="description" id="description">{{ $question->description}}</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 col-sm-4 col-xs-12">Select Question Image</label>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="file" class="form-control" name="ques_image">
+                                    </div>
+                                </div>
+                                @if(isset($question->ques_image))
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 col-sm-4 col-xs-12">Question Img. Preview</label>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <img class="img-circle" src="{{$question->ques_image}}" style="width: 50%">
+                                    </div>
+                                </div>
+                                @endif
+                                @if($answers)
+                                @foreach($answers as $k=>$answer)
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 col-sm-4 col-xs-12">Option{{$k+1}} <span class="error">*</span></label>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" name="ans{{$k+1}}" value="{{$answer->description}}">
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 col-sm-4 col-xs-12">Correct Option <span class="error">*</span></label>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        @if(isset($answers))
+                                        <select class="form-control" id="correct_answer" name="correct_answer">
+                                            <option value="">Choose option</option>
+                                            <option value="opt1" @if($answers[0]->is_answer == "1"){{'selected'}}@endif>option1</option>
+                                            <option value="opt2" @if($answers[1]->is_answer == "1"){{'selected'}}@endif>option2</option>
+                                            <option value="opt3" @if($answers[2]->is_answer == "1"){{'selected'}}@endif>option3</option>
+                                            <option value="opt4" @if($answers[3]->is_answer == "1"){{'selected'}}@endif>option4</option>
+                                        </select>
+                                        @else
+                                        <select class="form-control" id="correct_answer" name="correct_answer">
+                                            <option value="">Choose option</option>
+                                            <option value="opt1">option1</option>
+                                            <option value="opt2">option2</option>
+                                            <option value="opt3">option3</option>
+                                            <option value="opt4">option4</option>
+                                        </select>
+                                        @endif
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <div class="form-group">
+                                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-5">
+                                        <a class="btn btn-default" href="{{ route('admin.test-series.index') }}">Cancel</a>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-footer -->
+
+                        </form>
+                    </div>
+                    <!-- /.box-body -->
                 </div>
+
             </div>
             <!-- /.col -->
         </div>
@@ -39,21 +109,18 @@
 
 @section('script')
 <script>
+
     $(document).ready(function () {
 
-        $("#test-seriesForm").validate({
+        $("#quizForm").validate({
             rules: {
-                exam_id: {
-                    required: true
-                },
-                subject_id: {
-                    required: true
+                total_question: {
+                    required: true,
+                    min: 1
                 },
             },
-            messages: {
-
-            }
         });
+
         $(document).on("keyup", "#total_question", function () {
             var days = parseInt($("#total_question").val());
             if (days < 0) {
@@ -140,7 +207,6 @@
             }
 
         });
-
 
     });
 </script>

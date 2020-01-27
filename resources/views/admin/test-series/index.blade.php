@@ -36,8 +36,8 @@
                                     <th style="width: 8%;">Total_ques</th>
                                     <th style="width: 5%;">Series_time</th>
                                     <th style="width: 7%;">lang</th>
-                                    <th style="width: 14%;">Status</th>
-                                    <th style="width: 15%;">Action</th>
+                                    <th style="width: 11%;">Status</th>
+                                    <th style="width: 18%;">Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
