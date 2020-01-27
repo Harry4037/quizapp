@@ -544,7 +544,7 @@ class TestSeriesController extends Controller {
                 $searchHistory->save();
             } else {
                 $searchHistory = new SearchHistory();
-                $searchHistory->test_series_id = $request->test_series_id;
+                $searchHistory->test_id = $request->test_series_id;
                 $searchHistory->search_count = 1;
                 $searchHistory->save();
             }
@@ -582,7 +582,7 @@ class TestSeriesController extends Controller {
                     $searchHistory->save();
                 } else {
                     $searchHistory = new SearchHistory();
-                    $searchHistory->test_series_id = $request->test_series_id;
+                    $searchHistory->test_id = $request->test_series_id;
                     $searchHistory->search_count = 1;
                     $searchHistory->save();
                 }
