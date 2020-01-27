@@ -289,7 +289,7 @@ class TestSeriesController extends Controller {
            $inviteArray1[$k]['created_at'] = $invite1->created_at;
            $inviteArray1[$k]['flag'] = 2;
        }
-        $res = array_merge($dataArray, $dataArray1,$inviteArray,$inviteArray1);
+        $res = array_merge($dataArray, $dataArray1, $inviteArray, $inviteArray1);
         $data['TestSeries_list'] = $res;
         return $this->successResponse("TestSeries List", $data);
     }
@@ -532,10 +532,13 @@ class TestSeriesController extends Controller {
         if (!$request->test_series_id) {
             return $this->errorResponse("Test series ID missing.");
         }
-
+        if (!in_array($request->flag, [1, 2])) {
+            return $this->errorResponse("Select valid flag type");
+        }
+        if($request->flag == 1){
         $testSeries = TestSeries::find($request->test_series_id);
         if ($testSeries) {
-            $searchHistory = SearchHistory::where("test_series_id", $request->test_series_id)->first();
+            $searchHistory = SearchHistory::where("test_id", $request->test_series_id)->first();
             if ($searchHistory) {
                 $searchHistory->search_count = $searchHistory->search_count + 1;
                 $searchHistory->save();
@@ -569,6 +572,46 @@ class TestSeriesController extends Controller {
         } else {
             return $this->errorResponse("Invalid Test Series ID.");
         }
+        }
+        if($request->flag == 2){
+            $testSeries = UserTestSeries::find($request->test_series_id);
+            if ($testSeries) {
+                $searchHistory = SearchHistory::where("test_id", $request->test_series_id)->first();
+                if ($searchHistory) {
+                    $searchHistory->search_count = $searchHistory->search_count + 1;
+                    $searchHistory->save();
+                } else {
+                    $searchHistory = new SearchHistory();
+                    $searchHistory->test_series_id = $request->test_series_id;
+                    $searchHistory->search_count = 1;
+                    $searchHistory->save();
+                }
+                $seriesQuestions = Question::where("test_series_id", $testSeries->id)->get();
+
+                $dataArray = [];
+                $dataArray['test_series']['id'] = $testSeries->id;
+                $dataArray['test_series']['name'] = $testSeries->name;
+                $dataArray['test_series']['total_question'] = $testSeries->total_question;
+                $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
+                if ($seriesQuestions) {
+                    foreach ($seriesQuestions as $k => $seriesQuestion) {
+                        $answers = Answer::where("question_id", $seriesQuestion->id)->get();
+                        $dataArray['test_series']['questions'][$k]['id'] = $seriesQuestion->id;
+                        $dataArray['test_series']['questions'][$k]['description'] = $seriesQuestion->description;
+                        $dataArray['test_series']['questions'][$k]['ques_image'] = $seriesQuestion->ques_image;
+                        $dataArray['test_series']['questions'][$k]['ques_time'] = $seriesQuestion->ques_time;
+                        $dataArray['test_series']['questions'][$k]['answers'] = $answers;
+                    }
+                } else {
+                    $dataArray['test_series']['questions'] = [];
+                }
+
+                return $this->successResponse("Test Series.", $dataArray);
+            } else {
+                return $this->errorResponse("Invalid Test Series ID.");
+            }
+            }
+
     }
 
     /**
