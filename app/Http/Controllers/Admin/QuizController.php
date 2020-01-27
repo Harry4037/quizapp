@@ -63,14 +63,22 @@ class QuizController extends Controller {
 
     public function quizAdd(Request $request) {
         try {
-            $css = [
-                'bower_components/bootstrap-daterangepicker/daterangepicker.css',
-            ];
-            $js = [
-                'bower_components/moment/min/moment.min.js',
-                'bower_components/bootstrap-daterangepicker/daterangepicker.js',
-            ];
+
             if ($request->isMethod("post")) {
+//
+//                $validator = Validator::make($request->all(), [
+//                            'quiz_name' => [
+//                                'required',
+//                                Rule::unique('questions', 'description')->where(function ($query) use($request) {
+//                                            return $query->where(['description' => $request->description])
+//                                                            ->whereNull('deleted_at');
+//                                        }),
+//                            ],
+//                ]);
+//                if ($validator->fails()) {
+//                    return redirect()->route('admin.question.add')->withErrors($validator)->withInput();
+//                }
+
                 $quiz = new Quiz();
                 $quiz->user_id = auth()->user()->id;
                 $quiz->name = $request->quiz_name;
@@ -147,6 +155,14 @@ class QuizController extends Controller {
                     return redirect()->route('admin.quiz.index')->with('error', 'Something went be wrong.');
                 }
             }
+
+            $css = [
+                'bower_components/bootstrap-daterangepicker/daterangepicker.css',
+            ];
+            $js = [
+                'bower_components/moment/min/moment.min.js',
+                'bower_components/bootstrap-daterangepicker/daterangepicker.js',
+            ];
 
             return view('admin.quiz.add', [
                 'css' => $css,

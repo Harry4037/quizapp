@@ -79,12 +79,6 @@
                 quiz_name: {
                     required: true
                 },
-                exam_id: {
-                    required: true
-                },
-                subject_id: {
-                    required: true
-                },
                 start_date_time: {
                     required: true
                 },
@@ -99,9 +93,6 @@
                     min: 1
                 },
             },
-            messages: {
-
-            }
         });
 
         $(document).on("keyup", "#total_question", function () {
@@ -118,7 +109,7 @@
                     var day_html = '<div class="box-footer">'
                             + '<label class="control-label">Question ' + quesNo + ':-</label>'
                             + '<div class="form-group">'
-                            + '<label class="control-label col-md-4 col-sm-4 col-xs-12">Question Name <span class="error">*</span></label>'
+                            + '<label class="control-label col-md-4 col-sm-4 col-xs-12">Question <span class="error">*</span></label>'
                             + '<div class="col-md-4 col-sm-6 col-xs-6">'
                             + '<textarea class="form-control" name="description[' + i + ']" ></textarea>'
                             + '</div>'
