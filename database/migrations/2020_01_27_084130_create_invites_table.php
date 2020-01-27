@@ -16,9 +16,9 @@ class CreateInvitesTable extends Migration
         Schema::create('invites', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger("user_id");
-            $table->bigInteger("test_series_id");
-            $table->bigInteger("user_test_series_id");
-            $table->tinyInteger("status")->default(0);;
+            $table->bigInteger("test_series_id")->default(0);
+            $table->bigInteger("user_test_series_id")->default(0);
+            $table->tinyInteger("status")->default(0);
             $table->timestamps();
         });
     }
