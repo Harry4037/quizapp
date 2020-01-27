@@ -13,6 +13,7 @@ use App\Models\TestSeries;
 use App\Models\Subject;
 use App\Models\Answer;
 use App\Models\Exam;
+use App\Models\Invite;
 use App\Models\UserTestSeries;
 use App\Models\SearchHistory;
 
@@ -253,6 +254,12 @@ class TestSeriesController extends Controller {
         }
         $dataArray = [];
         $dataArray1 = [];
+
+        $inviteArray = [];
+        $inviteArray1 = [];
+        $result = TestSeries::where("user_id", $request->user_id)->select('id','name','total_question','created_at')->get();
+         foreach ($result as $k => $test) {
+
         $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
         foreach ($result as $k => $test) {
             $dataArray[$k]['id'] = $test->id;
@@ -261,15 +268,42 @@ class TestSeriesController extends Controller {
             $dataArray[$k]['flag'] = 1;
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
-//        $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id', 'name', 'created_at')->get();
-//        foreach ($result1 as $k => $test1) {
-//            $dataArray1[$k]['id'] = $test1->id;
-//            $dataArray1[$k]['name'] = $test1->name;
-//            $dataArray1[$k]['created_at'] = $test1->created_at;
-//            $dataArray1[$k]['flag'] = 2;
-//            $dataArray1[$k]['total_ques_no'] = NULL;
-//        }
-//        $res = array_merge($dataArray, $dataArray1);
+
+        $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id','name','created_at')->get();
+        foreach ($result1 as $k => $test1) {
+            $dataArray1[$k]['id'] = $test1->id;
+            $dataArray1[$k]['name'] = $test1->name;
+            $dataArray1[$k]['created_at'] = $test1->created_at;
+            $dataArray1[$k]['flag'] = 2;
+            $dataArray1[$k]['total_ques_no'] = NULL;
+        }
+        $invites = Invite::where("user_id", $request->user_id)->where('test_series','<',0)->with('testseries')->select('test_series','status','created_at')->get();
+        foreach ($invites as $k => $invite) {
+           $inviteArray[$k]['id'] = $invite->id;
+           $inviteArray[$k]['user_name'] = $user->name;
+           $inviteArray[$k]['test_series_name'] = $invite->testseries->name;
+           $inviteArray[$k]['created_at'] = $invite->created_at;
+           $inviteArray[$k]['flag'] = 1;
+       }
+       $invites1 = Invite::where("user_id", $request->user_id)->select('user_test_series','<',0)->with('usertestseries')->select('user_test_series','status','created_at')->get();
+       foreach ($invites1 as $k => $invite1) {
+           $inviteArray1[$k]['id'] = $invite1->id;
+           $inviteArray1[$k]['name'] = $user->name;
+           $inviteArray1[$k]['test_series_name'] = $invite1->usertestseries->name;
+           $inviteArray1[$k]['created_at'] = $invite1->created_at;
+           $inviteArray1[$k]['flag'] = 2;
+       }
+        $res = array_merge($dataArray, $dataArray1,$inviteArray,$inviteArray1);
+        $data['TestSeries_list']=$res;
+        $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id', 'name', 'created_at')->get();
+        foreach ($result1 as $k => $test1) {
+            $dataArray1[$k]['id'] = $test1->id;
+            $dataArray1[$k]['name'] = $test1->name;
+            $dataArray1[$k]['created_at'] = $test1->created_at;
+           $dataArray1[$k]['flag'] = 2;
+            $dataArray1[$k]['total_ques_no'] = NULL;
+        }
+       $res = array_merge($dataArray, $dataArray1);
         $res = $dataArray;
         $data['TestSeries_list'] = $res;
         return $this->successResponse("TestSeries List", $data);
