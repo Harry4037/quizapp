@@ -281,7 +281,7 @@ class TestSeriesController extends Controller {
            $inviteArray[$k]['created_at'] = $invite->created_at;
            $inviteArray[$k]['flag'] = 1;
        }
-       $invites1 = Invite::where("user_id", $request->user_id)->select("user_test_series_id",'<',0)->with('usertestseries')->get();
+       $invites1 = Invite::where("user_id", $request->user_id)->where("user_test_series_id",'<',0)->with('usertestseries')->get();
        foreach ($invites1 as $k => $invite1) {
            $inviteArray1[$k]['id'] = $invite1->id;
            $inviteArray1[$k]['name'] = $user->name;
