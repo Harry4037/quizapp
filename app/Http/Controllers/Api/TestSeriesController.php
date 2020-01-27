@@ -274,7 +274,7 @@ class TestSeriesController extends Controller {
             $dataArray1[$k]['flag'] = 2;
             $dataArray1[$k]['total_ques_no'] = NULL;
         }
-        $invites = Invite::where("user_id", $request->user_id)->where('test_series','<',0)->with('testseries')->select('test_series','status','created_at')->get();
+        $invites = Invite::where("user_id", $request->user_id)->where("test_series",'<',0)->with('testseries')->select('test_series','status','created_at')->get();
         foreach ($invites as $k => $invite) {
            $inviteArray[$k]['id'] = $invite->id;
            $inviteArray[$k]['user_name'] = $user->name;
@@ -282,7 +282,7 @@ class TestSeriesController extends Controller {
            $inviteArray[$k]['created_at'] = $invite->created_at;
            $inviteArray[$k]['flag'] = 1;
        }
-       $invites1 = Invite::where("user_id", $request->user_id)->select('user_test_series','<',0)->with('usertestseries')->select('user_test_series','status','created_at')->get();
+       $invites1 = Invite::where("user_id", $request->user_id)->select("user_test_series",'<',0)->with('usertestseries')->select('user_test_series','status','created_at')->get();
        foreach ($invites1 as $k => $invite1) {
            $inviteArray1[$k]['id'] = $invite1->id;
            $inviteArray1[$k]['name'] = $user->name;
@@ -291,17 +291,6 @@ class TestSeriesController extends Controller {
            $inviteArray1[$k]['flag'] = 2;
        }
         $res = array_merge($dataArray, $dataArray1,$inviteArray,$inviteArray1);
-        $data['TestSeries_list']=$res;
-        $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id', 'name', 'created_at')->get();
-        foreach ($result1 as $k => $test1) {
-            $dataArray1[$k]['id'] = $test1->id;
-            $dataArray1[$k]['name'] = $test1->name;
-            $dataArray1[$k]['created_at'] = $test1->created_at;
-           $dataArray1[$k]['flag'] = 2;
-            $dataArray1[$k]['total_ques_no'] = NULL;
-        }
-       $res = array_merge($dataArray, $dataArray1);
-        $res = $dataArray;
         $data['TestSeries_list'] = $res;
         return $this->successResponse("TestSeries List", $data);
     }
