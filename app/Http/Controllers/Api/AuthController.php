@@ -85,6 +85,7 @@ class AuthController extends Controller {
                 $user = new User();
                 $user->mobile_number = $request->mobile_number;
                 $user->user_type_id = $request->user_type;
+                $user->name = "Welcome User";
                 $user->lang = $request->lang;
                 $user->otp = $otp;
                 if ($request->device_token) {
