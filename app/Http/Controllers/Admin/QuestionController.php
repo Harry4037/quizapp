@@ -53,8 +53,13 @@ class QuestionController extends Controller {
             $questionsArray = [];
             foreach ($questions as $k => $question) {
                 $questionsArray[$k]['description'] = $question->description;
+                if($question->exam_id){
                 $questionsArray[$k]['exam'] = $question->exam->name;
                 $questionsArray[$k]['subject'] = $question->subject->name;
+                }else{
+                    $questionsArray[$k]['exam'] = "Quiz";
+                    $questionsArray[$k]['subject'] = "Quiz";
+                }
                 if($question->is_approve == 2){
                     $questionsArray[$k]['status'] = '<label class="btn btn-success btn-xs disabled">Approved</label>';
                 }elseif($question->is_approve == 3){

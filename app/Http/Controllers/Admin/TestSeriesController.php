@@ -200,7 +200,7 @@ class TestSeriesController extends Controller {
                         $question->quiz_id = 0;
                         $question->description = $ques;
 
-                        $question->ques_time = 0;
+                        $question->ques_time = $request->time[$k];
 
                         if ($question->save()) {
                             $answer = new Answer();
@@ -330,14 +330,13 @@ class TestSeriesController extends Controller {
                     $question->ques_image = '';
                 }
 
-                $question->user_id = 0;
-                $question->exam_id = 0;
-                $question->subject_id = 0;
+                $question->user_id = 1;
+                $question->exam_id = $request->exam_id;
+                $question->subject_id = $request->subject_id;
                 $question->test_series_id = $testseries->id;
                 $question->quiz_id = 0;
                 $question->description = $ques;
-
-                $question->ques_time = 0;
+                $question->ques_time = $request->time[$k];
 
                 if ($question->save()) {
                     $answer = new Answer();

@@ -70,6 +70,9 @@ Route::namespace("Api")->group(function() {
 
     Route::get('/search', 'TestSeriesController@search');
     Route::post('/creator-user-profile', 'UserController@CreatorUserProfile');
+
+    Route::post('/invite', 'InviteController@invite');
+    Route::get('/invite-status', 'InviteController@inviteStatus');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
