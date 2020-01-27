@@ -46,9 +46,10 @@
 <div class="form-group">
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Total Questions <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
-        <input type="number" class="form-control" required name="total_ques" id="total_ques" value="@if(isset($series)){{$series->total_question}}@endif">
+        <input type="number" class="form-control" required name="total_question" id="total_question" value="@if(isset($series)){{$series->total_question}}@endif">
     </div>
 </div>
+<div id="question_div"></div>
 <div class="form-group">
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Language <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">

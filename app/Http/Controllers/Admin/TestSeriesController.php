@@ -72,6 +72,7 @@ class TestSeriesController extends Controller {
                     . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve .'"><i class="fa fa-times"></i> Reject </a>';
                 }
                 $testseriesArray[$k]['action'] = '<a href="' . route('admin.test-series.edit', $testseries) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;'
+                . '<a href="' . route('admin.test-series.question-list', $testseries) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> View Questions </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $testseries->id . '" ><i class="fa fa-trash"></i> Delete </a>';
                 $testseriesArray[$k]['series_time'] = $count_time ." Sec";
             }
@@ -80,6 +81,20 @@ class TestSeriesController extends Controller {
             return $data;
         } catch (\Exception $e) {
             dd($e);
+        }
+    }
+
+    public function questionDelete(Request $request) {
+        try {
+            $question = Question::find($request->id);
+            if ($question) {
+                $question->delete();
+                return ['status' => true, "message" => "Question deleted."];
+            } else {
+                return ['status' => false, "message" => "Something went be wrong."];
+            }
+        } catch (\Exception $ex) {
+            return ['status' => false, "message" => $ex->getMessage()];
         }
     }
 
@@ -141,7 +156,13 @@ class TestSeriesController extends Controller {
 
     public function testSeriesAdd(Request $request) {
         try {
-
+            $css = [
+                'bower_components/bootstrap-daterangepicker/daterangepicker.css',
+            ];
+            $js = [
+                'bower_components/moment/min/moment.min.js',
+                'bower_components/bootstrap-daterangepicker/daterangepicker.js',
+            ];
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
                             'testseries_name' => [
@@ -158,8 +179,71 @@ class TestSeriesController extends Controller {
                 $testseries->exam_id = $request->exam_id;
                 $testseries->subject_id = $request->subject_id;
                 $testseries->lang = $request->lang_type;
-                $testseries->total_question = $request->total_ques;
+                $testseries->total_question = $request->total_question;
                 if ($testseries->save()) {
+
+                    foreach ($request->description as $k => $ques) {
+                        $question = new Question();
+                        if ($request->hasFile('ques_image.' . $k)) {
+                            $ques_image = $request->file("ques_image." . $k);
+                            $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                            $ques_file_name = basename($quesImage);
+                            $question->ques_image = $ques_file_name;
+                        } else {
+                            $question->ques_image = '';
+                        }
+
+                        $question->user_id = 1;
+                        $question->exam_id = $request->exam_id;
+                        $question->subject_id = $request->subject_id;
+                        $question->test_series_id = $testseries->id;
+                        $question->quiz_id = 0;
+                        $question->description = $ques;
+
+                        $question->ques_time = 0;
+
+                        if ($question->save()) {
+                            $answer = new Answer();
+                            $answer->question_id = $question->id;
+                            $answer->description = $request->ans1[$k];
+                            if ($request->correct_answer[$k] == "opt1") {
+                                $answer->is_answer = 1;
+                            } else {
+                                $answer->is_answer = 0;
+                            }
+                            $answer->save();
+
+                            $answer = new Answer();
+                            $answer->question_id = $question->id;
+                            $answer->description = $request->ans2[$k];
+                            if ($request->correct_answer[$k] == "opt2") {
+                                $answer->is_answer = 1;
+                            } else {
+                                $answer->is_answer = 0;
+                            }
+                            $answer->save();
+
+                            $answer = new Answer();
+                            $answer->question_id = $question->id;
+                            $answer->description = $request->ans3[$k];
+                            if ($request->correct_answer[$k] == "opt3") {
+                                $answer->is_answer = 1;
+                            } else {
+                                $answer->is_answer = 0;
+                            }
+                            $answer->save();
+
+                            $answer = new Answer();
+                            $answer->question_id = $question->id;
+                            $answer->description = $request->ans4[$k];
+                            if ($request->correct_answer[$k] == "opt4") {
+                                $answer->is_answer = 1;
+                            } else {
+                                $answer->is_answer = 0;
+                            }
+                            $answer->save();
+                        }
+                    }
                     return redirect()->route('admin.test-series.index')->with('status', 'Test Series has been updated successfully.');
                 } else {
                     return redirect()->route('admin.test-series.index')->with('error', 'Something went wrong.');
@@ -169,7 +253,9 @@ class TestSeriesController extends Controller {
             $exams = Exam::get();
             return view('admin.test-series.add', [
                 'subjects' => $subjects,
-                'exams' => $exams
+                'exams' => $exams,
+                'css' => $css,
+                'js' => $js
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.test-series.index')->with('error', $ex->getMessage());
@@ -209,6 +295,147 @@ class TestSeriesController extends Controller {
         } catch (\Exception $e) {
             return ['status' => false, "message" => $e->getMessage()];
         }
+    }
+
+    public function testSeriesQuestionList(Request $request, Testseries $testseries) {
+        $css = [
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+        ];
+        $js = [
+            'bower_components/datatables.net/js/jquery.dataTables.min.js',
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+        ];
+
+        $questions = Question::where("test_series_id", $testseries->id)->get();
+        return view('admin.test-series.question-list', [
+            'questions' => $questions,
+            'testseries' => $testseries,
+            'css' => $css,
+            'js' => $js
+        ]);
+    }
+
+    public function testSeriesQuestionAdd(Request $request, Testseries $testseries) {
+
+        if ($request->isMethod("post")) {
+
+            foreach ($request->description as $k => $ques) {
+                $question = new Question();
+                if ($request->hasFile('ques_image.' . $k)) {
+                    $ques_image = $request->file("ques_image." . $k);
+                    $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                    $ques_file_name = basename($quesImage);
+                    $question->ques_image = $ques_file_name;
+                } else {
+                    $question->ques_image = '';
+                }
+
+                $question->user_id = 0;
+                $question->exam_id = 0;
+                $question->subject_id = 0;
+                $question->test_series_id = $testseries->id;
+                $question->quiz_id = 0;
+                $question->description = $ques;
+
+                $question->ques_time = 0;
+
+                if ($question->save()) {
+                    $answer = new Answer();
+                    $answer->question_id = $question->id;
+                    $answer->description = $request->ans1[$k];
+                    if ($request->correct_answer[$k] == "opt1") {
+                        $answer->is_answer = 1;
+                    } else {
+                        $answer->is_answer = 0;
+                    }
+                    $answer->save();
+
+                    $answer = new Answer();
+                    $answer->question_id = $question->id;
+                    $answer->description = $request->ans2[$k];
+                    if ($request->correct_answer[$k] == "opt2") {
+                        $answer->is_answer = 1;
+                    } else {
+                        $answer->is_answer = 0;
+                    }
+                    $answer->save();
+
+                    $answer = new Answer();
+                    $answer->question_id = $question->id;
+                    $answer->description = $request->ans3[$k];
+                    if ($request->correct_answer[$k] == "opt3") {
+                        $answer->is_answer = 1;
+                    } else {
+                        $answer->is_answer = 0;
+                    }
+                    $answer->save();
+
+                    $answer = new Answer();
+                    $answer->question_id = $question->id;
+                    $answer->description = $request->ans4[$k];
+                    if ($request->correct_answer[$k] == "opt4") {
+                        $answer->is_answer = 1;
+                    } else {
+                        $answer->is_answer = 0;
+                    }
+                    $answer->save();
+                }
+            }
+            return redirect()->route('admin.test-series.index')->with('status', 'Question added successfully.');
+        }
+
+        return view('admin.test-series.question-add', [
+            'testseries' => $testseries,
+        ]);
+    }
+
+    public function testSeriesQuestionEdit(Request $request, Question $question) {
+
+        if ($request->isMethod('post')) {
+            if ($request->hasFile('ques_image')) {
+                $quesImg = Question::selectRaw('ques_image img')->find($question->id);
+                Storage::disk('public')->delete('ques_image/' . $quesImg->img);
+                $ques_image = $request->file("ques_image");
+                $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                $ques_file_name = basename($quesImage);
+                $question->ques_image = $ques_file_name;
+            }
+            $question->description = $request->description;
+
+            if ($question->save()) {
+                if ($request->correct_answer == "opt1") {
+                    Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 1]);
+                    Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                    Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                    Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+                }
+                if ($request->correct_answer == "opt2") {
+                    Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                    Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 1]);
+                    Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                    Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+                }
+                if ($request->correct_answer == "opt3") {
+                    Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                    Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                    Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 1]);
+                    Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+                }
+                if ($request->correct_answer == "opt4") {
+                    Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                    Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                    Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                    Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 1]);
+                }
+                return redirect()->route('admin.test-series.index')->with('status', 'Question has been updated successfully.');
+            }
+        }
+
+        $answers = Answer::where('question_id', $question->id)->get();
+        return view('admin.test-series.question-edit', [
+            'question' => $question,
+            'answers' => $answers,
+        ]);
     }
 
 }

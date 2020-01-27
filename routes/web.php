@@ -78,7 +78,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::get('/{question}/comment-list', 'QuestionController@comment')->name('admin.question.comment-list');
     });
 
-    // Exam Routes
+    // Quiz Routes
     Route::prefix('quiz')->group(function() {
         Route::get('/', 'QuizController@index')->name('admin.quiz.index');
         Route::get('/list', 'QuizController@quizList')->name('admin.quiz.list');
@@ -96,6 +96,9 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::get('/list', 'TestSeriesController@testSeriesList')->name('admin.test-series.list');
         Route::match(['get', 'post'], '/add', 'TestSeriesController@testSeriesAdd')->name('admin.test-series.add');
         Route::match(['get', 'post'], '/edit/{testseries}', 'TestSeriesController@testSeriesEdit')->name('admin.test-series.edit');
+        Route::match(['get', 'post'], '/question-list/{testseries}', 'TestSeriesController@testSeriesQuestionList')->name('admin.test-series.question-list');
+        Route::match(['get', 'post'], '/question/add/{testseries}', 'TestSeriesController@testSeriesQuestionAdd')->name('admin.test-series.add-question');
+        Route::match(['get', 'post'], '/question/edit/{question}', 'TestSeriesController@testSeriesQuestionEdit')->name('admin.test-series.edit-question');
         Route::post('/delete', 'TestSeriesController@testSeriesDelete')->name('admin.test-series.delete');
         Route::post('/accept-series', 'TestSeriesController@acceptTestSeries')->name('admin.test-series.accept-ques');
         Route::post('/reject-series', 'TestSeriesController@rejectTestSeries')->name('admin.test-series.reject-ques');
