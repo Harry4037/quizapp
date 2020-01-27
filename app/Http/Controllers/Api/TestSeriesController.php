@@ -289,8 +289,10 @@ class TestSeriesController extends Controller {
            $inviteArray1[$k]['created_at'] = $invite1->created_at;
            $inviteArray1[$k]['flag'] = 2;
        }
-        $res = array_merge($dataArray, $dataArray1, $inviteArray, $inviteArray1);
+        $res = array_merge($dataArray, $dataArray1);
+        $res1 = array_merge($inviteArray, $inviteArray1);
         $data['TestSeries_list'] = $res;
+        $data['Invite_list'] = $res1;
         return $this->successResponse("TestSeries List", $data);
     }
 
