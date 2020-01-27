@@ -2153,6 +2153,147 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/search-history",
+    "title": "Search History",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetSearchHistory",
+    "group": "TestSeries",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>test series.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Search History\",\n      \"data\": {\n          \"trend_search\": [\n              {\n                  \"id\": 3,\n                  \"name\": \"SSC\"\n              },\n              {\n                  \"id\": 4,\n                  \"name\": \"Math\"\n              }\n          ],\n          \"recent_search\": [\n              {\n                  \"id\": 4,\n                  \"name\": \"Math\"\n              },\n              {\n                  \"id\": 3,\n                  \"name\": \"SSC\"\n              }\n          ]\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/TestSeriesController.php",
+    "groupTitle": "TestSeries"
+  },
+  {
+    "type": "get",
+    "url": "/api/test-series",
+    "title": "Test Series",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetTestSeries",
+    "group": "TestSeries",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "test_series_id",
+            "description": "<p>Test Series ID*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>test series.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Test Series.\",\n      \"data\": {\n          \"test_series\": {\n              \"id\": 3,\n              \"name\": \"SSC\",\n              \"total_question\": 1,\n              \"lang\": \"English\",\n              \"questions\": [\n                  {\n                      \"id\": 1,\n                      \"description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\",\n                      \"ques_image\": \"http://127.0.0.1:8000/storage/ques_image/ \",\n                      \"ques_time\": 20,\n                      \"answers\": [\n                          {\n                              \"id\": 1,\n                              \"question_id\": 1,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0,\n                              \"created_at\": null,\n                              \"updated_at\": null,\n                              \"deleted_at\": null\n                          },\n                          {\n                              \"id\": 2,\n                              \"question_id\": 1,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0,\n                              \"created_at\": null,\n                              \"updated_at\": null,\n                              \"deleted_at\": null\n                          },\n                          {\n                              \"id\": 3,\n                              \"question_id\": 1,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 0,\n                              \"created_at\": null,\n                              \"updated_at\": null,\n                              \"deleted_at\": null\n                          },\n                          {\n                              \"id\": 4,\n                              \"question_id\": 1,\n                              \"description\": \"Lorem Ipsum.\",\n                              \"is_answer\": 1,\n                              \"created_at\": null,\n                              \"updated_at\": null,\n                              \"deleted_at\": null\n                          }\n                      ]\n                  }\n              ]\n          }\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/TestSeriesController.php",
+    "groupTitle": "TestSeries"
+  },
+  {
+    "type": "get",
     "url": "/api/test-series-list",
     "title": "Test Series List",
     "header": {
