@@ -273,7 +273,7 @@ class TestSeriesController extends Controller {
             $dataArray1[$k]['flag'] = 2;
             $dataArray1[$k]['total_ques_no'] = NULL;
         }
-        $invites = Invite::where("user_id", $request->user_id)->where("test_series_id",'<',0)->with('testseries')->select('test_series','status','created_at')->get();
+        $invites = Invite::where("user_id", $request->user_id)->where("test_series_id",'<',0)->with('testseries')->get();
         foreach ($invites as $k => $invite) {
            $inviteArray[$k]['id'] = $invite->id;
            $inviteArray[$k]['user_name'] = $user->name;
@@ -281,7 +281,7 @@ class TestSeriesController extends Controller {
            $inviteArray[$k]['created_at'] = $invite->created_at;
            $inviteArray[$k]['flag'] = 1;
        }
-       $invites1 = Invite::where("user_id", $request->user_id)->select("user_test_series_id",'<',0)->with('usertestseries')->select('user_test_series','status','created_at')->get();
+       $invites1 = Invite::where("user_id", $request->user_id)->select("user_test_series_id",'<',0)->with('usertestseries')->get();
        foreach ($invites1 as $k => $invite1) {
            $inviteArray1[$k]['id'] = $invite1->id;
            $inviteArray1[$k]['name'] = $user->name;
