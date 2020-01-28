@@ -541,7 +541,7 @@ class TestSeriesController extends Controller {
         if ($request->flag == 1) {
             $testSeries = TestSeries::find($request->test_series_id);
             if ($testSeries) {
-                $searchHistory = SearchHistory::where(["test_id"=> $request->test_series_id, "flag" => $request->flag])->first();
+                $searchHistory = SearchHistory::where(["test_id" => $request->test_series_id, "flag" => $request->flag])->first();
                 if ($searchHistory) {
                     $searchHistory->search_count = $searchHistory->search_count + 1;
                     $searchHistory->save();
@@ -596,7 +596,7 @@ class TestSeriesController extends Controller {
                 $dataArray = [];
                 $dataArray['test_series']['id'] = $testSeries->id;
                 $dataArray['test_series']['name'] = $testSeries->name;
-                $dataArray['test_series']['total_question'] = $testSeries->total_question;
+
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
                 if ($seriesQuestions) {
                     foreach ($seriesQuestions as $k => $seriesQuestion) {
@@ -610,6 +610,7 @@ class TestSeriesController extends Controller {
                 } else {
                     $dataArray['test_series']['questions'] = [];
                 }
+                $dataArray['test_series']['total_question'] = count($seriesQuestions);
 
                 return $this->successResponse("Test Series.", $dataArray);
             } else {
