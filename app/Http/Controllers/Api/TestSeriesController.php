@@ -461,6 +461,7 @@ class TestSeriesController extends Controller {
      * @apiGroup TestSeries
      *
      * @apiParam {String} test_series_id Test Series ID*.
+     * @apiParam {String} flag Flag*.
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -540,7 +541,7 @@ class TestSeriesController extends Controller {
         if ($request->flag == 1) {
             $testSeries = TestSeries::find($request->test_series_id);
             if ($testSeries) {
-                $searchHistory = SearchHistory::where(["test_id", $request->test_series_id, "flag" => $request->flag])->first();
+                $searchHistory = SearchHistory::where(["test_id"=> $request->test_series_id, "flag" => $request->flag])->first();
                 if ($searchHistory) {
                     $searchHistory->search_count = $searchHistory->search_count + 1;
                     $searchHistory->save();
@@ -579,7 +580,7 @@ class TestSeriesController extends Controller {
         if ($request->flag == 2) {
             $testSeries = UserTestSeries::find($request->test_series_id);
             if ($testSeries) {
-                $searchHistory = SearchHistory::where(["test_id", $request->test_series_id, "flag" => $request->flag])->first();
+                $searchHistory = SearchHistory::where(["test_id" => $request->test_series_id, "flag" => $request->flag])->first();
                 if ($searchHistory) {
                     $searchHistory->search_count = $searchHistory->search_count + 1;
                     $searchHistory->save();
