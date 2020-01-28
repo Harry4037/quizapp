@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 class NotificationController extends Controller {
@@ -78,6 +79,9 @@ class NotificationController extends Controller {
                     $dataArray[$k]['user_id'] = $uuy->user_id;
                     $dataArray[$k]['is_read'] = $uuy->is_read;
                     $dataArray[$k]['message'] = $uuy->message;
+                    $date = Carbon::parse($uuy->created_at);
+                    $dataArray[$k]['date'] = $date->format("d-F-Y");
+                    $dataArray[$k]['time'] = $date->format("h:i:s A");
                 }
             }
             $data['notification_list']=$dataArray;
