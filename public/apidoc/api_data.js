@@ -394,6 +394,13 @@ define({ "api": [
             "optional": false,
             "field": "test_series_id",
             "description": "<p>Test Series Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "flag",
+            "description": "<p>Flag type.</p>"
           }
         ]
       }
@@ -1843,7 +1850,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Daily Quiz Found\",\n      \"data\": {\n          \"quiz\": {\n              \"id\": 1,\n              \"name\": \"ABC\",\n              \"total_question\": 10,\n              \"lang\": \"English\",\n              \"start_date_time\": \"2020-01-23 16:00:00\",\n              \"end_date_time\": \"2020-01-23 17:00:00\"\n          }\n      }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Daily Quiz Found\",\n      \"data\": {\n          \"quiz\": {\n              \"id\": 1,\n              \"name\": \"ABC\",\n              \"total_question\": 10,\n              \"lang\": \"English\",\n              \"start_date_time\": \"2020-01-23 16:00:00\",\n              \"end_date_time\": \"2020-01-23 17:00:00\",\n              \"question_time\": 5345\n          }\n      }\n  }",
           "type": "json"
         }
       ]
@@ -1978,7 +1985,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Daily Quiz Submitted.\",\n      \"data\": {\n         \n       }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Daily Quiz Submitted.\",\n      \"data\": {\n\n       }\n  }",
           "type": "json"
         }
       ]

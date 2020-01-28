@@ -39,7 +39,8 @@ class QuizController extends Controller {
      *               "total_question": 10,
      *               "lang": "English",
      *               "start_date_time": "2020-01-23 16:00:00",
-     *               "end_date_time": "2020-01-23 17:00:00"
+     *               "end_date_time": "2020-01-23 17:00:00",
+     *               "question_time": 5345
      *           }
      *       }
      *   }
@@ -56,7 +57,10 @@ class QuizController extends Controller {
             $dataArray['quiz']['lang'] = $quiz->lang == 1 ? 'English' : 'Hindi';
             $dataArray['quiz']['start_date_time'] = $quiz->start_date_time;
             $dataArray['quiz']['end_date_time'] = $quiz->end_date_time;
-
+            $dateTime = Carbon::parse($quiz->end_date_time);
+            $dateTime1 = Carbon::parse($quiz->start_date_time);
+            $min = $dateTime->diffInMinutes($dateTime1);
+            $dataArray['quiz']['question_time'] = $min * 60;
             return $this->successResponse("Daily Quiz Found.", $dataArray);
         } else {
             return $this->errorResponse("No Daily Quiz Found.");
@@ -198,7 +202,7 @@ class QuizController extends Controller {
      *           }
      *       ]
      *   }
-     * 
+     *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Daily Quiz Submitted.
@@ -211,7 +215,7 @@ class QuizController extends Controller {
      *       "status_code": 200,
      *       "message": "Daily Quiz Submitted.",
      *       "data": {
-     *          
+     *
      *        }
      *   }
      *
