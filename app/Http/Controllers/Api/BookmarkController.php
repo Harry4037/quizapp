@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\TestSeries;
 use App\Models\Bookmark;
 use App\Models\Subject;
+use App\Models\UserTestSeries;
 
 class BookmarkController extends Controller
 {
@@ -20,6 +21,7 @@ class BookmarkController extends Controller
      *
      * @apiParam {String} user_id User user_id*.
      * @apiParam {String} test_series_id Test Series Id.
+     * @apiParam {String} flag Flag type.
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -96,9 +98,13 @@ class BookmarkController extends Controller
         if (!$request->user_id) {
             return $this->errorResponse("User Id missing.");
         }
+        if (!in_array($request->flag, [1, 2])) {
+            return $this->errorResponse("Select valid flag type");
+        }
         if (!$request->test_series_id) {
             return $this->errorResponse("test_series Id missing.");
         }
+        if ($request->flag == 1) {
         $test_series = TestSeries::find($request->test_series_id);
         if (!$test_series) {
             return $this->errorResponse("test series not found.");
@@ -124,6 +130,34 @@ class BookmarkController extends Controller
             $arr = array('favorite' => true, 'count' => $fav_count);
             return $this->successResponse("test_series bookmarked successfully.", $arr);
         }
+        }
+        if ($request->flag == 2) {
+            $test_series = UserTestSeries::find($request->test_series_id);
+            if (!$test_series) {
+                return $this->errorResponse("test series not found.");
+            }
+            $user = User::find($request->user_id);
+            $remove = Bookmark::where("user_id", $request->user_id)->where("user_test_series_id", $request->test_series_id)->first();
+            if (!$user) {
+                return $this->errorResponse("user not found.");
+            } elseif ($remove) {
+                $r = Bookmark::where("user_id", $request->user_id)->where("user_test_series_id", $request->test_series_id)->delete();
+                $fav_count = Bookmark::where('user_test_series_id', $request->test_series_id)->count();
+                // $dataArray['fav_count'] = $fav_count;
+                $arr = array('favorite' => false, 'count' => $fav_count);
+                return $this->successResponse("test_series bookmarked Removed.", $arr);
+            } else {
+                $bookmark = new Bookmark();
+                $bookmark->user_test_series_id = $request->test_series_id;
+                $bookmark->user_id = $request->user_id;
+                $bookmark->created_at = new \DateTime("now");
+                $bookmark->save();
+                $fav_count = Bookmark::where('user_test_series_id', $request->test_series_id)->count();
+                // $dataArray['fav_count'] = $fav_count;
+                $arr = array('favorite' => true, 'count' => $fav_count);
+                return $this->successResponse("test_series bookmarked successfully.", $arr);
+            }
+            }
     }
 
     /**
@@ -189,20 +223,38 @@ class BookmarkController extends Controller
         if (!$user) {
             return $this->errorResponse("user not found.");
         } else {
+
             $bookmarkArray = [];
-            $bookmarks = Bookmark::where("user_id", $request->user_id)->with(['testseriesDetail'])->get();
+            $bookmarkArray1 = [];
+            $bookmarks = Bookmark::where("user_id", $request->user_id)->where('test_series_id', '!=', 0)->with(['testseriesDetail'])->get();
             foreach ($bookmarks as $key => $bookmark) {
                 $bookmarkArray[$key]['id'] = $bookmark->id;
                 $bookmarkArray[$key]['test_series_id'] = $bookmark->testseriesDetail->id;
                 $bookmarkArray[$key]['created_at'] = $bookmark->created_at;
                 $bookmarkArray[$key]['subject_id'] = $bookmark->testseriesDetail->subject_id;
                 $bookmarkArray[$key]['name'] = $bookmark->testseriesDetail->name;
+                $bookmarkArray[$key]['flag'] = 1;
                 $bookmarkArray[$key]['total_question'] = $bookmark->testseriesDetail->total_question;
                 $bookmarkArray[$key]['lang'] = $bookmark->testseriesDetail->lang;
                 $subject = Subject::where("id", $bookmark->testseriesDetail->subject_id)->first();
                 $bookmarkArray[$key]['subject_name'] = $subject->name;
             }
-            $data['Bookmark_list'] = $bookmarkArray;
+
+            $bookmarks1 = Bookmark::where("user_id", $request->user_id)->where('user_test_series_id', '!=', 0)->with(['usertestseriesDetail'])->get();
+            foreach ($bookmarks1 as $key => $bookmark) {
+                $bookmarkArray[$key]['id'] = $bookmark->id;
+                $bookmarkArray[$key]['test_series_id'] = $bookmark->usertestseriesDetail->id;
+                $bookmarkArray[$key]['created_at'] = $bookmark->created_at;
+                $bookmarkArray[$key]['subject_id'] = $bookmark->usertestseriesDetail->subject_id;
+                $bookmarkArray[$key]['name'] = $bookmark->usertestseriesDetail->name;
+                $bookmarkArray[$key]['flag'] = 2;
+                $bookmarkArray[$key]['total_question'] = NULL;
+                $bookmarkArray[$key]['lang'] = $bookmark->usertestseriesDetail->lang;
+                $subject = Subject::where("id", $bookmark->usertestseriesDetail->subject_id)->first();
+                $bookmarkArray[$key]['subject_name'] = $subject->name;
+            }
+            $res = array_merge($bookmarkArray, $bookmarkArray1);
+            $data['Bookmark_list'] = $res;
             return $this->successResponse("Bookmark List.", $data);
         }
     }
