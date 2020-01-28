@@ -41,7 +41,7 @@
 <script>
     $(document).ready(function () {
 
-        $("#test-seriesForm").validate({
+        $("#testseriesForm").validate({
             rules: {
                 exam_id: {
                     required: true
@@ -49,10 +49,11 @@
                 subject_id: {
                     required: true
                 },
+                total_question: {
+                    required: true,
+                    min: 1
+                },
             },
-            messages: {
-
-            }
         });
         $(document).on("keyup", "#total_question", function () {
             var days = parseInt($("#total_question").val());
