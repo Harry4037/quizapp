@@ -171,10 +171,10 @@ class QuestionCommentController extends Controller {
         if (!$request->question_id) {
             return $this->errorResponse("Question ID missing");
         }
-        // $question = Question::find($request->question_id);
-        // if (!$question) {
-        //     return $this->errorResponse("Question not found.");
-        // }
+        $question = Question::find($request->question_id);
+        if (!$question) {
+            return $this->errorResponse("Question not found.");
+        }
         $dataArray = [];
         $comments = QuestionComment::where('question_id',$request->question_id)->get();
         foreach ($comments as $k => $comment) {
