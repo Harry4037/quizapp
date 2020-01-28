@@ -153,6 +153,13 @@ class QuestionController extends Controller {
         if (!$request->flag) {
             return $this->errorResponse("Flag is missing.");
         }
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID is missing.");
+        }
+        $user = User::find($request->user_id);
+        if(!$user){
+            return $this->errorResponse("Invalid User.");
+        }
 
         if ($request->flag == 1) {
             $questions = Question::all()->random(10);
@@ -673,6 +680,7 @@ class QuestionController extends Controller {
         } else {
             $question->ques_image = NULL;
         }
+        $question->lang = $request->lang;
         $question->user_id = $request->user_id;
         $question->exam_id = $exam->id;
         $question->description = $request->description;
