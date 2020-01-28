@@ -11,6 +11,7 @@ use App\Models\Answer;
 use App\Models\Exam;
 use App\Models\TestSeries;
 use App\Models\Subject;
+use App\Models\Invite;
 use Carbon\Carbon;
 use Validator;
 use Illuminate\Validation\Rule;
@@ -103,8 +104,11 @@ class TestSeriesController extends Controller {
             $testseries = TestSeries::find($request->id);
             if ($testseries) {
                 $testseries->delete();
-                $ques = Question::where('test_series_id',$request->id)->delete();
+                $ques = Question::where('test_series_id',$testseries->id)->get();
+                Question::where('test_series_id',$testseries->id)->delete();
+                Invite::where('test_series_id',$testseries->id)->delete();
                 foreach($ques as $que){
+
                     Answer::where('question_id',$que->id)->delete();
                 }
                 return ['status' => true, "message" => "Question deleted."];
