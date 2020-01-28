@@ -157,6 +157,11 @@ class QuizController extends Controller {
                 $dataArray['quiz']['lang'] = $quiz->lang == 1 ? 'English' : 'Hindi';
                 $dataArray['quiz']['start_date_time'] = $quiz->start_date_time;
                 $dataArray['quiz']['end_date_time'] = $quiz->end_date_time;
+                $dateTime = Carbon::parse($quiz->end_date_time);
+                $dateTime1 = Carbon::parse($quiz->start_date_time);
+                $min = $dateTime->diffInMinutes($dateTime1);
+                $dataArray['quiz']['question_time'] = $min * 60;
+
                 $questions = Question::where('quiz_id', $quiz->id)->get();
                 if ($questions) {
                     foreach ($questions as $k => $question) {
