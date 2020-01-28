@@ -160,24 +160,18 @@ class TestSeriesController extends Controller {
 
     public function testSeriesAdd(Request $request) {
         try {
-            $css = [
-                'bower_components/bootstrap-daterangepicker/daterangepicker.css',
-            ];
-            $js = [
-                'bower_components/moment/min/moment.min.js',
-                'bower_components/bootstrap-daterangepicker/daterangepicker.js',
-            ];
+
             if ($request->isMethod("post")) {
-                $validator = Validator::make($request->all(), [
-                            'testseries_name' => [
-                                'required',
-                            ],
-                    ]);
-                if ($validator->fails()) {
-                    return redirect()->route('admin.test-series.add')->withErrors($validator)->withInput();
-                }
+                // $validator = Validator::make($request->all(), [
+                //             'testseries_name' => [
+                //                 'required',
+                //             ],
+                //     ]);
+                // if ($validator->fails()) {
+                //     return redirect()->route('admin.test-series.add')->withErrors($validator)->withInput();
+                // }
                 $testseries = new TestSeries();
-                $testseries->user_id = 1;
+                $testseries->user_id = auth()->user()->id;
                 $testseries->is_approve = 2;
                 $testseries->name = $request->testseries_name;
                 $testseries->exam_id = $request->exam_id;
@@ -253,6 +247,14 @@ class TestSeriesController extends Controller {
                     return redirect()->route('admin.test-series.index')->with('error', 'Something went wrong.');
                 }
             }
+
+            $css = [
+                'bower_components/bootstrap-daterangepicker/daterangepicker.css',
+            ];
+            $js = [
+                'bower_components/moment/min/moment.min.js',
+                'bower_components/bootstrap-daterangepicker/daterangepicker.js',
+            ];
             $subjects = Subject::get();
             $exams = Exam::get();
             return view('admin.test-series.add', [
