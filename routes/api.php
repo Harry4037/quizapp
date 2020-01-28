@@ -58,6 +58,7 @@ Route::namespace("Api")->group(function() {
     Route::post('/publish-test-series', 'TestSeriesController@publishTestSeries');
     Route::get('/test-series', 'TestSeriesController@testSeries');
     Route::get('/search-history', 'TestSeriesController@searchHistory');
+    Route::get('/search', 'TestSeriesController@search');
 
     //QuestionController
 //    Route::post('/create-question', 'QuestionController@createQuestion');
@@ -68,7 +69,7 @@ Route::namespace("Api")->group(function() {
     Route::post('/add-bookmark', 'BookmarkController@addBookmark');
     Route::get('/bookmark-list', 'BookmarkController@bookmarkList');
 
-    Route::get('/search', 'TestSeriesController@search');
+
     Route::post('/creator-user-profile', 'UserController@CreatorUserProfile');
 
     Route::post('/invite', 'InviteController@invite');
