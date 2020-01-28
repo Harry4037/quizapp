@@ -18,6 +18,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -26,6 +27,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -34,6 +36,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -42,6 +45,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -50,6 +54,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -58,6 +63,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -66,6 +72,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -74,6 +81,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         
         DB::table('questions')->insert([
@@ -83,6 +91,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -91,6 +100,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -99,6 +109,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -107,6 +118,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -115,6 +127,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -123,6 +136,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         
         DB::table('questions')->insert([
@@ -132,6 +146,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -140,6 +155,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -148,6 +164,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -156,6 +173,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -164,6 +182,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -172,6 +191,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         
         DB::table('questions')->insert([
@@ -181,6 +201,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         DB::table('questions')->insert([
             'user_id' => 1,
@@ -189,6 +210,7 @@ class QuestionTableSeeder extends Seeder {
             'description' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             'ques_image' => " ",
             'ques_time' => 20,
+            'lang' => 1,
         ]);
         
     }
