@@ -97,8 +97,8 @@ class InviteController extends Controller
             $testseries = UserTestSeries::find($request->test_series_id);
         }
         if ($invite->save()) {
-            $data['test_series'] = $user->name;
-            $data['user_detail'] = $testseries->name;
+            $data['test_series'] = $testseries->name;
+            $data['user_detail'] = $user->name;
             return $this->successResponse("Invite successfully", $data);
         } else {
             return $this->errorResponse("Something went wrong.");
