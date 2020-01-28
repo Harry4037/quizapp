@@ -480,6 +480,7 @@ class TestSeriesController extends Controller {
      *               "name": "SSC",
      *               "total_question": 1,
      *               "lang": "English",
+     *               "question_time": 45,
      *               "questions": [
      *                   {
      *                       "id": 1,
@@ -559,6 +560,7 @@ class TestSeriesController extends Controller {
                 $dataArray['test_series']['name'] = $testSeries->name;
                 $dataArray['test_series']['total_question'] = $testSeries->total_question;
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
+                $totalTime = 0;
                 if ($seriesQuestions) {
                     foreach ($seriesQuestions as $k => $seriesQuestion) {
                         $answers = Answer::where("question_id", $seriesQuestion->id)->get();
@@ -567,10 +569,12 @@ class TestSeriesController extends Controller {
                         $dataArray['test_series']['questions'][$k]['ques_image'] = $seriesQuestion->ques_image;
                         $dataArray['test_series']['questions'][$k]['ques_time'] = $seriesQuestion->ques_time;
                         $dataArray['test_series']['questions'][$k]['answers'] = $answers;
+                        $totalTime += $seriesQuestion->ques_time;
                     }
                 } else {
                     $dataArray['test_series']['questions'] = [];
                 }
+                $dataArray['test_series']['question_time'] = $totalTime;
 
                 return $this->successResponse("Test Series.", $dataArray);
             } else {
@@ -596,8 +600,8 @@ class TestSeriesController extends Controller {
                 $dataArray = [];
                 $dataArray['test_series']['id'] = $testSeries->id;
                 $dataArray['test_series']['name'] = $testSeries->name;
-
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
+                $totalTime = 0;
                 if ($seriesQuestions) {
                     foreach ($seriesQuestions as $k => $seriesQuestion) {
                         $answers = Answer::where("question_id", $seriesQuestion->id)->get();
@@ -606,11 +610,13 @@ class TestSeriesController extends Controller {
                         $dataArray['test_series']['questions'][$k]['ques_image'] = $seriesQuestion->ques_image;
                         $dataArray['test_series']['questions'][$k]['ques_time'] = $seriesQuestion->ques_time;
                         $dataArray['test_series']['questions'][$k]['answers'] = $answers;
+                        $totalTime += $seriesQuestion->ques_time;
                     }
                 } else {
                     $dataArray['test_series']['questions'] = [];
                 }
                 $dataArray['test_series']['total_question'] = count($seriesQuestions);
+                $dataArray['test_series']['question_time'] = $totalTime;
 
                 return $this->successResponse("Test Series.", $dataArray);
             } else {
