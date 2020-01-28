@@ -9,5 +9,8 @@ class Bookmark extends Model
     public function testseriesDetail(){
 		return $this->belongsTo('App\Models\TestSeries', 'test_series_id');
   }
+  public function usertestseriesDetail(){
+    return $this->belongsTo('App\Models\UserTestSeries', 'user_test_series_id');
+}
 
 }
