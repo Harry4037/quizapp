@@ -45,7 +45,8 @@ class QuestionController extends Controller {
      *       "status_code": 200,
      *       "message": "Question list.",
      *       "data": [
-     *           {
+     *          "question_time":50,
+     *          "questions": {
      *               "id": 8,
      *               "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
      *               "ques_image": " ",
@@ -153,10 +154,20 @@ class QuestionController extends Controller {
         if (!$request->flag) {
             return $this->errorResponse("Flag is missing.");
         }
-
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID is missing.");
+        }
+        $user = User::find($request->user_id);
+        if (!$user) {
+            return $this->errorResponse("Invalid User.");
+        }
         if ($request->flag == 1) {
-            $questions = Question::all()->random(10);
+            $questions = Question::where("lang", $user->lang)->limit(500)->get();
+            if (count($questions) > 10) {
+                $questions = $questions->random(10);
+            }
             $dataArray = [];
+            $totatlTime = 0;
             foreach ($questions as $k => $question) {
                 $answers = Answer::where("question_id", $question->id)->get();
                 $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
@@ -170,9 +181,11 @@ class QuestionController extends Controller {
                 $dataArray[$k]['ques_time'] = $question->ques_time;
                 $dataArray[$k]['is_like'] = $isLike ? true : false;
                 $dataArray[$k]['answers'] = $answers;
+                $totatlTime += $question->ques_time;
             }
-
-            return $this->successResponse("Question list.", $dataArray);
+            $data['question_time'] = $totatlTime;
+            $data['questions'] = $dataArray;
+            return $this->successResponse("Question list.", $data);
         } elseif ($request->flag == 2) {
             if (!$request->exam_id) {
                 return $this->errorResponse("Exam Id missing.");
@@ -197,14 +210,17 @@ class QuestionController extends Controller {
             }
 
             $query = Question::Query();
-            // $query->whereIn('exam_id', $request->exam_id)
-            $query->whereIn('subject_id', $request->subject_id);
-
+            $query->where(function($query) use($request) {
+                $query->where("lang", $request->lang)
+                        ->whereIn('exam_id', $request->exam_id)
+                        ->whereIn('subject_id', $request->subject_id);
+            });
             $query->limit($request->total_questions);
 
             $questions = $query->get();
 
             $dataArray = [];
+            $totatlTime = 0;
             foreach ($questions as $k => $question) {
                 $answers = Answer::where("question_id", $question->id)->get();
                 $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
@@ -214,9 +230,12 @@ class QuestionController extends Controller {
                 $dataArray[$k]['ques_time'] = $question->ques_time;
                 $dataArray[$k]['is_like'] = $isLike ? true : false;
                 $dataArray[$k]['answers'] = $answers;
+                $totatlTime += $question->ques_time;
             }
 
-            return $this->successResponse("Question list", $dataArray);
+            $data['question_time'] = $totatlTime;
+            $data['questions'] = $dataArray;
+            return $this->successResponse("Question list.", $data);
         } else {
             return $this->errorResponse("Invlaid flag type.");
         }
@@ -673,6 +692,7 @@ class QuestionController extends Controller {
         } else {
             $question->ques_image = NULL;
         }
+        $question->lang = $request->lang;
         $question->user_id = $request->user_id;
         $question->exam_id = $exam->id;
         $question->description = $request->description;
