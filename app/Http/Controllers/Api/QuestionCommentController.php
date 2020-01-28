@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Exception;
+use Carbon\Carbon;
 use App\Models\QuestionComment;
 use App\Models\User;
 use App\Models\Question;
@@ -170,13 +171,24 @@ class QuestionCommentController extends Controller {
         if (!$request->question_id) {
             return $this->errorResponse("Question ID missing");
         }
-        $question = Question::find($request->question_id);
-        if (!$question) {
-            return $this->errorResponse("Question not found.");
+        // $question = Question::find($request->question_id);
+        // if (!$question) {
+        //     return $this->errorResponse("Question not found.");
+        // }
+        $dataArray = [];
+        $comments = QuestionComment::where('question_id',$request->question_id)->get();
+        foreach ($comments as $k => $comment) {
+            $dataArray[$k]['id'] = $comment->id;
+            $dataArray[$k]['user_id'] = $comment->user_id;
+            $dataArray[$k]['question_id'] = $comment->question_id;
+            $dataArray[$k]['description'] = $comment->description;
+            $dataArray[$k]['created_at'] = $comment->created_at;
+            $dataArray[$k]['updated_at'] = $comment->updated_at;
+            $date = Carbon::parse($comment->created_at);
+            $dataArray[$k]['date'] = $date->format("d-F-Y");
+            $dataArray[$k]['time'] = $date->format("h:i:s A");
         }
-
-        $comment = QuestionComment::where('question_id',$request->question_id)->get();
-        return $this->successResponse("List of Comments", $comment);
+        return $this->successResponse("List of Comments", $dataArray);
 
     }
 
