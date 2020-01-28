@@ -233,6 +233,7 @@ class BookmarkController extends Controller
                 $bookmarkArray[$key]['created_at'] = $bookmark->created_at;
                 $bookmarkArray[$key]['subject_id'] = $bookmark->testseriesDetail->subject_id;
                 $bookmarkArray[$key]['name'] = $bookmark->testseriesDetail->name;
+                $bookmarkArray[$key]['flag'] = 1;
                 $bookmarkArray[$key]['total_question'] = $bookmark->testseriesDetail->total_question;
                 $bookmarkArray[$key]['lang'] = $bookmark->testseriesDetail->lang;
                 $subject = Subject::where("id", $bookmark->testseriesDetail->subject_id)->first();
@@ -246,6 +247,7 @@ class BookmarkController extends Controller
                 $bookmarkArray[$key]['created_at'] = $bookmark->created_at;
                 $bookmarkArray[$key]['subject_id'] = $bookmark->usertestseriesDetail->subject_id;
                 $bookmarkArray[$key]['name'] = $bookmark->usertestseriesDetail->name;
+                $bookmarkArray[$key]['flag'] = 2;
                 $bookmarkArray[$key]['total_question'] = NULL;
                 $bookmarkArray[$key]['lang'] = $bookmark->usertestseriesDetail->lang;
                 $subject = Subject::where("id", $bookmark->usertestseriesDetail->subject_id)->first();
