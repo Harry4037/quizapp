@@ -541,13 +541,13 @@ class TestSeriesController extends Controller {
         if ($request->flag == 1) {
             $testSeries = TestSeries::find($request->test_series_id);
             if ($testSeries) {
-                $searchHistory = SearchHistory::where(["test_id" => $request->test_series_id, "flag" => $request->flag])->first();
+                $searchHistory = SearchHistory::where(["test_series_id" => $request->test_series_id, "flag" => $request->flag])->first();
                 if ($searchHistory) {
                     $searchHistory->search_count = $searchHistory->search_count + 1;
                     $searchHistory->save();
                 } else {
                     $searchHistory = new SearchHistory();
-                    $searchHistory->test_id = $request->test_series_id;
+                    $searchHistory->test_series_id = $request->test_series_id;
                     $searchHistory->search_count = 1;
                     $searchHistory->flag = 1;
                     $searchHistory->save();
@@ -580,13 +580,13 @@ class TestSeriesController extends Controller {
         if ($request->flag == 2) {
             $testSeries = UserTestSeries::find($request->test_series_id);
             if ($testSeries) {
-                $searchHistory = SearchHistory::where(["test_id" => $request->test_series_id, "flag" => $request->flag])->first();
+                $searchHistory = SearchHistory::where(["test_series_id" => $request->test_series_id, "flag" => $request->flag])->first();
                 if ($searchHistory) {
                     $searchHistory->search_count = $searchHistory->search_count + 1;
                     $searchHistory->save();
                 } else {
                     $searchHistory = new SearchHistory();
-                    $searchHistory->test_id = $request->test_series_id;
+                    $searchHistory->test_series_id = $request->test_series_id;
                     $searchHistory->search_count = 1;
                     $searchHistory->flag = 2;
                     $searchHistory->save();
@@ -668,7 +668,6 @@ class TestSeriesController extends Controller {
         $dataArrayTrending = [];
         if ($trendSearchs) {
             foreach ($trendSearchs as $k => $trendSearch) {
-
                 if ($trendSearch->flag == 1) {
                     $testSeries = TestSeries::find($trendSearch->test_series_id);
                 } else {
