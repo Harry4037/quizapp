@@ -15,8 +15,9 @@ class CreateSearchHistoriesTable extends Migration
     {
         Schema::create('search_histories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('test_id');
+            $table->bigInteger('test_series_id');
             $table->bigInteger('search_count');
+            $table->tinyInteger('flag');
             $table->timestamps();
         });
     }

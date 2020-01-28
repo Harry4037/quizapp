@@ -265,7 +265,7 @@ class TestSeriesController extends Controller {
             $dataArray[$k]['flag'] = 1;
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
-        $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id','name','created_at')->get();
+        $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id', 'name', 'created_at')->get();
         foreach ($result1 as $k => $test1) {
             $dataArray1[$k]['id'] = $test1->id;
             $dataArray1[$k]['name'] = $test1->name;
@@ -273,22 +273,22 @@ class TestSeriesController extends Controller {
             $dataArray1[$k]['flag'] = 2;
             $dataArray1[$k]['total_ques_no'] = NULL;
         }
-        $invites = Invite::where("user_id", $request->user_id)->where("test_series_id",'<',0)->with('testseries')->get();
+        $invites = Invite::where("user_id", $request->user_id)->where("test_series_id", '<', 0)->with('testseries')->get();
         foreach ($invites as $k => $invite) {
-           $inviteArray[$k]['id'] = $invite->id;
-           $inviteArray[$k]['user_name'] = $user->name;
-           $inviteArray[$k]['test_series_name'] = $invite->testseries->name;
-           $inviteArray[$k]['created_at'] = $invite->created_at;
-           $inviteArray[$k]['flag'] = 1;
-       }
-       $invites1 = Invite::where("user_id", $request->user_id)->where("user_test_series_id",'<',0)->with('usertestseries')->get();
-       foreach ($invites1 as $k => $invite1) {
-           $inviteArray1[$k]['id'] = $invite1->id;
-           $inviteArray1[$k]['name'] = $user->name;
-           $inviteArray1[$k]['test_series_name'] = $invite1->usertestseries->name;
-           $inviteArray1[$k]['created_at'] = $invite1->created_at;
-           $inviteArray1[$k]['flag'] = 2;
-       }
+            $inviteArray[$k]['id'] = $invite->id;
+            $inviteArray[$k]['user_name'] = $user->name;
+            $inviteArray[$k]['test_series_name'] = $invite->testseries->name;
+            $inviteArray[$k]['created_at'] = $invite->created_at;
+            $inviteArray[$k]['flag'] = 1;
+        }
+        $invites1 = Invite::where("user_id", $request->user_id)->where("user_test_series_id", '<', 0)->with('usertestseries')->get();
+        foreach ($invites1 as $k => $invite1) {
+            $inviteArray1[$k]['id'] = $invite1->id;
+            $inviteArray1[$k]['name'] = $user->name;
+            $inviteArray1[$k]['test_series_name'] = $invite1->usertestseries->name;
+            $inviteArray1[$k]['created_at'] = $invite1->created_at;
+            $inviteArray1[$k]['flag'] = 2;
+        }
         $res = array_merge($dataArray, $dataArray1);
         $res1 = array_merge($inviteArray, $inviteArray1);
         $data['TestSeries_list'] = $res;
@@ -306,7 +306,7 @@ class TestSeriesController extends Controller {
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
-     * @apiSuccess {String} message 1=>testseries, 2=>usertest series.
+     * @apiSuccess {String} message Search Results.
      * @apiSuccess {JSON} data response.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -342,30 +342,30 @@ class TestSeriesController extends Controller {
     public function search(Request $request) {
         if (!$request->name) {
             return $this->errorResponse("Input Missing.");
-        } else {
-            $searchKeyword = $request->name;
-            $dataArray = [];
-            $dataArray1 = [];
-            $result = TestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'total_question', 'created_at')->get();
-            foreach ($result as $k => $test) {
-                $dataArray[$k]['id'] = $test->id;
-                $dataArray[$k]['name'] = $test->name;
-                $dataArray[$k]['created_at'] = $test->created_at;
-                $dataArray[$k]['flag'] = 1;
-                $dataArray[$k]['total_ques_no'] = $test->total_question;
-            }
-            $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'created_at')->get();
-            foreach ($result1 as $k => $test1) {
-                $dataArray1[$k]['id'] = $test1->id;
-                $dataArray1[$k]['name'] = $test1->name;
-                $dataArray1[$k]['created_at'] = $test1->created_at;
-                $dataArray1[$k]['flag'] = 2;
-                $dataArray1[$k]['total_ques_no'] = NULL;
-            }
-            $res = array_merge($dataArray, $dataArray1);
-            $data['search_list'] = $res;
-            return $this->successResponse("Search Results", $data);
         }
+
+        $searchKeyword = $request->name;
+        $dataArray = [];
+        $dataArray1 = [];
+        $result = TestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'total_question', 'created_at')->get();
+        foreach ($result as $k => $test) {
+            $dataArray[$k]['id'] = $test->id;
+            $dataArray[$k]['name'] = $test->name;
+            $dataArray[$k]['created_at'] = $test->created_at;
+            $dataArray[$k]['flag'] = 1;
+            $dataArray[$k]['total_ques_no'] = $test->total_question;
+        }
+        $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'created_at')->get();
+        foreach ($result1 as $k => $test1) {
+            $dataArray1[$k]['id'] = $test1->id;
+            $dataArray1[$k]['name'] = $test1->name;
+            $dataArray1[$k]['created_at'] = $test1->created_at;
+            $dataArray1[$k]['flag'] = 2;
+            $dataArray1[$k]['total_ques_no'] = NULL;
+        }
+        $res = array_merge($dataArray, $dataArray1);
+        $data['search_list'] = $res;
+        return $this->successResponse("Search Results.", $data);
     }
 
     /**
@@ -461,6 +461,7 @@ class TestSeriesController extends Controller {
      * @apiGroup TestSeries
      *
      * @apiParam {String} test_series_id Test Series ID*.
+     * @apiParam {String} flag Flag*.
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -537,55 +538,18 @@ class TestSeriesController extends Controller {
         if (!in_array($request->flag, [1, 2])) {
             return $this->errorResponse("Select valid flag type");
         }
-        if($request->flag == 1){
-        $testSeries = TestSeries::find($request->test_series_id);
-        if ($testSeries) {
-            $searchHistory = SearchHistory::where("test_id", $request->test_series_id)->first();
-            if ($searchHistory) {
-                $searchHistory->search_count = $searchHistory->search_count + 1;
-                $searchHistory->save();
-            } else {
-                $searchHistory = new SearchHistory();
-                $searchHistory->test_id = $request->test_series_id;
-                $searchHistory->search_count = 1;
-                $searchHistory->save();
-            }
-            $seriesQuestions = Question::where("test_series_id", $testSeries->id)->get();
-
-            $dataArray = [];
-            $dataArray['test_series']['id'] = $testSeries->id;
-            $dataArray['test_series']['name'] = $testSeries->name;
-            $dataArray['test_series']['total_question'] = $testSeries->total_question;
-            $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
-            if ($seriesQuestions) {
-                foreach ($seriesQuestions as $k => $seriesQuestion) {
-                    $answers = Answer::where("question_id", $seriesQuestion->id)->get();
-                    $dataArray['test_series']['questions'][$k]['id'] = $seriesQuestion->id;
-                    $dataArray['test_series']['questions'][$k]['description'] = $seriesQuestion->description;
-                    $dataArray['test_series']['questions'][$k]['ques_image'] = $seriesQuestion->ques_image;
-                    $dataArray['test_series']['questions'][$k]['ques_time'] = $seriesQuestion->ques_time;
-                    $dataArray['test_series']['questions'][$k]['answers'] = $answers;
-                }
-            } else {
-                $dataArray['test_series']['questions'] = [];
-            }
-
-            return $this->successResponse("Test Series.", $dataArray);
-        } else {
-            return $this->errorResponse("Invalid Test Series ID.");
-        }
-        }
-        if($request->flag == 2){
-            $testSeries = UserTestSeries::find($request->test_series_id);
+        if ($request->flag == 1) {
+            $testSeries = TestSeries::find($request->test_series_id);
             if ($testSeries) {
-                $searchHistory = SearchHistory::where("test_id", $request->test_series_id)->first();
+                $searchHistory = SearchHistory::where(["test_series_id" => $request->test_series_id, "flag" => $request->flag])->first();
                 if ($searchHistory) {
                     $searchHistory->search_count = $searchHistory->search_count + 1;
                     $searchHistory->save();
                 } else {
                     $searchHistory = new SearchHistory();
-                    $searchHistory->test_id = $request->test_series_id;
+                    $searchHistory->test_series_id = $request->test_series_id;
                     $searchHistory->search_count = 1;
+                    $searchHistory->flag = 1;
                     $searchHistory->save();
                 }
                 $seriesQuestions = Question::where("test_series_id", $testSeries->id)->get();
@@ -612,8 +576,47 @@ class TestSeriesController extends Controller {
             } else {
                 return $this->errorResponse("Invalid Test Series ID.");
             }
-            }
+        }
+        if ($request->flag == 2) {
+            $testSeries = UserTestSeries::find($request->test_series_id);
+            if ($testSeries) {
+                $searchHistory = SearchHistory::where(["test_series_id" => $request->test_series_id, "flag" => $request->flag])->first();
+                if ($searchHistory) {
+                    $searchHistory->search_count = $searchHistory->search_count + 1;
+                    $searchHistory->save();
+                } else {
+                    $searchHistory = new SearchHistory();
+                    $searchHistory->test_series_id = $request->test_series_id;
+                    $searchHistory->search_count = 1;
+                    $searchHistory->flag = 2;
+                    $searchHistory->save();
+                }
+                $seriesQuestions = Question::where("test_series_id", $testSeries->id)->get();
 
+                $dataArray = [];
+                $dataArray['test_series']['id'] = $testSeries->id;
+                $dataArray['test_series']['name'] = $testSeries->name;
+
+                $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
+                if ($seriesQuestions) {
+                    foreach ($seriesQuestions as $k => $seriesQuestion) {
+                        $answers = Answer::where("question_id", $seriesQuestion->id)->get();
+                        $dataArray['test_series']['questions'][$k]['id'] = $seriesQuestion->id;
+                        $dataArray['test_series']['questions'][$k]['description'] = $seriesQuestion->description;
+                        $dataArray['test_series']['questions'][$k]['ques_image'] = $seriesQuestion->ques_image;
+                        $dataArray['test_series']['questions'][$k]['ques_time'] = $seriesQuestion->ques_time;
+                        $dataArray['test_series']['questions'][$k]['answers'] = $answers;
+                    }
+                } else {
+                    $dataArray['test_series']['questions'] = [];
+                }
+                $dataArray['test_series']['total_question'] = count($seriesQuestions);
+
+                return $this->successResponse("Test Series.", $dataArray);
+            } else {
+                return $this->errorResponse("Invalid Test Series ID.");
+            }
+        }
     }
 
     /**
@@ -665,17 +668,27 @@ class TestSeriesController extends Controller {
         $dataArrayTrending = [];
         if ($trendSearchs) {
             foreach ($trendSearchs as $k => $trendSearch) {
-                $testSeries = TestSeries::find($trendSearch->test_series_id);
+                if ($trendSearch->flag == 1) {
+                    $testSeries = TestSeries::find($trendSearch->test_series_id);
+                } else {
+                    $testSeries = UserTestSeries::find($trendSearch->test_series_id);
+                }
                 $dataArrayTrending[$k]['id'] = $testSeries->id;
                 $dataArrayTrending[$k]['name'] = $testSeries->name;
+                $dataArrayTrending[$k]['flag'] = $trendSearch->flag;
             }
         }
         $dataArrayRecent = [];
         if ($recentSearchs) {
             foreach ($recentSearchs as $k => $recentSearch) {
-                $testSeries = TestSeries::find($recentSearch->test_series_id);
+                if ($trendSearch->flag == 1) {
+                    $testSeries = TestSeries::find($trendSearch->test_series_id);
+                } else {
+                    $testSeries = UserTestSeries::find($trendSearch->test_series_id);
+                }
                 $dataArrayRecent[$k]['id'] = $testSeries->id;
                 $dataArrayRecent[$k]['name'] = $testSeries->name;
+                $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
             }
         }
         $data['trend_search'] = $dataArrayTrending;

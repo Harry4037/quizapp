@@ -702,6 +702,13 @@
             "optional": false,
             "field": "status",
             "description": "<p>Status.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "flag",
+            "description": "<p>Flag(1=&gt; testSeries, 2=&gt; User test series).</p>"
           }
         ]
       }
@@ -906,12 +913,6 @@
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "TestSeriesnotfound",
-            "description": "<p>Test Series not found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
             "field": "usernotfound",
             "description": "<p>user not found.</p>"
           }
@@ -926,11 +927,6 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Test Series Id Missing\",\n      \"data\": {}\n  }",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Test Series not found.\",\n      \"data\": {}\n  }",
           "type": "json"
         },
         {
@@ -2045,7 +2041,7 @@
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>1=&gt;testseries, 2=&gt;usertest series.</p>"
+            "description": "<p>Search Results.</p>"
           },
           {
             "group": "Success 200",
@@ -2243,6 +2239,13 @@
             "optional": false,
             "field": "test_series_id",
             "description": "<p>Test Series ID*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "flag",
+            "description": "<p>Flag*.</p>"
           }
         ]
       }
