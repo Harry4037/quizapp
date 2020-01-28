@@ -157,12 +157,14 @@ class QuestionController extends Controller {
             return $this->errorResponse("User ID is missing.");
         }
         $user = User::find($request->user_id);
-        if(!$user){
+        if (!$user) {
             return $this->errorResponse("Invalid User.");
         }
-
         if ($request->flag == 1) {
-            $questions = Question::all()->random(10);
+            $questions = Question::where("lang", $user->lang)->limit(100)->get();
+            if (count($questions) > 10) {
+                $questions = $questions->random(10);
+            }
             $dataArray = [];
             foreach ($questions as $k => $question) {
                 $answers = Answer::where("question_id", $question->id)->get();
@@ -204,9 +206,11 @@ class QuestionController extends Controller {
             }
 
             $query = Question::Query();
-            // $query->whereIn('exam_id', $request->exam_id)
-            $query->whereIn('subject_id', $request->subject_id);
-
+            $query->where(function($query) use($request) {
+                $query->where("lang", $request->lang)
+                        ->whereIn('exam_id', $request->exam_id)
+                        ->whereIn('subject_id', $request->subject_id);
+            });
             $query->limit($request->total_questions);
 
             $questions = $query->get();
