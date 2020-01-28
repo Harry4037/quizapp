@@ -17,6 +17,7 @@ class CreateSearchHistoriesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('test_id');
             $table->bigInteger('search_count');
+            $table->tinyInteger('flag');
             $table->timestamps();
         });
     }
