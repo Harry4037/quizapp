@@ -297,7 +297,7 @@ class TestSeriesController extends Controller {
         foreach ($invites as $k => $invite) {
             $inviteArray[$k]['id'] = $invite->id;
             $inviteArray[$k]['user_name'] = $user->name;
-            $inviteArray[$k]['test_series_name'] = $invite->testseries->name;
+            $inviteArray[$k]['name'] = $invite->testseries->name;
             $inviteArray[$k]['created_at'] = $invite->created_at;
             $date = Carbon::parse($invite->created_at);
             $inviteArray[$k]['date'] = $date->format("d-M-Y");
@@ -312,8 +312,8 @@ class TestSeriesController extends Controller {
         $invites1 = Invite::where("user_id", $request->user_id)->where("user_test_series_id", '!=', 0)->with('usertestseries')->get();
         foreach ($invites1 as $k => $invite1) {
             $inviteArray1[$k]['id'] = $invite1->id;
-            $inviteArray1[$k]['name'] = $user->name;
-            $inviteArray1[$k]['test_series_name'] = $invite1->usertestseries->name;
+            $inviteArray1[$k]['user_name'] = $user->name;
+            $inviteArray1[$k]['name'] = $invite1->usertestseries->name;
             $inviteArray1[$k]['created_at'] = $invite1->created_at;
             $date = Carbon::parse($invite1->created_at);
             $inviteArray1[$k]['date'] = $date->format("d-M-Y");
