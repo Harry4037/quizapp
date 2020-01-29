@@ -11,10 +11,10 @@ class Invite extends Model
     }
 
     public function testseries() {
-        return $this->belongsTo('App\Models\TestSeries', 'test_series_id');
+        return $this->belongsTo('App\Models\TestSeries', 'test_series_id'->withTrashed());
     }
 
     public function usertestseries() {
-        return $this->belongsTo('App\Models\UserTestSeries', 'user_test_series_id');
+        return $this->belongsTo('App\Models\UserTestSeries', 'user_test_series_id')->withTrashed();
     }
 }
