@@ -703,9 +703,9 @@ class TestSeriesController extends Controller {
     }
 
     /**
-     * @api {get} /api/test-series-list Test Series List
+     * @api {get} /api/test-series-list My Test Series List
      * @apiHeader {String} Accept application/json.
-     * @apiName GetTestSeriesList
+     * @apiName GetMyTestSeriesList
      * @apiGroup TestSeries
      *
      * @apiParam {String} user_id User ID*.

@@ -2156,6 +2156,83 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/test-series-list",
+    "title": "My Test Series List",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetMyTestSeriesList",
+    "group": "TestSeries",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User ID*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>TestSeries List.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"TestSeries List\",\n      \"data\": {\n          \"my_testseries\": [\n              {\n                  \"id\": 2,\n                  \"name\": \"gggggu\",\n                  \"created_at\": \"2020-01-20T11:47:20.000000Z\",\n                  \"flag\": 1,\n                  \"total_ques_no\": 10\n              },\n              {\n                  \"id\": 3,\n                  \"name\": \"gggggu\",\n                  \"created_at\": \"2020-01-20T11:47:31.000000Z\",\n                  \"flag\": 1,\n                  \"total_ques_no\": 10\n              },\n              {\n                  \"id\": 4,\n                  \"name\": \"rbi assistant computer\",\n                  \"created_at\": \"2020-01-22T09:47:16.000000Z\",\n                  \"flag\": 1,\n                  \"total_ques_no\": 10\n              }\n          ]\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/TestSeriesController.php",
+    "groupTitle": "TestSeries"
+  },
+  {
+    "type": "get",
     "url": "/api/search-history",
     "title": "Search History",
     "header": {
@@ -2390,83 +2467,6 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Input Missing.\",\n      \"data\": {}\n  }",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "app/Http/Controllers/Api/TestSeriesController.php",
-    "groupTitle": "TestSeries"
-  },
-  {
-    "type": "get",
-    "url": "/api/test-series-list",
-    "title": "Test Series List",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Accept",
-            "description": "<p>application/json.</p>"
-          }
-        ]
-      }
-    },
-    "name": "GetTestSeriesList",
-    "group": "TestSeries",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "user_id",
-            "description": "<p>User ID*.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "success",
-            "description": "<p>true</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status_code",
-            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>TestSeries List.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "data",
-            "description": "<p>response.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"TestSeries List\",\n      \"data\": {\n          \"my_testseries\": [\n              {\n                  \"id\": 2,\n                  \"name\": \"gggggu\",\n                  \"created_at\": \"2020-01-20T11:47:20.000000Z\",\n                  \"flag\": 1,\n                  \"total_ques_no\": 10\n              },\n              {\n                  \"id\": 3,\n                  \"name\": \"gggggu\",\n                  \"created_at\": \"2020-01-20T11:47:31.000000Z\",\n                  \"flag\": 1,\n                  \"total_ques_no\": 10\n              },\n              {\n                  \"id\": 4,\n                  \"name\": \"rbi assistant computer\",\n                  \"created_at\": \"2020-01-22T09:47:16.000000Z\",\n                  \"flag\": 1,\n                  \"total_ques_no\": 10\n              }\n          ]\n      }\n  }",
           "type": "json"
         }
       ]
