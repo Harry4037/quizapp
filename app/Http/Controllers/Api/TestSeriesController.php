@@ -752,9 +752,9 @@ class TestSeriesController extends Controller {
         if ($trendSearchs) {
             foreach ($trendSearchs as $k => $trendSearch) {
                 if ($trendSearch->flag == 1) {
-                    $testSeries = TestSeries::find($trendSearch->test_series_id);
+                    $testSeries = TestSeries::find($trendSearch->test_series_id)->withTrashed();;
                 } else {
-                    $testSeries = UserTestSeries::find($trendSearch->test_series_id);
+                    $testSeries = UserTestSeries::find($trendSearch->test_series_id)->withTrashed();;
                 }
                 $dataArrayTrending[$k]['id'] = $testSeries->id;
                 $dataArrayTrending[$k]['name'] = $testSeries->name;
