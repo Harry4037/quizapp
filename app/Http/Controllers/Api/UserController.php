@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use App\Models\User;
 use App\Models\TestSeries;
+use Carbon\Carbon;
 use App\Models\UserExam;
 use Illuminate\Support\Facades\Storage;
 
@@ -552,6 +553,8 @@ class UserController extends Controller {
                $dataArray[$k]['id'] = $test->id;
                $dataArray[$k]['name'] = $test->name;
                $dataArray[$k]['created_at'] = $test->created_at;
+               $date = Carbon::parse($test->created_at);
+               $dataArray[$k]['date'] = $date->format("d-M-Y");
                $dataArray[$k]['flag'] = 1;
                $dataArray[$k]['total_ques_no'] = $test->total_question;
                $count++;
