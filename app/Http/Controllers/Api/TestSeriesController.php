@@ -595,15 +595,17 @@ class TestSeriesController extends Controller {
                     $searchHistory->flag = 2;
                     $searchHistory->save();
                 }
-                $seriesQuestions = Question::where("test_series_id", $testSeries->id)->get();
+                $result1 = UserTestSeriesQuestionAnswer::where("user_test_series_id", $testSeries->id)->get();
+
 
                 $dataArray = [];
                 $dataArray['test_series']['id'] = $testSeries->id;
                 $dataArray['test_series']['name'] = $testSeries->name;
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
                 $totalTime = 0;
-                if ($seriesQuestions) {
-                    foreach ($seriesQuestions as $k => $seriesQuestion) {
+                foreach ($result1 as $k => $result) {
+                    $seriesQuestion = Question::where("id", $result->question_id)->get();
+
                         $answers = Answer::where("question_id", $seriesQuestion->id)->get();
                         $dataArray['test_series']['questions'][$k]['id'] = $seriesQuestion->id;
                         $dataArray['test_series']['questions'][$k]['description'] = $seriesQuestion->description;
@@ -622,7 +624,7 @@ class TestSeriesController extends Controller {
             } else {
                 return $this->errorResponse("Invalid Test Series ID.");
             }
-        }
+
     }
 
     /**
