@@ -15,7 +15,7 @@ class CreateQuestionsTable extends Migration {
         Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
-            $table->bigInteger('exam_id');
+            $table->bigInteger('exam_id')->nullable();
             $table->bigInteger('subject_id');
             $table->longText('description');
             $table->string('ques_image')->nullable();
