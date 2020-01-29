@@ -13,6 +13,8 @@ use App\Models\TestSeries;
 use App\Models\Subject;
 use App\Models\Answer;
 use App\Models\Exam;
+use Carbon\Carbon;
+use App\Models\Bookmark;
 use App\Models\Invite;
 use App\Models\UserTestSeries;
 use App\Models\SearchHistory;
@@ -264,6 +266,12 @@ class TestSeriesController extends Controller {
             $dataArray[$k]['name'] = $test->name;
             $dataArray[$k]['created_at'] = $test->created_at;
             $dataArray[$k]['flag'] = 1;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test->id)->first();
+            if ($fav) {
+                $dataArray[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray[$k]['is_bookmark'] = false;
+            }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
         $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id', 'name', 'created_at')->get();
@@ -272,6 +280,12 @@ class TestSeriesController extends Controller {
             $dataArray1[$k]['name'] = $test1->name;
             $dataArray1[$k]['created_at'] = $test1->created_at;
             $dataArray1[$k]['flag'] = 2;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test1->id)->first();
+            if ($fav) {
+                $dataArray1[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray1[$k]['is_bookmark'] = false;
+            }
             $dataArray1[$k]['total_ques_no'] = NULL;
         }
         $invites = Invite::where("user_id", $request->user_id)->where("test_series_id", '!=', 0)->with('testseries')->get();
@@ -281,6 +295,12 @@ class TestSeriesController extends Controller {
             $inviteArray[$k]['test_series_name'] = $invite->testseries->name;
             $inviteArray[$k]['created_at'] = $invite->created_at;
             $inviteArray[$k]['flag'] = 1;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $invite->test_series_id)->first();
+            if ($fav) {
+                $inviteArray[$k]['is_bookmark'] = true;
+            } else {
+                $inviteArray[$k]['is_bookmark'] = false;
+            }
         }
         $invites1 = Invite::where("user_id", $request->user_id)->where("user_test_series_id", '!=', 0)->with('usertestseries')->get();
         foreach ($invites1 as $k => $invite1) {
@@ -289,6 +309,12 @@ class TestSeriesController extends Controller {
             $inviteArray1[$k]['test_series_name'] = $invite1->usertestseries->name;
             $inviteArray1[$k]['created_at'] = $invite1->created_at;
             $inviteArray1[$k]['flag'] = 2;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $invite->user_test_series_id)->first();
+            if ($fav) {
+                $inviteArray1[$k]['is_bookmark'] = true;
+            } else {
+                $inviteArray1[$k]['is_bookmark'] = false;
+            }
         }
         $res = array_merge($dataArray, $dataArray1);
         $res1 = array_merge($inviteArray, $inviteArray1);
@@ -354,6 +380,12 @@ class TestSeriesController extends Controller {
             $dataArray[$k]['name'] = $test->name;
             $dataArray[$k]['created_at'] = $test->created_at;
             $dataArray[$k]['flag'] = 1;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
+            if ($fav) {
+                $dataArray[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray[$k]['is_bookmark'] = false;
+            }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
         $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'created_at')->get();
@@ -362,6 +394,12 @@ class TestSeriesController extends Controller {
             $dataArray1[$k]['name'] = $test1->name;
             $dataArray1[$k]['created_at'] = $test1->created_at;
             $dataArray1[$k]['flag'] = 2;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test->id)->first();
+            if ($fav) {
+                $dataArray1[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray1[$k]['is_bookmark'] = false;
+            }
             $dataArray1[$k]['total_ques_no'] = NULL;
         }
         $res = array_merge($dataArray, $dataArray1);
@@ -560,6 +598,15 @@ class TestSeriesController extends Controller {
                 $dataArray['test_series']['id'] = $testSeries->id;
                 $dataArray['test_series']['name'] = $testSeries->name;
                 $dataArray['test_series']['total_question'] = $testSeries->total_question;
+                if ($request->user_id) {
+                $fav = Bookmark::where('user_id', $request->user_id)->where('test_series_id', $testseries->id)->first();
+                if ($fav) {
+                    $dataArray['test_series']['is_bookmark'] = true;
+                } else {
+                    $dataArray['test_series']['is_bookmark'] = false;
+                }}else{
+                    $dataArray['test_series']['is_bookmark'] = false;
+                }
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
                 $totalTime = 0;
                 if ($seriesQuestions) {
@@ -602,6 +649,15 @@ class TestSeriesController extends Controller {
                 $dataArray = [];
                 $dataArray['test_series']['id'] = $testSeries->id;
                 $dataArray['test_series']['name'] = $testSeries->name;
+                if ($request->user_id) {
+                    $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $testseries->id)->first();
+                    if ($fav) {
+                        $dataArray['test_series']['is_bookmark'] = true;
+                    } else {
+                        $dataArray['test_series']['is_bookmark'] = false;
+                    }}else{
+                        $dataArray['test_series']['is_bookmark'] = false;
+                    }
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
                 $totalTime = 0;
                 foreach ($result1 as $k => $result) {
@@ -769,7 +825,15 @@ class TestSeriesController extends Controller {
             $dataArray[$k]['id'] = $test->id;
             $dataArray[$k]['name'] = $test->name;
             $dataArray[$k]['created_at'] = $test->created_at;
+            $date = Carbon::parse($test->created_at);
+            $dataArray[$k]['date'] = $date->format("d-M-Y");
             $dataArray[$k]['flag'] = 1;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
+            if ($fav) {
+                $dataArray[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray[$k]['is_bookmark'] = false;
+            }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
         $data['my_testseries'] = $dataArray;
