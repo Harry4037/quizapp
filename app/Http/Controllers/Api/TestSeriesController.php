@@ -16,6 +16,7 @@ use App\Models\Exam;
 use App\Models\Invite;
 use App\Models\UserTestSeries;
 use App\Models\SearchHistory;
+use App\Models\UserTestSeriesQuestionAnswer;
 
 class TestSeriesController extends Controller {
 
