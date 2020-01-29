@@ -59,6 +59,7 @@ Route::namespace("Api")->group(function() {
     Route::get('/test-series', 'TestSeriesController@testSeries');
     Route::get('/search-history', 'TestSeriesController@searchHistory');
     Route::get('/search', 'TestSeriesController@search');
+    Route::get('/my-test-series', 'TestSeriesController@myTestseries');
 
     //QuestionController
 //    Route::post('/create-question', 'QuestionController@createQuestion');

@@ -702,4 +702,75 @@ class TestSeriesController extends Controller {
         return $this->successResponse("Search History", $data);
     }
 
+    /**
+     * @api {get} /api/test-series-list Test Series List
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetTestSeriesList
+     * @apiGroup TestSeries
+     *
+     * @apiParam {String} user_id User ID*.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message TestSeries List.
+     * @apiSuccess {JSON} data response.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "TestSeries List",
+     *       "data": {
+     *           "my_testseries": [
+     *               {
+     *                   "id": 2,
+     *                   "name": "gggggu",
+     *                   "created_at": "2020-01-20T11:47:20.000000Z",
+     *                   "flag": 1,
+     *                   "total_ques_no": 10
+     *               },
+     *               {
+     *                   "id": 3,
+     *                   "name": "gggggu",
+     *                   "created_at": "2020-01-20T11:47:31.000000Z",
+     *                   "flag": 1,
+     *                   "total_ques_no": 10
+     *               },
+     *               {
+     *                   "id": 4,
+     *                   "name": "rbi assistant computer",
+     *                   "created_at": "2020-01-22T09:47:16.000000Z",
+     *                   "flag": 1,
+     *                   "total_ques_no": 10
+     *               }
+     *           ]
+     *       }
+     *   }
+     *
+     *
+     */
+    public function myTestseries(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID Missing.");
+        }
+        $user = User::find($request->user_id);
+        if (!$user) {
+            return $this->errorResponse("Invalid User ID");
+        }
+        $dataArray = [];
+
+        $inviteArray = [];
+        $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
+        foreach ($result as $k => $test) {
+            $dataArray[$k]['id'] = $test->id;
+            $dataArray[$k]['name'] = $test->name;
+            $dataArray[$k]['created_at'] = $test->created_at;
+            $dataArray[$k]['flag'] = 1;
+            $dataArray[$k]['total_ques_no'] = $test->total_question;
+        }
+        $data['my_testseries'] = $dataArray;
+        return $this->successResponse("TestSeries List", $data);
+    }
+
 }
