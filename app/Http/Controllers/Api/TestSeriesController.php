@@ -268,7 +268,7 @@ class TestSeriesController extends Controller {
             $date = Carbon::parse($test->created_at);
             $dataArray[$k]['date'] = $date->format("d-M-Y");
             $dataArray[$k]['flag'] = 1;
-            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test->id)->first();
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
             if ($fav) {
                 $dataArray[$k]['is_bookmark'] = true;
             } else {
@@ -284,7 +284,7 @@ class TestSeriesController extends Controller {
             $date = Carbon::parse($test1->created_at);
             $dataArray1[$k]['date'] = $date->format("d-M-Y");
             $dataArray1[$k]['flag'] = 2;
-            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test1->id)->first();
+            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test1->id)->first();
             if ($fav) {
                 $dataArray1[$k]['is_bookmark'] = true;
             } else {
@@ -302,7 +302,7 @@ class TestSeriesController extends Controller {
             $date = Carbon::parse($invite->created_at);
             $inviteArray[$k]['date'] = $date->format("d-M-Y");
             $inviteArray[$k]['flag'] = 1;
-            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $invite->test_series_id)->first();
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $invite->testseries->id)->first();
             if ($fav) {
                 $inviteArray[$k]['is_bookmark'] = true;
             } else {
@@ -318,7 +318,7 @@ class TestSeriesController extends Controller {
             $date = Carbon::parse($invite1->created_at);
             $inviteArray1[$k]['date'] = $date->format("d-M-Y");
             $inviteArray1[$k]['flag'] = 2;
-            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $invite1->user_test_series_id)->first();
+            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $invite1->usertestseries->id)->first();
             if ($fav) {
                 $inviteArray1[$k]['is_bookmark'] = true;
             } else {
