@@ -870,7 +870,8 @@ class TestSeriesController extends Controller {
      * @apiName PostDeleteTestSeries
      * @apiGroup TestSeries
      *
-     * @apiParam {String} user_id User ID*.
+     * @apiParam {String} user_id User ID.
+     * @apiParam {String} flag FLag Key.
      * @apiParam {String} test_series_id Test Series ID*.
      *
      * @apiSuccess {String} success true
@@ -893,6 +894,9 @@ class TestSeriesController extends Controller {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
+        if (!in_array($request->flag, [1, 2])) {
+            return $this->errorResponse("Select valid flag type");
+        }
         $user = User::find($request->user_id);
         if (!$user) {
             return $this->errorResponse("Invalid User ID");
@@ -900,13 +904,25 @@ class TestSeriesController extends Controller {
         if (!$request->test_series_id) {
             return $this->errorResponse("Test Series ID Missing.");
         }
-        $testseries = UserTestSeries::find($request->test_series_id);
-        if (!$testseries) {
-            return $this->errorResponse("Invalid Test Series ID");
-        }else{
-            $r = UserTestSeries::where("user_id", $request->user_id)->where("id", $request->test_series_id)->delete();
-            return $this->successResponse("test_series Removed.", (object) []);
+        if($request->flag == 1){
+            $testseries = TestSeries::find($request->test_series_id);
+            if (!$testseries) {
+                return $this->errorResponse("Invalid Test Series ID");
+            }else{
+                TestSeries::where("user_id", $request->user_id)->where("id", $request->test_series_id)->delete();
+                return $this->successResponse("test_series Removed.", (object) []);
+            }
         }
+        if($request->flag == 2){
+            $testseries = UserTestSeries::find($request->test_series_id);
+            if (!$testseries) {
+                return $this->errorResponse("Invalid Test Series ID");
+            }else{
+                UserTestSeries::where("user_id", $request->user_id)->where("id", $request->test_series_id)->delete();
+                return $this->successResponse("test_series Removed.", (object) []);
+            }
+        }
+
 
     }
 }
