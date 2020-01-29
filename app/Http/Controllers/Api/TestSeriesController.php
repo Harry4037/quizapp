@@ -290,7 +290,8 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray1[$k]['is_bookmark'] = false;
             }
-            $dataArray1[$k]['total_ques_no'] = NULL;
+            $result1 = UserTestSeriesQuestionAnswer::where("user_test_series_id", $test1->id)->get();
+            $dataArray1[$k]['total_ques_no'] = count($result1);
         }
         $invites = Invite::where("user_id", $request->user_id)->where("test_series_id", '!=', 0)->with('testseries')->get();
         foreach ($invites as $k => $invite) {
