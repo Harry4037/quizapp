@@ -804,6 +804,8 @@ class TestSeriesController extends Controller {
      *                   "name": "gggggu",
      *                   "created_at": "2020-01-20T11:47:20.000000Z",
      *                   "flag": 1,
+     *                   "date": "23-Jan-2020",
+     *                   "is_bookmark":TRUE,
      *                   "total_ques_no": 10
      *               },
      *               {
@@ -811,6 +813,8 @@ class TestSeriesController extends Controller {
      *                   "name": "gggggu",
      *                   "created_at": "2020-01-20T11:47:31.000000Z",
      *                   "flag": 1,
+     *                   "date": "23-Jan-2020",
+     *                   "is_bookmark":TRUE,
      *                   "total_ques_no": 10
      *               },
      *               {
@@ -818,6 +822,8 @@ class TestSeriesController extends Controller {
      *                   "name": "rbi assistant computer",
      *                   "created_at": "2020-01-22T09:47:16.000000Z",
      *                   "flag": 1,
+     *                   "date": "23-Jan-2020",
+     *                   "is_bookmark":TRUE,
      *                   "total_ques_no": 10
      *               }
      *           ]
@@ -857,4 +863,50 @@ class TestSeriesController extends Controller {
         return $this->successResponse("TestSeries List", $data);
     }
 
+
+        /**
+     * @api {post} /api/delete-test-series Delete Test Series
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostDeleteTestSeries
+     * @apiGroup TestSeries
+     *
+     * @apiParam {String} user_id User ID*.
+     * @apiParam {String} test_series_id Test Series ID*.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Delete TestSeries List.
+     * @apiSuccess {JSON} data response.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "test_series Removed.",
+     *       "data": {}
+     *   }
+     *
+     *
+     */
+    public function deleteTestseries(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID Missing.");
+        }
+        $user = User::find($request->user_id);
+        if (!$user) {
+            return $this->errorResponse("Invalid User ID");
+        }
+        if (!$request->test_series_id) {
+            return $this->errorResponse("Test Series ID Missing.");
+        }
+        $testseries = UserTestSeries::find($request->test_series_id);
+        if (!$testseries) {
+            return $this->errorResponse("Invalid Test Series ID");
+        }else{
+            $r = UserTestSeries::where("user_id", $request->user_id)->where("id", $request->test_series_id)->delete();
+            return $this->successResponse("test_series Removed.", (object) []);
+        }
+
+    }
 }
