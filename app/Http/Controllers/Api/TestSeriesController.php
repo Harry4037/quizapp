@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use App\Models\Bookmark;
 use App\Models\Invite;
 use App\Models\UserTestSeries;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SearchHistory;
 use App\Models\UserTestSeriesQuestionAnswer;
 
