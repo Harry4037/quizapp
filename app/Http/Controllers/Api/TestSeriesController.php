@@ -605,7 +605,7 @@ class TestSeriesController extends Controller {
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
                 $totalTime = 0;
                 foreach ($result1 as $k => $result) {
-                    $seriesQuestion = Question::where("id", $result->question_id)->get();
+                    $seriesQuestion = Question::find($result->question_id);
 
                         $answers = Answer::where("question_id", $seriesQuestion->id)->get();
                         $dataArray['test_series']['questions'][$k]['id'] = $seriesQuestion->id;
@@ -618,7 +618,7 @@ class TestSeriesController extends Controller {
                 } else {
                     $dataArray['test_series']['questions'] = [];
                 }
-                $dataArray['test_series']['total_question'] = count($seriesQuestions);
+                $dataArray['test_series']['total_question'] = count($result1);
                 $dataArray['test_series']['question_time'] = $totalTime;
 
                 return $this->successResponse("Test Series.", $dataArray);
