@@ -185,8 +185,8 @@ class QuestionCommentController extends Controller {
             $dataArray[$k]['created_at'] = $comment->created_at;
             $dataArray[$k]['updated_at'] = $comment->updated_at;
             $date = Carbon::parse($comment->created_at);
-            $dataArray[$k]['date'] = $date->format("d-F-Y");
-            $dataArray[$k]['time'] = $date->format("h:i:s A");
+            $dataArray[$k]['date'] = $date->format("d-M-Y");
+            $dataArray[$k]['time'] = $date->format("h:i A");
         }
         return $this->successResponse("List of Comments", $dataArray);
 

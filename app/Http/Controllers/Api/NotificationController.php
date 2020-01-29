@@ -80,8 +80,8 @@ class NotificationController extends Controller {
                     $dataArray[$k]['is_read'] = $uuy->is_read;
                     $dataArray[$k]['message'] = $uuy->message;
                     $date = Carbon::parse($uuy->created_at);
-                    $dataArray[$k]['date'] = $date->format("d-F-Y");
-                    $dataArray[$k]['time'] = $date->format("h:i:s A");
+                    $dataArray[$k]['date'] = $date->format("d-M-Y");
+                    $dataArray[$k]['time'] = $date->format("h:i A");
                 }
             }
             $data['notification_list']=$dataArray;
