@@ -2156,7 +2156,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/test-series-list",
+    "url": "/api/my-test-series",
     "title": "My Test Series List",
     "header": {
       "fields": {
