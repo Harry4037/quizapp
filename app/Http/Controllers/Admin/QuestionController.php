@@ -158,13 +158,14 @@ class QuestionController extends Controller {
                 }
             }
             $subjects = Subject::get();
-            $exams = Exam::get();
+            $exams1 = Exam::get();
             $answers = Answer::where('question_id',$question->id)->get();
+
             return view('admin.question.edit', [
                 'question' => $question,
                 'subjects' => $subjects,
-                'exams' => $exams,
-                'answers' => $answers
+                'exams1' => $exams1,
+                'answers' => $answers,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.question.index')->with('error', $ex->getMessage());
@@ -243,11 +244,19 @@ class QuestionController extends Controller {
                     return redirect()->route('admin.question.index')->with('error', 'Something went be wrong.');
                 }
             }
+            $css = [
+                'bower_components/select2/dist/css/select2.min.css'
+            ];
+            $js = [
+                'bower_components/select2/dist/js/select2.min.js'
+            ];
             $subjects = Subject::get();
             $exams = Exam::get();
             return view('admin.question.add', [
                 'subjects' => $subjects,
-                'exams' => $exams
+                'exams' => $exams,
+                'js' => $js,
+                'css' => $css
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.question.index')->with('error', $ex->getMessage());

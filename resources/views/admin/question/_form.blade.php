@@ -16,8 +16,8 @@
     <div class="form-group">
         <label class="control-label col-md-4 col-sm-4 col-xs-12">Exams <span class="error">*</span></label>
         <div class="col-md-4 col-sm-6 col-xs-6">
-            <select class="form-control" name="exam_id" id="exam_id">
-                <option value="">Choose Option</option>
+            <select class="form-control" name="exam_id" id="exam_id" multiple="multiple">
+
                 @foreach($exams as $exam)
                 <option value="{{$exam->id}}"
                         @if(isset($question))
@@ -30,7 +30,24 @@
             </select>
         </div>
     </div>
+    @elseif(isset($exams1))
+    <div class="form-group">
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Exams <span class="error">*</span></label>
+        <div class="col-md-4 col-sm-6 col-xs-6">
+            <select class="form-control" name="exam_id" id="exam_id" >
 
+                @foreach($exams1 as $exam1)
+                <option value="{{$exam1->id}}"
+                        @if(isset($question))
+                        @if($question->exam_id == $exam1->id)
+                        {{ 'selected' }}
+                        @endif
+                        @endif
+                        >{{$exam1->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
 @endif
 @if(isset($subjects))
     <div class="form-group">

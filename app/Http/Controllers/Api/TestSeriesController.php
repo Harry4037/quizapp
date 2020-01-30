@@ -13,9 +13,13 @@ use App\Models\TestSeries;
 use App\Models\Subject;
 use App\Models\Answer;
 use App\Models\Exam;
+use Carbon\Carbon;
+use App\Models\Bookmark;
 use App\Models\Invite;
 use App\Models\UserTestSeries;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SearchHistory;
+use App\Models\UserTestSeriesQuestionAnswer;
 
 class TestSeriesController extends Controller {
 
@@ -262,7 +266,15 @@ class TestSeriesController extends Controller {
             $dataArray[$k]['id'] = $test->id;
             $dataArray[$k]['name'] = $test->name;
             $dataArray[$k]['created_at'] = $test->created_at;
+            $date = Carbon::parse($test->created_at);
+            $dataArray[$k]['date'] = $date->format("d-M-Y");
             $dataArray[$k]['flag'] = 1;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
+            if ($fav) {
+                $dataArray[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray[$k]['is_bookmark'] = false;
+            }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
         $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id', 'name', 'created_at')->get();
@@ -270,24 +282,49 @@ class TestSeriesController extends Controller {
             $dataArray1[$k]['id'] = $test1->id;
             $dataArray1[$k]['name'] = $test1->name;
             $dataArray1[$k]['created_at'] = $test1->created_at;
+            $date = Carbon::parse($test1->created_at);
+            $dataArray1[$k]['date'] = $date->format("d-M-Y");
             $dataArray1[$k]['flag'] = 2;
-            $dataArray1[$k]['total_ques_no'] = NULL;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test1->id)->first();
+            if ($fav) {
+                $dataArray1[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray1[$k]['is_bookmark'] = false;
+            }
+            $result1 = UserTestSeriesQuestionAnswer::where("user_test_series_id", $test1->id)->get();
+            $dataArray1[$k]['total_ques_no'] = count($result1);
         }
         $invites = Invite::where("user_id", $request->user_id)->where("test_series_id", '!=', 0)->with('testseries')->get();
         foreach ($invites as $k => $invite) {
             $inviteArray[$k]['id'] = $invite->id;
             $inviteArray[$k]['user_name'] = $user->name;
-            $inviteArray[$k]['test_series_name'] = $invite->testseries->name;
+            $inviteArray[$k]['name'] = $invite->testseries->name;
             $inviteArray[$k]['created_at'] = $invite->created_at;
+            $date = Carbon::parse($invite->created_at);
+            $inviteArray[$k]['date'] = $date->format("d-M-Y");
             $inviteArray[$k]['flag'] = 1;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $invite->test_series_id)->first();
+            if ($fav) {
+                $inviteArray[$k]['is_bookmark'] = true;
+            } else {
+                $inviteArray[$k]['is_bookmark'] = false;
+            }
         }
         $invites1 = Invite::where("user_id", $request->user_id)->where("user_test_series_id", '!=', 0)->with('usertestseries')->get();
         foreach ($invites1 as $k => $invite1) {
             $inviteArray1[$k]['id'] = $invite1->id;
-            $inviteArray1[$k]['name'] = $user->name;
-            $inviteArray1[$k]['test_series_name'] = $invite1->usertestseries->name;
+            $inviteArray1[$k]['user_name'] = $user->name;
+            $inviteArray1[$k]['name'] = $invite1->usertestseries->name;
             $inviteArray1[$k]['created_at'] = $invite1->created_at;
+            $date = Carbon::parse($invite1->created_at);
+            $inviteArray1[$k]['date'] = $date->format("d-M-Y");
             $inviteArray1[$k]['flag'] = 2;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $invite1->user_test_series_id)->first();
+            if ($fav) {
+                $inviteArray1[$k]['is_bookmark'] = true;
+            } else {
+                $inviteArray1[$k]['is_bookmark'] = false;
+            }
         }
         $res = array_merge($dataArray, $dataArray1);
         $res1 = array_merge($inviteArray, $inviteArray1);
@@ -352,7 +389,15 @@ class TestSeriesController extends Controller {
             $dataArray[$k]['id'] = $test->id;
             $dataArray[$k]['name'] = $test->name;
             $dataArray[$k]['created_at'] = $test->created_at;
+            $date = Carbon::parse($test->created_at);
+                $dataArray[$k]['date'] = $date->format("d-M-Y");
             $dataArray[$k]['flag'] = 1;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
+            if ($fav) {
+                $dataArray[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray[$k]['is_bookmark'] = false;
+            }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
         $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'created_at')->get();
@@ -360,7 +405,15 @@ class TestSeriesController extends Controller {
             $dataArray1[$k]['id'] = $test1->id;
             $dataArray1[$k]['name'] = $test1->name;
             $dataArray1[$k]['created_at'] = $test1->created_at;
+            $date = Carbon::parse($test1->created_at);
+                $dataArray1[$k]['test_series']['date'] = $date->format("d-M-Y");
             $dataArray1[$k]['flag'] = 2;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test->id)->first();
+            if ($fav) {
+                $dataArray1[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray1[$k]['is_bookmark'] = false;
+            }
             $dataArray1[$k]['total_ques_no'] = NULL;
         }
         $res = array_merge($dataArray, $dataArray1);
@@ -558,7 +611,18 @@ class TestSeriesController extends Controller {
                 $dataArray = [];
                 $dataArray['test_series']['id'] = $testSeries->id;
                 $dataArray['test_series']['name'] = $testSeries->name;
+                $date = Carbon::parse($testSeries->created_at);
+                $dataArray['test_series']['date'] = $date->format("d-M-Y");
                 $dataArray['test_series']['total_question'] = $testSeries->total_question;
+                if ($request->user_id) {
+                $fav = Bookmark::where('user_id', $request->user_id)->where('test_series_id', $testseries->id)->first();
+                if ($fav) {
+                    $dataArray['test_series']['is_bookmark'] = true;
+                } else {
+                    $dataArray['test_series']['is_bookmark'] = false;
+                }}else{
+                    $dataArray['test_series']['is_bookmark'] = false;
+                }
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
                 $totalTime = 0;
                 if ($seriesQuestions) {
@@ -595,15 +659,28 @@ class TestSeriesController extends Controller {
                     $searchHistory->flag = 2;
                     $searchHistory->save();
                 }
-                $seriesQuestions = Question::where("test_series_id", $testSeries->id)->get();
+                $result1 = UserTestSeriesQuestionAnswer::where("user_test_series_id", $testSeries->id)->get();
+
 
                 $dataArray = [];
                 $dataArray['test_series']['id'] = $testSeries->id;
                 $dataArray['test_series']['name'] = $testSeries->name;
+                $date = Carbon::parse($testSeries->created_at);
+                $dataArray['test_series']['date'] = $date->format("d-M-Y");
+                if ($request->user_id) {
+                    $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $testseries->id)->first();
+                    if ($fav) {
+                        $dataArray['test_series']['is_bookmark'] = true;
+                    } else {
+                        $dataArray['test_series']['is_bookmark'] = false;
+                    }}else{
+                        $dataArray['test_series']['is_bookmark'] = false;
+                    }
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
                 $totalTime = 0;
-                if ($seriesQuestions) {
-                    foreach ($seriesQuestions as $k => $seriesQuestion) {
+                foreach ($result1 as $k => $result) {
+                    $seriesQuestion = Question::find($result->question_id);
+
                         $answers = Answer::where("question_id", $seriesQuestion->id)->get();
                         $dataArray['test_series']['questions'][$k]['id'] = $seriesQuestion->id;
                         $dataArray['test_series']['questions'][$k]['description'] = $seriesQuestion->description;
@@ -615,14 +692,14 @@ class TestSeriesController extends Controller {
                 } else {
                     $dataArray['test_series']['questions'] = [];
                 }
-                $dataArray['test_series']['total_question'] = count($seriesQuestions);
+                $dataArray['test_series']['total_question'] = count($result1);
                 $dataArray['test_series']['question_time'] = $totalTime;
 
                 return $this->successResponse("Test Series.", $dataArray);
             } else {
                 return $this->errorResponse("Invalid Test Series ID.");
             }
-        }
+
     }
 
     /**
@@ -675,9 +752,9 @@ class TestSeriesController extends Controller {
         if ($trendSearchs) {
             foreach ($trendSearchs as $k => $trendSearch) {
                 if ($trendSearch->flag == 1) {
-                    $testSeries = TestSeries::find($trendSearch->test_series_id);
+                    $testSeries = TestSeries::find($trendSearch->test_series_id)->withTrashed();
                 } else {
-                    $testSeries = UserTestSeries::find($trendSearch->test_series_id);
+                    $testSeries = UserTestSeries::find($trendSearch->test_series_id)->withTrashed();
                 }
                 $dataArrayTrending[$k]['id'] = $testSeries->id;
                 $dataArrayTrending[$k]['name'] = $testSeries->name;
@@ -728,6 +805,8 @@ class TestSeriesController extends Controller {
      *                   "name": "gggggu",
      *                   "created_at": "2020-01-20T11:47:20.000000Z",
      *                   "flag": 1,
+     *                   "date": "23-Jan-2020",
+     *                   "is_bookmark":TRUE,
      *                   "total_ques_no": 10
      *               },
      *               {
@@ -735,6 +814,8 @@ class TestSeriesController extends Controller {
      *                   "name": "gggggu",
      *                   "created_at": "2020-01-20T11:47:31.000000Z",
      *                   "flag": 1,
+     *                   "date": "23-Jan-2020",
+     *                   "is_bookmark":TRUE,
      *                   "total_ques_no": 10
      *               },
      *               {
@@ -742,6 +823,8 @@ class TestSeriesController extends Controller {
      *                   "name": "rbi assistant computer",
      *                   "created_at": "2020-01-22T09:47:16.000000Z",
      *                   "flag": 1,
+     *                   "date": "23-Jan-2020",
+     *                   "is_bookmark":TRUE,
      *                   "total_ques_no": 10
      *               }
      *           ]
@@ -766,11 +849,81 @@ class TestSeriesController extends Controller {
             $dataArray[$k]['id'] = $test->id;
             $dataArray[$k]['name'] = $test->name;
             $dataArray[$k]['created_at'] = $test->created_at;
+            $date = Carbon::parse($test->created_at);
+            $dataArray[$k]['date'] = $date->format("d-M-Y");
             $dataArray[$k]['flag'] = 1;
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
+            if ($fav) {
+                $dataArray[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray[$k]['is_bookmark'] = false;
+            }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
         $data['my_testseries'] = $dataArray;
         return $this->successResponse("TestSeries List", $data);
     }
 
+
+        /**
+     * @api {post} /api/delete-test-series Delete Test Series
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostDeleteTestSeries
+     * @apiGroup TestSeries
+     *
+     * @apiParam {String} user_id User ID.
+     * @apiParam {String} flag FLag Key.
+     * @apiParam {String} test_series_id Test Series ID*.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Delete TestSeries List.
+     * @apiSuccess {JSON} data response.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "test_series Removed.",
+     *       "data": {}
+     *   }
+     *
+     *
+     */
+    public function deleteTestseries(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID Missing.");
+        }
+        if (!in_array($request->flag, [1, 2])) {
+            return $this->errorResponse("Select valid flag type");
+        }
+        $user = User::find($request->user_id);
+        if (!$user) {
+            return $this->errorResponse("Invalid User ID");
+        }
+        if (!$request->test_series_id) {
+            return $this->errorResponse("Test Series ID Missing.");
+        }
+        if($request->flag == 1){
+            $testseries = TestSeries::find($request->test_series_id);
+            if (!$testseries) {
+                return $this->errorResponse("Invalid Test Series ID");
+            }else{
+                TestSeries::where("user_id", $request->user_id)->where("id", $request->test_series_id)->delete();
+                return $this->successResponse("test_series Removed.", (object) []);
+            }
+        }
+        if($request->flag == 2){
+            $testseries = UserTestSeries::find($request->test_series_id);
+            if (!$testseries) {
+                return $this->errorResponse("Invalid Test Series ID");
+            }else{
+                UserTestSeries::where("user_id", $request->user_id)->where("id", $request->test_series_id)->delete();
+                return $this->successResponse("test_series Removed.", (object) []);
+            }
+        }
+
+
+    }
 }

@@ -21,6 +21,7 @@ class CreateUserTestSeriesTable extends Migration
             $table->bigInteger("subject_id");
             $table->tinyInteger("lang");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
