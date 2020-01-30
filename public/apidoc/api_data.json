@@ -1796,6 +1796,77 @@
     "groupTitle": "Question_Answer"
   },
   {
+    "type": "post",
+    "url": "/api/submit-random-answer",
+    "title": "Submit Random Answer",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostSubmitRandomAnswer",
+    "group": "Question_Answer",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "body:\n  {\n          \"user_id\":1,\n          \"questions\":[\n                  {\n                          \"question_id\":1,\n                          \"answer_id\":4,\n                          \"is_correct\":1\n                  },\n                  {\n                          \"question_id\":2,\n                          \"answer_id\":6,\n                          \"is_correct\":0\n                  }\n          ]\n  }",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Answer",
+            "description": "<p>'s submitted succeffully.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>blank object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Answer's submitted succeffully.\",\n      \"data\": {}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/QuestionController.php",
+    "groupTitle": "Question_Answer"
+  },
+  {
     "type": "get",
     "url": "/api/quiz-detail",
     "title": "Quiz Detail",
