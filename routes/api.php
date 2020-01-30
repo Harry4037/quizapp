@@ -27,7 +27,6 @@ Route::namespace("Api")->group(function() {
         fwrite($myfile, "----------------------------------------------------");
         fclose($myfile);
     }
-
     Route::post('/send-otp', 'AuthController@sendOTP');
     Route::post('/verify-otp', 'AuthController@verifyOTP');
     Route::post('/register', 'UserController@userRegister');
@@ -42,8 +41,7 @@ Route::namespace("Api")->group(function() {
     Route::post('/comment', 'QuestionCommentController@comment');
     Route::get('/comment-list', 'QuestionCommentController@commentList');
     Route::get('/notification', 'NotificationController@notificationlist');
-
-
+    
     //Quiz
     Route::get('/quiz-detail', 'QuizController@quizDetail');
     Route::get('/start-quiz', 'QuizController@startQuiz');
