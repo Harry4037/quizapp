@@ -717,4 +717,67 @@ class QuestionController extends Controller {
         }
     }
 
+    /**
+     * @api {post} /api/submit-random-answer  Submit Random Answer
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostSubmitRandomAnswer
+     * @apiGroup Question/Answer
+     *
+     * @apiExample Example usage:
+     * body:
+     *   {
+     *           "user_id":1,
+     *           "questions":[
+     *                   {
+     *                           "question_id":1,
+     *                           "answer_id":4,
+     *                           "is_correct":1
+     *                   },
+     *                   {
+     *                           "question_id":2,
+     *                           "answer_id":6,
+     *                           "is_correct":0
+     *                   }
+     *           ]
+     *   }
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} Answer's submitted succeffully.
+     * @apiSuccess {JSON} data blank object.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Answer's submitted succeffully.",
+     *       "data": {}
+     *
+     */
+    public function submitRandomQuestion(Request $request) {
+        if (empty($request->input())) {
+            return $this->errorResponse("Parameter Body Missing.");
+        }
+        if (!$request->input("user_id")) {
+            return $this->errorResponse("Questions missing.");
+        }
+        if (!$request->input("questions")) {
+            return $this->errorResponse("Questions missing.");
+        }
+        if (!is_array($request->input("questions"))) {
+            return $this->errorResponse("Questions missing.");
+        }
+        foreach ($request->input("questions") as $k => $question) {
+            $UserAnswer = new UserAnswer();
+            $UserAnswer->user_id = $request->user_id;
+            $UserAnswer->question_id = $question['question_id'];
+            $UserAnswer->answer_id = $question['answer_id'];
+            $UserAnswer->is_correct = $question['is_correct'];
+            $UserAnswer->save();
+        }
+
+        return $this->successResponse("Result Submmitted Successfully.", (object) []);
+    }
+
 }
