@@ -756,9 +756,9 @@ class TestSeriesController extends Controller {
                 } else {
                     $testSeries = UserTestSeries::find($trendSearch->test_series_id)->withTrashed();
                 }
-                $dataArrayTrending[$k]['id'] = $testSeries->id;
-                $dataArrayTrending[$k]['name'] = $testSeries->name;
-                $dataArrayTrending[$k]['flag'] = $trendSearch->flag;
+                $dataArrayTrending[$k]['id'] = $testSeries->id ? $testSeries->id :'';
+                $dataArrayTrending[$k]['name'] = $testSeries->name ? $testSeries->name : '';
+                $dataArrayTrending[$k]['flag'] = $trendSearch->flag ;
             }
         }
         $dataArrayRecent = [];
@@ -769,8 +769,8 @@ class TestSeriesController extends Controller {
                 } else {
                     $testSeries = UserTestSeries::find($trendSearch->test_series_id)->withTrashed();
                 }
-                $dataArrayRecent[$k]['id'] = $testSeries->id;
-                $dataArrayRecent[$k]['name'] = $testSeries->name;
+                $dataArrayRecent[$k]['id'] =  $testSeries->id ? $testSeries->id :'';
+                $dataArrayRecent[$k]['name'] = $testSeries->name ? $testSeries->name : '';
                 $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
             }
         }
