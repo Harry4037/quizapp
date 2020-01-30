@@ -55,10 +55,11 @@ class QuizController extends Controller {
             $dataArray['quiz']['name'] = $quiz->name;
             $dataArray['quiz']['total_question'] = $quiz->total_questions;
             $dataArray['quiz']['lang'] = $quiz->lang == 1 ? 'English' : 'Hindi';
-            $dataArray['quiz']['start_date_time'] = $quiz->start_date_time;
+
             $dateTime = Carbon::parse($quiz->end_date_time);
             $dateTime1 = Carbon::parse($quiz->start_date_time);
             $min = $dateTime->diffInMinutes($dateTime1);
+            $dataArray['quiz']['start_date_time'] = $dateTime1->format("h:i A");
             $dataArray['quiz']['end_date_time'] = $dateTime->format("h:i A");
             $dataArray['quiz']['question_time'] = $min * 60;
             return $this->successResponse("Daily Quiz Found.", $dataArray);
