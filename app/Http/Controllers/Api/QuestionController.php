@@ -721,7 +721,7 @@ class QuestionController extends Controller {
     public function yearList(Request $request) {
         $years = Question::whereNotNull('year')->groupBy('year')->get();
         return $this->successResponse("List of Years", $years);
-
+    }
     /**
      * @api {post} /api/submit-random-answer  Submit Random Answer
      * @apiHeader {String} Accept application/json.
