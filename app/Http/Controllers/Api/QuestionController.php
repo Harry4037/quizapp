@@ -31,6 +31,7 @@ class QuestionController extends Controller {
      * @apiParam {String} exam_id Exam Id in array format*.
      * @apiParam {String} subject_id Subject Id in array format*.
      * @apiParam {String} total_questions Total no. of questions*.
+     * @apiParam {String} year year(optional)*.
      * @apiParam {String} lang Language(English=>1,Hindi=>2)*.
      *
      * @apiSuccess {String} success true
@@ -216,8 +217,12 @@ class QuestionController extends Controller {
                         ->whereIn('subject_id', $request->subject_id);
             });
             $query->limit($request->total_questions);
+            if (!$request->year) {
+                $questions = $query->get();
+            }else{
+                $questions = $query->where('year',$request->year)->get();
+            }
 
-            $questions = $query->get();
 
             $dataArray = [];
             $totatlTime = 0;
@@ -228,6 +233,9 @@ class QuestionController extends Controller {
                 $dataArray[$k]['description'] = $question->description;
                 $dataArray[$k]['ques_image'] = $question->ques_image;
                 $dataArray[$k]['ques_time'] = $question->ques_time;
+                if ($request->year) {
+                    $dataArray[$k]['year'] = $question->year;
+                }
                 $dataArray[$k]['is_like'] = $isLike ? true : false;
                 $dataArray[$k]['answers'] = $answers;
                 $totatlTime += $question->ques_time;
