@@ -752,25 +752,25 @@ class TestSeriesController extends Controller {
         if ($trendSearchs) {
             foreach ($trendSearchs as $k => $trendSearch) {
                 if ($trendSearch->flag == 1) {
-                    $testSeries = TestSeries::find($trendSearch->test_series_id)->withTrashed();
+                    $testSeries = TestSeries::find($trendSearch->test_series_id);
                 } else {
-                    $testSeries = UserTestSeries::find($trendSearch->test_series_id)->withTrashed();
+                    $testSeries = UserTestSeries::find($trendSearch->test_series_id);
                 }
-                $dataArrayTrending[$k]['id'] = $testSeries->id;
-                $dataArrayTrending[$k]['name'] = $testSeries->name;
-                $dataArrayTrending[$k]['flag'] = $trendSearch->flag;
+                $dataArrayTrending[$k]['id'] = $testSeries->id ? $testSeries->id :'';
+                $dataArrayTrending[$k]['name'] = $testSeries->name ? $testSeries->name : '';
+                $dataArrayTrending[$k]['flag'] = $trendSearch->flag ;
             }
         }
         $dataArrayRecent = [];
         if ($recentSearchs) {
             foreach ($recentSearchs as $k => $recentSearch) {
                 if ($trendSearch->flag == 1) {
-                    $testSeries = TestSeries::find($trendSearch->test_series_id)->withTrashed();
+                    $testSeries = TestSeries::find($trendSearch->test_series_id);
                 } else {
-                    $testSeries = UserTestSeries::find($trendSearch->test_series_id)->withTrashed();
+                    $testSeries = UserTestSeries::find($trendSearch->test_series_id);
                 }
-                $dataArrayRecent[$k]['id'] = $testSeries->id;
-                $dataArrayRecent[$k]['name'] = $testSeries->name;
+                $dataArrayRecent[$k]['id'] =  $testSeries->id ? $testSeries->id :'';
+                $dataArrayRecent[$k]['name'] = $testSeries->name ? $testSeries->name : '';
                 $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
             }
         }
