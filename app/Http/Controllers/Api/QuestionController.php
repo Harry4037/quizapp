@@ -717,4 +717,9 @@ class QuestionController extends Controller {
         }
     }
 
+    public function yearList(Request $request) {
+        $years = Question::whereNotNull('year')->groupBy('year')->get();
+        return $this->successResponse("List of Years", $years);
+    }
+
 }
