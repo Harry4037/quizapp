@@ -716,7 +716,36 @@ class QuestionController extends Controller {
             return $this->errorResponse("Something went wrong.");
         }
     }
-
+    /**
+     * @api {get} /api/year-list  Year List
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetYearList
+     * @apiGroup Question
+     *
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message List of Years.
+     * @apiSuccess {JSON} data Array.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "List of Years",
+     *       "data": [
+     *           {
+     *               "year": 2013
+     *           },
+     *           {
+     *               "year": 2019
+     *           }
+     *       ]
+     *   }
+     *
+     *
+     */
 
     public function yearList(Request $request) {
         $years = Question::whereNotNull('year')->groupBy('year')->select('year')->get();
