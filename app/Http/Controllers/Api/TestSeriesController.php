@@ -408,7 +408,7 @@ class TestSeriesController extends Controller {
             $date = Carbon::parse($test1->created_at);
                 $dataArray1[$k]['test_series']['date'] = $date->format("d-M-Y");
             $dataArray1[$k]['flag'] = 2;
-            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test->id)->first();
+            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test1->id)->first();
             if ($fav) {
                 $dataArray1[$k]['is_bookmark'] = true;
             } else {
