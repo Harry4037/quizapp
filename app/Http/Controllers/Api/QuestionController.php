@@ -31,6 +31,7 @@ class QuestionController extends Controller {
      * @apiParam {String} exam_id Exam Id in array format*.
      * @apiParam {String} subject_id Subject Id in array format*.
      * @apiParam {String} total_questions Total no. of questions*.
+     * @apiParam {String} year year(optional)*.
      * @apiParam {String} lang Language(English=>1,Hindi=>2)*.
      *
      * @apiSuccess {String} success true
@@ -216,8 +217,12 @@ class QuestionController extends Controller {
                         ->whereIn('subject_id', $request->subject_id);
             });
             $query->limit($request->total_questions);
+            if (!$request->year) {
+                $questions = $query->get();
+            }else{
+                $questions = $query->where('year',$request->year)->get();
+            }
 
-            $questions = $query->get();
 
             $dataArray = [];
             $totatlTime = 0;
@@ -228,6 +233,9 @@ class QuestionController extends Controller {
                 $dataArray[$k]['description'] = $question->description;
                 $dataArray[$k]['ques_image'] = $question->ques_image;
                 $dataArray[$k]['ques_time'] = $question->ques_time;
+                if ($request->year) {
+                    $dataArray[$k]['year'] = $question->year;
+                }
                 $dataArray[$k]['is_like'] = $isLike ? true : false;
                 $dataArray[$k]['answers'] = $answers;
                 $totatlTime += $question->ques_time;
@@ -235,6 +243,26 @@ class QuestionController extends Controller {
 
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
+
+            $UserTestSeries = new UserTestSeries();
+            $UserTestSeries->user_id = $request->user_id;
+            $exam_name = Exam::where('id', $request->exam_id)->first();
+            $UserTestSeries->name = $request->user_id . "_" . $exam_name->name;
+            $UserTestSeries->exam_id = $request->exam_id;
+            $UserTestSeries->subject_id = $request->subject_id;
+            $UserTestSeries->lang = $request->lang;
+            $UserTestSeries->is_attempted = 0;
+            if ($UserTestSeries->save()) {
+                foreach ($questions as $k => $question) {
+                    $UserTestSeriesQuestionAnswer = new UserTestSeriesQuestionAnswer();
+                    $UserTestSeriesQuestionAnswer->user_test_series_id = $UserTestSeries->id;
+                    $UserTestSeriesQuestionAnswer->question_id = $question->question_id;
+                    $UserTestSeriesQuestionAnswer->answer_id = $question->answer_id;
+                    $UserTestSeriesQuestionAnswer->is_correct = $question->is_correct;
+                    $UserTestSeriesQuestionAnswer->status = 0;
+                    $UserTestSeriesQuestionAnswer->save();
+                }
+            }
             return $this->successResponse("Question list.", $data);
         } else {
             return $this->errorResponse("Invlaid flag type.");
@@ -716,7 +744,41 @@ class QuestionController extends Controller {
             return $this->errorResponse("Something went wrong.");
         }
     }
+    /**
+     * @api {get} /api/year-list  Year List
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetYearList
+     * @apiGroup Question
+     *
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message List of Years.
+     * @apiSuccess {JSON} data Array.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "List of Years",
+     *       "data": [
+     *           {
+     *               "year": 2013
+     *           },
+     *           {
+     *               "year": 2019
+     *           }
+     *       ]
+     *   }
+     *
+     *
+     */
 
+    public function yearList(Request $request) {
+        $years = Question::whereNotNull('year')->groupBy('year')->select('year')->get();
+        return $this->successResponse("List of Years", $years);
+    }
     /**
      * @api {post} /api/submit-random-answer  Submit Random Answer
      * @apiHeader {String} Accept application/json.
@@ -778,6 +840,7 @@ class QuestionController extends Controller {
         }
 
         return $this->successResponse("Result Submmitted Successfully.", (object) []);
+
     }
 
 }

@@ -99,6 +99,12 @@
     </div>
 </div>
 <div class="form-group">
+    <label class="control-label col-md-4 col-sm-4 col-xs-12">Question Year </label>
+    <div class="col-md-4 col-sm-6 col-xs-6">
+        <input type="number" class="form-control" name="year" id="year" value="@if(isset($question)){{$question->year}}@endif">
+    </div>
+</div>
+<div class="form-group">
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Option1 <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
         <input  type="text" class="form-control" required name="ans1" id="ans1" value="@if(isset($answers)){{$answers[0]->description}}@endif">

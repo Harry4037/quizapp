@@ -27,7 +27,6 @@ Route::namespace("Api")->group(function() {
         fwrite($myfile, "----------------------------------------------------");
         fclose($myfile);
     }
-
     Route::post('/send-otp', 'AuthController@sendOTP');
     Route::post('/verify-otp', 'AuthController@verifyOTP');
     Route::post('/register', 'UserController@userRegister');
@@ -42,7 +41,7 @@ Route::namespace("Api")->group(function() {
     Route::post('/comment', 'QuestionCommentController@comment');
     Route::get('/comment-list', 'QuestionCommentController@commentList');
     Route::get('/notification', 'NotificationController@notificationlist');
-
+    
     //Quiz
     Route::get('/quiz-detail', 'QuizController@quizDetail');
     Route::get('/start-quiz', 'QuizController@startQuiz');
@@ -65,7 +64,11 @@ Route::namespace("Api")->group(function() {
     //QuestionController
 //    Route::post('/create-question', 'QuestionController@createQuestion');
     Route::post('/create-single-question', 'QuestionController@createSingleQuestion');
+
+    Route::get('/year-list', 'QuestionController@yearList');
+
     Route::post('/submit-random-answer', 'QuestionController@submitRandomQuestion');
+
 
     Route::get('/follow', 'FollowController@follow');
 
@@ -77,6 +80,7 @@ Route::namespace("Api")->group(function() {
 
     Route::post('/invite', 'InviteController@invite');
     Route::get('/invite-status', 'InviteController@inviteStatus');
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

@@ -1056,6 +1056,70 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/year-list",
+    "title": "Year List",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetYearList",
+    "group": "Question",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>List of Years.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Array.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"List of Years\",\n      \"data\": [\n          {\n              \"year\": 2013\n          },\n          {\n              \"year\": 2019\n          }\n      ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/QuestionController.php",
+    "groupTitle": "Question"
+  },
+  {
+    "type": "get",
     "url": "/api/comment-list",
     "title": "Comment List",
     "header": {
@@ -1206,6 +1270,13 @@ define({ "api": [
             "optional": false,
             "field": "total_questions",
             "description": "<p>Total no. of questions*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "year",
+            "description": "<p>year(optional)*.</p>"
           },
           {
             "group": "Parameter",
@@ -3207,6 +3278,20 @@ define({ "api": [
             "optional": false,
             "field": "profile_pic",
             "description": "<p>User Profile pic.(File Type)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "into_line",
+            "description": "<p>About Me</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "experience",
+            "description": "<p>Experience</p>"
           }
         ]
       }
@@ -3584,6 +3669,20 @@ define({ "api": [
             "optional": false,
             "field": "designation",
             "description": "<p>Designation*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "into_line",
+            "description": "<p>About Me*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "experience",
+            "description": "<p>Experience</p>"
           }
         ]
       }

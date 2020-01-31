@@ -408,7 +408,7 @@ class TestSeriesController extends Controller {
             $date = Carbon::parse($test1->created_at);
                 $dataArray1[$k]['test_series']['date'] = $date->format("d-M-Y");
             $dataArray1[$k]['flag'] = 2;
-            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test->id)->first();
+            $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test1->id)->first();
             if ($fav) {
                 $dataArray1[$k]['is_bookmark'] = true;
             } else {
@@ -752,13 +752,13 @@ class TestSeriesController extends Controller {
         if ($trendSearchs) {
             foreach ($trendSearchs as $k => $trendSearch) {
                 if ($trendSearch->flag == 1) {
-                    $testSeries = TestSeries::find($trendSearch->test_series_id)->withTrashed();
+                    $testSeries = TestSeries::find($trendSearch->test_series_id);
                 } else {
-                    $testSeries = UserTestSeries::find($trendSearch->test_series_id)->withTrashed();
+                    $testSeries = UserTestSeries::find($trendSearch->test_series_id);
                 }
-                $dataArrayTrending[$k]['id'] = $testSeries->id;
-                $dataArrayTrending[$k]['name'] = $testSeries->name;
-                $dataArrayTrending[$k]['flag'] = $trendSearch->flag;
+                $dataArrayTrending[$k]['id'] = $testSeries->id ? $testSeries->id :'';
+                $dataArrayTrending[$k]['name'] = $testSeries->name ? $testSeries->name : '';
+                $dataArrayTrending[$k]['flag'] = $trendSearch->flag ;
             }
         }
         $dataArrayRecent = [];
@@ -769,8 +769,8 @@ class TestSeriesController extends Controller {
                 } else {
                     $testSeries = UserTestSeries::find($trendSearch->test_series_id);
                 }
-                $dataArrayRecent[$k]['id'] = $testSeries->id;
-                $dataArrayRecent[$k]['name'] = $testSeries->name;
+                $dataArrayRecent[$k]['id'] =  $testSeries->id ? $testSeries->id :'';
+                $dataArrayRecent[$k]['name'] = $testSeries->name ? $testSeries->name : '';
                 $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
             }
         }

@@ -125,7 +125,7 @@ class QuestionController extends Controller {
                 $question->subject_id = $request->subject_id;
                 $question->description = $request->description;
                 $question->ques_time = $request->time;
-
+                $question->year = $request->year;
                 if ($question->save()) {
                     if($request->correct_answer == "opt1"){
                         Answer::where('id',$request->answer1)->update(['description' => $request->ans1, 'is_answer' => 1]);
@@ -194,6 +194,7 @@ class QuestionController extends Controller {
                 $question->is_approve = 2;
                 $question->description = $request->description;
                 $question->exam_id = $request->exam_id;
+                $question->year = $request->year;
                 $question->subject_id = $request->subject_id;
                 if ($request->hasFile('ques_image')) {
                     $ques_image = $request->file("ques_image");
