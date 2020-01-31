@@ -243,6 +243,26 @@ class QuestionController extends Controller {
 
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
+
+            $UserTestSeries = new UserTestSeries();
+            $UserTestSeries->user_id = $request->user_id;
+            $exam_name = Exam::where('id', $request->exam_id)->first();
+            $UserTestSeries->name = $request->user_id . "_" . $exam_name->name;
+            $UserTestSeries->exam_id = $request->exam_id;
+            $UserTestSeries->subject_id = $request->subject_id;
+            $UserTestSeries->lang = $request->lang;
+            $UserTestSeries->is_attempted = 0;
+            if ($UserTestSeries->save()) {
+                foreach ($questions as $k => $question) {
+                    $UserTestSeriesQuestionAnswer = new UserTestSeriesQuestionAnswer();
+                    $UserTestSeriesQuestionAnswer->user_test_series_id = $UserTestSeries->id;
+                    $UserTestSeriesQuestionAnswer->question_id = $question->question_id;
+                    $UserTestSeriesQuestionAnswer->answer_id = $question->answer_id;
+                    $UserTestSeriesQuestionAnswer->is_correct = $question->is_correct;
+                    $UserTestSeriesQuestionAnswer->status = 0;
+                    $UserTestSeriesQuestionAnswer->save();
+                }
+            }
             return $this->successResponse("Question list.", $data);
         } else {
             return $this->errorResponse("Invlaid flag type.");

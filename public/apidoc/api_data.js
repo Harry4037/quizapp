@@ -1275,6 +1275,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "year",
+            "description": "<p>year(optional)*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "lang",
             "description": "<p>Language(English=&gt;1,Hindi=&gt;2)*.</p>"
           }
@@ -3271,6 +3278,20 @@ define({ "api": [
             "optional": false,
             "field": "profile_pic",
             "description": "<p>User Profile pic.(File Type)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "into_line",
+            "description": "<p>About Me</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "experience",
+            "description": "<p>Experience</p>"
           }
         ]
       }
@@ -3648,6 +3669,20 @@ define({ "api": [
             "optional": false,
             "field": "designation",
             "description": "<p>Designation*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "into_line",
+            "description": "<p>About Me*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "experience",
+            "description": "<p>Experience</p>"
           }
         ]
       }

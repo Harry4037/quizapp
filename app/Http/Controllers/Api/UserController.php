@@ -30,6 +30,7 @@ class UserController extends Controller {
      * @apiParam {String} user_type User type*. (Creator => 2, User => 3)
      * @apiParam {String} profile_pic User Profile pic.(File Type)
      * @apiParam {String} into_line About Me
+     * @apiParam {String} experience Experience
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -119,6 +120,9 @@ class UserController extends Controller {
         $user->dob = $request->dob;
         if ($request->into_line) {
             $user->into_line = $request->into_line;
+        }
+        if ($request->experience) {
+            $user->experience = $request->experience;
         }
         $user->designation = $request->designation;
         $user->qualification = $request->qualification;
@@ -386,6 +390,7 @@ class UserController extends Controller {
      * @apiParam {String} dob Date Of Birth(2020-01-08)*.
      * @apiParam {String} designation Designation*.
      * @apiParam {String}  into_line About Me*.
+     * @apiParam {String} experience Experience
      *
      *
      * @apiSuccess {String} success true
@@ -457,6 +462,9 @@ class UserController extends Controller {
         }
         if ($request->into_line) {
             $userArray['into_line'] = $request->into_line;
+        }
+        if ($request->experience) {
+            $userArray['experience'] = $request->experience;
         }
         if ($request->dob) {
             $userArray['dob'] = $request->dob;
