@@ -20,6 +20,7 @@ class CreateUserTestSeriesTable extends Migration
             $table->bigInteger("exam_id");
             $table->bigInteger("subject_id");
             $table->tinyInteger("lang");
+            $table->tinyInteger("is_attempted")->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

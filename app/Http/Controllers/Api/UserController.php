@@ -29,6 +29,8 @@ class UserController extends Controller {
      * @apiParam {String} lang User language*. (English => 1, Hindi => 2)
      * @apiParam {String} user_type User type*. (Creator => 2, User => 3)
      * @apiParam {String} profile_pic User Profile pic.(File Type)
+     * @apiParam {String} into_line About Me
+     * @apiParam {String} experience Experience
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -116,6 +118,12 @@ class UserController extends Controller {
         $user->email = $request->email_id;
         $user->mobile_number = $request->mobile_number;
         $user->dob = $request->dob;
+        if ($request->into_line) {
+            $user->into_line = $request->into_line;
+        }
+        if ($request->experience) {
+            $user->experience = $request->experience;
+        }
         $user->designation = $request->designation;
         $user->qualification = $request->qualification;
         $user->lang = $request->lang;
@@ -381,6 +389,8 @@ class UserController extends Controller {
      * @apiParam {String} user_id User ID.
      * @apiParam {String} dob Date Of Birth(2020-01-08)*.
      * @apiParam {String} designation Designation*.
+     * @apiParam {String}  into_line About Me*.
+     * @apiParam {String} experience Experience
      *
      *
      * @apiSuccess {String} success true
@@ -446,6 +456,15 @@ class UserController extends Controller {
         }
         if ($request->email) {
             $userArray['email'] = $request->email;
+        }
+        if ($request->email) {
+            $userArray['email'] = $request->email;
+        }
+        if ($request->into_line) {
+            $userArray['into_line'] = $request->into_line;
+        }
+        if ($request->experience) {
+            $userArray['experience'] = $request->experience;
         }
         if ($request->dob) {
             $userArray['dob'] = $request->dob;

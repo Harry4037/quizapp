@@ -19,6 +19,7 @@ class CreateUserTestSeriesQuestionAnswersTable extends Migration
             $table->bigInteger("question_id");
             $table->bigInteger("answer_id");
             $table->tinyInteger("is_correct");
+            $table->tinyInteger("status")->default(0);
             $table->timestamps();
         });
     }
