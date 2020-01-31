@@ -173,12 +173,19 @@ class QuizController extends Controller {
         }
     }
 
-    public function questionDelete(Request $request) {
+    public function quizDelete(Request $request) {
         try {
-            $question = Question::find($request->id);
-            if ($question) {
-                $question->delete();
-                return ['status' => true, "message" => "Question deleted."];
+            $quiz = Quiz::find($request->id);
+            $questions = Question::where("quiz_id", $quiz->id)->get();
+            if ($quiz) {
+                $quiz->delete();
+                if ($questions) {
+                    Question::where("quiz_id", $quiz->id)->delete();
+                    foreach ($questions as $que) {
+                        Answer::where('question_id', $que->id)->delete();
+                    }
+                }
+                return ['status' => true, "message" => "Quiz deleted."];
             } else {
                 return ['status' => false, "message" => "Something went be wrong."];
             }
@@ -257,6 +264,7 @@ class QuizController extends Controller {
                 $question->subject_id = 0;
                 $question->test_series_id = 0;
                 $question->quiz_id = $quiz->id;
+                $question->lang = $quiz->lang;
                 $question->description = $ques;
 
                 $question->ques_time = 0;
@@ -303,6 +311,9 @@ class QuizController extends Controller {
                     $answer->save();
                 }
             }
+            $questionCount = Question::where("quiz_id", $quiz->id)->count();
+            $quiz->total_questions = $questionCount;
+            $quiz->save();
             return redirect()->route('admin.quiz.index')->with('status', 'Question added successfully.');
         }
 
@@ -358,6 +369,25 @@ class QuizController extends Controller {
             'question' => $question,
             'answers' => $answers,
         ]);
+    }
+
+    public function deleteQuizQuestion(Request $request) {
+        try {
+            $question = Question::find($request->id);
+            if ($question) {
+                $question->delete();
+                $quiz = Quiz::find($question->quiz_id);
+                if ($quiz) {
+                    $quiz->total_questions = $quiz->total_questions - 1;
+                    $quiz->save();
+                }
+                return ['status' => true, "message" => "Question deleted."];
+            } else {
+                return ['status' => false, "message" => "Something went be wrong."];
+            }
+        } catch (\Exception $ex) {
+            return ['status' => false, "message" => $ex->getMessage()];
+        }
     }
 
 }

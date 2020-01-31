@@ -32,7 +32,7 @@ class UserController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = User::query()->where("user_type_id", 2);
+            $query = User::query()->where("user_type_id", 3);
             if ($searchKeyword) {
                 $query->where(function($q) use($searchKeyword) {
                     $q->where("name", "LIKE", "%$searchKeyword%")
