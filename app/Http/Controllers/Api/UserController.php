@@ -391,7 +391,7 @@ class UserController extends Controller {
      * @apiParam {String} user_id User ID.
      * @apiParam {String} dob Date Of Birth(2020-01-08)*.
      * @apiParam {String} designation Designation*.
-     * @apiParam {String}  into_line About Me*.
+     * @apiParam {String} into_line About Me*.
      * @apiParam {String} experience Experience
      * @apiParam {String} qualification Qualification
      * @apiParam {String} lang Language (1=>English, 2=>Hindi).
@@ -488,7 +488,7 @@ class UserController extends Controller {
             $userArray['lang'] = $request->lang;
         }
         if ($request->user_type) {
-            $userArray['user_type'] = $request->user_type;
+            $userArray['user_type_id'] = $request->user_type;
         }
         $userArray['updated_at'] = new \DateTime("now");
         User::where('id', $request->user_id)->update($userArray);

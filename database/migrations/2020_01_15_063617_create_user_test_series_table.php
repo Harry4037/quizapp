@@ -15,11 +15,11 @@ class CreateUserTestSeriesTable extends Migration
     {
         Schema::create('user_test_series', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
-            $table->string("name");
-            $table->bigInteger("exam_id");
-            $table->bigInteger("subject_id");
-            $table->tinyInteger("lang");
+            $table->bigInteger('user_id')->default(0);
+            $table->string("name")->nullable();
+            $table->bigInteger("exam_id")->default(0);
+            $table->bigInteger("subject_id")->default(0);
+            $table->tinyInteger("lang")->default(0);
             $table->tinyInteger("is_attempted")->default(0);
             $table->timestamps();
             $table->softDeletes();
