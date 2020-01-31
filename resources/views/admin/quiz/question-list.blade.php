@@ -41,6 +41,7 @@
                                     <td>{{ $question->description }}</td>
                                     <td>
                                         <a href="{{ route('admin.quiz.edit-question', $question->id) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                        &nbsp;&nbsp;<a href="javaScript:void(0);" id="{{ $question->id }}" class="delete btn btn-danger btn-xs"><i class="fa fa-trash"></i> Delete </a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -78,7 +79,7 @@
                     "Deleting User",
                     "Are you sure want to delete this Question?",
                     record_id,
-                    "{{route('admin.quiz.delete')}}"
+                    "{{route('admin.quiz.delete-question')}}",
                     );
         });
     });
