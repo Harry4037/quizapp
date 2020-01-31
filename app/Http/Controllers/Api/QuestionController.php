@@ -432,6 +432,7 @@ class QuestionController extends Controller {
             $UserTestSeries->exam_id = $request->input("exam_id");
             $UserTestSeries->subject_id = $request->input("subject_id");
             $UserTestSeries->lang = $request->input("lang");
+            $UserTestSeries->is_attempted = 1;
             if ($UserTestSeries->save()) {
                 $total = 0;
                 $correct = 0;
@@ -442,6 +443,7 @@ class QuestionController extends Controller {
 //                    $UserTestSeriesQuestionAnswer->user_test_series_id = $UserTestSeries->id;
 //                    $UserTestSeriesQuestionAnswer->question_id = $question['question_id'];
                     $UserTestSeriesQuestionAnswer->answer_id = $question['answer_id'];
+                    $UserTestSeriesQuestionAnswer->status = 1;
                     $UserTestSeriesQuestionAnswer->is_correct = $question['is_correct'];
                     $UserTestSeriesQuestionAnswer->save();
                     $questionDetail = Question::find($question['question_id']);
