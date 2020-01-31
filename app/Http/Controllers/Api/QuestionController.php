@@ -47,6 +47,7 @@ class QuestionController extends Controller {
      *       "message": "Question list.",
      *       "data": [
      *          "question_time":50,
+     *          "test_series_id":2,
      *          "questions": {
      *               "id": 8,
      *               "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
@@ -219,8 +220,8 @@ class QuestionController extends Controller {
             $query->limit($request->total_questions);
             if (!$request->year) {
                 $questions = $query->get();
-            }else{
-                $questions = $query->where('year',$request->year)->get();
+            } else {
+                $questions = $query->where('year', $request->year)->get();
             }
 
 
@@ -245,26 +246,26 @@ class QuestionController extends Controller {
             $data['questions'] = $dataArray;
 
 
-            $UserTestSeries = new UserTestSeries();
-            $UserTestSeries->user_id = $request->user_id;
+            $testSeries = new UserTestSeries();
+            $testSeries->user_id = $request->user_id;
             $exam_name = Exam::where('id', $request->exam_id)->first();
-            $UserTestSeries->name = $request->user_id . "_" . $exam_name->name;
-            $UserTestSeries->exam_id = $request->exam_id;
-            $UserTestSeries->subject_id = $request->subject_id;
-            $UserTestSeries->lang = $request->lang;
-            $UserTestSeries->is_attempted = 0;
-            if ($UserTestSeries->save()) {
+            $testSeries->name = $exam_name->name . "_" . $request->id;
+            $testSeries->exam_id = $request->exam_id[0];
+            $testSeries->subject_id = $request->subject_id[0];
+            $testSeries->lang = $request->lang;
+            $testSeries->is_attempted = 0;
+            if ($testSeries->save()) {
                 foreach ($questions as $k => $question) {
                     $UserTestSeriesQuestionAnswer = new UserTestSeriesQuestionAnswer();
-                    $UserTestSeriesQuestionAnswer->user_test_series_id = $UserTestSeries->id;
-                    $UserTestSeriesQuestionAnswer->question_id = $question->question_id;
-                    $UserTestSeriesQuestionAnswer->answer_id = $question->answer_id;
-                    $UserTestSeriesQuestionAnswer->is_correct = $question->is_correct;
+                    $UserTestSeriesQuestionAnswer->user_test_series_id = $testSeries->id;
+                    $UserTestSeriesQuestionAnswer->question_id = $question->id;
+                    $UserTestSeriesQuestionAnswer->answer_id = NULL;
+                    $UserTestSeriesQuestionAnswer->is_correct = NULL;
                     $UserTestSeriesQuestionAnswer->status = 0;
                     $UserTestSeriesQuestionAnswer->save();
                 }
             }
-            $data['test_series_id'] = $UserTestSeries->id;
+            $data['test_series_id'] = $testSeries->id;
             return $this->successResponse("Question list.", $data);
         } else {
             return $this->errorResponse("Invlaid flag type.");
@@ -281,6 +282,7 @@ class QuestionController extends Controller {
      * body:
      *   {
      *           "user_id":1,
+     *           "quiz_id":2,
      *           "name" : "SSC_1",
      *           "exam_id":1,
      *           "subject_id":1,
@@ -390,6 +392,9 @@ class QuestionController extends Controller {
         if (!$request->input("user_id")) {
             return $this->errorResponse("User Id missing.");
         }
+        if (!$request->input("quiz_id")) {
+            return $this->errorResponse("Test Series Id missing.");
+        }
         if (!$request->input("name")) {
             return $this->errorResponse("Name missing.");
         }
@@ -420,8 +425,8 @@ class QuestionController extends Controller {
             return $this->errorResponse("Questions missing.");
         }
         try {
-            $ques = UserTestSeries::find();
-            $UserTestSeries = new UserTestSeries();
+            $UserTestSeries = UserTestSeries::find($request->quiz_id);
+//            $UserTestSeries = new UserTestSeries();
             $UserTestSeries->user_id = $request->input("user_id");
             $UserTestSeries->name = $request->input("name");
             $UserTestSeries->exam_id = $request->input("exam_id");
@@ -432,9 +437,10 @@ class QuestionController extends Controller {
                 $correct = 0;
                 $questions = [];
                 foreach ($request->input("questions") as $k => $question) {
-                    $UserTestSeriesQuestionAnswer = new UserTestSeriesQuestionAnswer();
-                    $UserTestSeriesQuestionAnswer->user_test_series_id = $UserTestSeries->id;
-                    $UserTestSeriesQuestionAnswer->question_id = $question['question_id'];
+                    $UserTestSeriesQuestionAnswer = UserTestSeriesQuestionAnswer::where(["user_test_series_id" => $UserTestSeries->id, "question_id" => $question['question_id']])->first();
+//                    $UserTestSeriesQuestionAnswer = new UserTestSeriesQuestionAnswer();
+//                    $UserTestSeriesQuestionAnswer->user_test_series_id = $UserTestSeries->id;
+//                    $UserTestSeriesQuestionAnswer->question_id = $question['question_id'];
                     $UserTestSeriesQuestionAnswer->answer_id = $question['answer_id'];
                     $UserTestSeriesQuestionAnswer->is_correct = $question['is_correct'];
                     $UserTestSeriesQuestionAnswer->save();
@@ -747,6 +753,7 @@ class QuestionController extends Controller {
             return $this->errorResponse("Something went wrong.");
         }
     }
+
     /**
      * @api {get} /api/year-list  Year List
      * @apiHeader {String} Accept application/json.
@@ -777,11 +784,11 @@ class QuestionController extends Controller {
      *
      *
      */
-
     public function yearList(Request $request) {
         $years = Question::whereNotNull('year')->groupBy('year')->select('year')->get();
         return $this->successResponse("List of Years", $years);
     }
+
     /**
      * @api {post} /api/submit-random-answer  Submit Random Answer
      * @apiHeader {String} Accept application/json.
@@ -843,7 +850,6 @@ class QuestionController extends Controller {
         }
 
         return $this->successResponse("Result Submmitted Successfully.", (object) []);
-
     }
 
 }
