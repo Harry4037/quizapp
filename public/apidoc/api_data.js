@@ -202,7 +202,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"OTP verified successfully.\",\n      \"data\": {\n          \"user_detail\": {\n              \"id\": 2,\n              \"name\": \"Hariom\",\n              \"email\": \"hariom@mail.com\",\n              \"mobile_number\": \"8077575835\",\n              \"dob\": \"1991-02-04\",\n              \"designation\": \"Student\",\n              \"qualification\": \"M.Com\",\n              \"into_line\": null,\n              \"lang\": 1,\n              \"user_type_id\": 2,\n              \"otp\": \"12345\",\n              \"profile_pic\": \"http://127.0.0.1:8000/storage/profile_pic/1hbKjNG9nhvNTtJtWMn2t7hlsSE6GLsuKqtp3scX.jpeg\",\n              \"device_token\": null,\n              \"latitude\": null,\n              \"longitude\": null,\n              \"is_active\": 1,\n              \"email_verified_at\": null,\n              \"created_by\": \"0\",\n              \"updated_by\": \"0\",\n              \"created_at\": \"2020-01-13 06:57:03\",\n              \"updated_at\": \"2020-01-13 06:57:03\",\n              \"deleted_at\": null\n          },\n          \"user\": {\n              \"following\": 10,\n              \"follower\": 50,\n              \"post\": 35\n          }\n      }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"OTP verified successfully.\",\n      \"data\": {\n          \"user_detail\": {\n              \"id\": 2,\n              \"name\": \"Hariom\",\n              \"email\": \"hariom@mail.com\",\n              \"mobile_number\": \"8077575835\",\n              \"dob\": \"1991-02-04\",\n              \"designation\": \"Student\",\n              \"qualification\": \"M.Com\",\n              \"about\": \"Lorem ipsum\",\n              \"experience\": \"2 Year\",\n              \"into_line\": null,\n              \"lang\": 1,\n              \"user_type_id\": 2,\n              \"otp\": \"12345\",\n              \"profile_pic\": \"http://127.0.0.1:8000/storage/profile_pic/1hbKjNG9nhvNTtJtWMn2t7hlsSE6GLsuKqtp3scX.jpeg\",\n              \"device_token\": null,\n              \"latitude\": null,\n              \"longitude\": null,\n              \"is_active\": 1,\n              \"email_verified_at\": null,\n              \"created_by\": \"0\",\n              \"updated_by\": \"0\",\n              \"created_at\": \"2020-01-13 06:57:03\",\n              \"updated_at\": \"2020-01-13 06:57:03\",\n              \"deleted_at\": null\n          },\n          \"user\": {\n              \"following\": 10,\n              \"follower\": 50,\n              \"post\": 35\n          }\n      }\n  }",
           "type": "json"
         }
       ]
@@ -575,7 +575,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"TestSeries List\",\n   \"data\":{\n     \"user_profile\":{\n     \"id\": 1,\n     \"name\": \"quiz\",\n     \"email\": \"admin@mail.com\",\n         \"mobile_number\": null,\n     \"dob\": \"2020-01-08\",\n     \"designation\": null,\n     \"qualification\": null,\n     \"lang\": 1,\n     \"user_type_id\": 2,\n     \"otp\": null,\n     \"profile_pic\": \"http://127.0.0.1:8000/img/no-image.jpg\",\n     \"device_token\": null,\n     \"latitude\": null,\n     \"longitude\": null,\n     \"is_active\": 1,\n     \"email_verified_at\": null,\n     \"created_by\": \"0\",\n     \"updated_by\": \"0\",\n     \"created_at\": null,\n     \"updated_at\": null,\n     \"deleted_at\": null\n     },\n     \"user\":{\n             \"following\": 10,\n             \"follower\": 50,\n             \"post\": 2,\n             \"Test_series\":[\n             {\n                    \"id\": 1,\n                     \"name\": \"grhfghrt\",\n                     \"created_at\": null,\n                     \"flag\": 1,\n                     \"total_ques_no\": 12\n             },\n             {\n                     \"id\": 2,\n                     \"name\": \"grhfgh\",\n                     \"created_at\": null,\n                     \"flag\": 1,\n                     \"total_ques_no\": 12\n             }\n         ]\n     }\n   }\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"TestSeries List\",\n   \"data\":{\n     \"user_profile\":{\n     \"id\": 1,\n     \"name\": \"quiz\",\n     \"email\": \"admin@mail.com\",\n     \"mobile_number\": null,\n     \"dob\": \"2020-01-08\",\n     \"designation\": null,\n     \"about\": null,\n     \"experience\": null,\n     \"qualification\": null,\n     \"lang\": 1,\n     \"user_type_id\": 2,\n     \"otp\": null,\n     \"profile_pic\": \"http://127.0.0.1:8000/img/no-image.jpg\",\n     \"device_token\": null,\n     \"latitude\": null,\n     \"longitude\": null,\n     \"is_active\": 1,\n     \"email_verified_at\": null,\n     \"created_by\": \"0\",\n     \"updated_by\": \"0\",\n     \"created_at\": null,\n     \"updated_at\": null,\n     \"deleted_at\": null\n     },\n     \"user\":{\n             \"following\": 10,\n             \"follower\": 50,\n             \"post\": 2,\n             \"Test_series\":[\n             {\n                    \"id\": 1,\n                     \"name\": \"grhfghrt\",\n                     \"created_at\": null,\n                     \"flag\": 1,\n                     \"total_ques_no\": 12\n             },\n             {\n                     \"id\": 2,\n                     \"name\": \"grhfgh\",\n                     \"created_at\": null,\n                     \"flag\": 1,\n                     \"total_ques_no\": 12\n             }\n         ]\n     }\n   }\n  }\n}",
           "type": "json"
         }
       ]
@@ -3166,7 +3166,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"user Profile.\",\n      \"data\": {\n          \"user_profile\": {\n              \"id\": 2,\n              \"name\": \"Hariom\",\n              \"email\": \"hariom@mail.com\",\n              \"mobile_number\": \"8077575835\",\n              \"dob\": \"1991-02-04\",\n              \"designation\": \"Student\",\n              \"qualification\": \"M.Com\",\n              \"into_line\": null,\n              \"lang\": 1,\n              \"user_type_id\": 2,\n              \"otp\": \"12345\",\n              \"profile_pic\": \"http://127.0.0.1:8000/storage/profile_pic/1hbKjNG9nhvNTtJtWMn2t7hlsSE6GLsuKqtp3scX.jpeg\",\n              \"device_token\": null,\n              \"latitude\": null,\n              \"longitude\": null,\n              \"is_active\": 1,\n              \"email_verified_at\": null,\n              \"created_by\": \"0\",\n              \"updated_by\": \"0\",\n              \"created_at\": \"2020-01-13 06:57:03\",\n              \"updated_at\": \"2020-01-13 06:57:03\",\n              \"deleted_at\": null\n          },\n          \"user\": {\n              \"following\": 10,\n              \"follower\": 50,\n              \"post\": 35\n          }\n      }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"user Profile.\",\n      \"data\": {\n          \"user_profile\": {\n              \"id\": 2,\n              \"name\": \"Hariom\",\n              \"email\": \"hariom@mail.com\",\n              \"mobile_number\": \"8077575835\",\n              \"dob\": \"1991-02-04\",\n              \"designation\": \"Student\",\n              \"qualification\": \"M.Com\",\n              \"into_line\": null,\n              \"about\": null,\n              \"experience\": null,\n              \"lang\": 1,\n              \"user_type_id\": 2,\n              \"otp\": \"12345\",\n              \"profile_pic\": \"http://127.0.0.1:8000/storage/profile_pic/1hbKjNG9nhvNTtJtWMn2t7hlsSE6GLsuKqtp3scX.jpeg\",\n              \"device_token\": null,\n              \"latitude\": null,\n              \"longitude\": null,\n              \"is_active\": 1,\n              \"email_verified_at\": null,\n              \"created_by\": \"0\",\n              \"updated_by\": \"0\",\n              \"created_at\": \"2020-01-13 06:57:03\",\n              \"updated_at\": \"2020-01-13 06:57:03\",\n              \"deleted_at\": null\n          },\n          \"user\": {\n              \"following\": 10,\n              \"follower\": 50,\n              \"post\": 35\n          }\n      }\n  }",
           "type": "json"
         }
       ]
@@ -3683,6 +3683,34 @@ define({ "api": [
             "optional": false,
             "field": "experience",
             "description": "<p>Experience</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "qualification",
+            "description": "<p>Qualification</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "lang",
+            "description": "<p>Language (1=&gt;English, 2=&gt;Hindi).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_type",
+            "description": "<p>User Type (2=&gt;Creator, 3=&gt;User).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "about",
+            "description": "<p>About</p>"
           }
         ]
       }
