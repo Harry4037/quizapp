@@ -244,6 +244,7 @@ class QuestionController extends Controller {
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
 
+
             $UserTestSeries = new UserTestSeries();
             $UserTestSeries->user_id = $request->user_id;
             $exam_name = Exam::where('id', $request->exam_id)->first();
@@ -263,6 +264,7 @@ class QuestionController extends Controller {
                     $UserTestSeriesQuestionAnswer->save();
                 }
             }
+            $data['test_series_id'] = $UserTestSeries->id;
             return $this->successResponse("Question list.", $data);
         } else {
             return $this->errorResponse("Invlaid flag type.");
@@ -418,6 +420,7 @@ class QuestionController extends Controller {
             return $this->errorResponse("Questions missing.");
         }
         try {
+            $ques = UserTestSeries::find();
             $UserTestSeries = new UserTestSeries();
             $UserTestSeries->user_id = $request->input("user_id");
             $UserTestSeries->name = $request->input("name");

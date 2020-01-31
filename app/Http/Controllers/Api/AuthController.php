@@ -133,6 +133,8 @@ class AuthController extends Controller {
      *               "dob": "1991-02-04",
      *               "designation": "Student",
      *               "qualification": "M.Com",
+     *               "about": "Lorem ipsum",
+     *               "experience": "2 Year",
      *               "into_line": null,
      *               "lang": 1,
      *               "user_type_id": 2,
