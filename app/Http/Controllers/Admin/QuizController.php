@@ -180,8 +180,9 @@ class QuizController extends Controller {
             if ($quiz) {
                 $quiz->delete();
                 if ($questions) {
-                    foreach ($questions as $question) {
-                        $question->delete();
+                    Question::where("quiz_id", $quiz->id)->delete();
+                    foreach ($questions as $que) {
+                        Answer::where('question_id', $que->id)->delete();
                     }
                 }
                 return ['status' => true, "message" => "Quiz deleted."];
