@@ -21,6 +21,7 @@ class CreateQuizzesTable extends Migration {
             $table->dateTime('start_date_time');
             $table->dateTime('end_date_time');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

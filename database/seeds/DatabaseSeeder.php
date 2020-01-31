@@ -2,19 +2,20 @@
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
-{
+class DatabaseSeeder extends Seeder {
+
     /**
      * Seed the application's database.
      *
      * @return void
      */
-    public function run()
-    {
-         $this->call(UserTypeTableSeeder::class);
-         $this->call(UserTableSeeder::class);
-         $this->call(ExamTableSeeder::class);
-         $this->call(QuestionTableSeeder::class);
-         $this->call(AnswerTableSeeder::class);
+    public function run() {
+        $this->call(UserTypeTableSeeder::class);
+        $this->call(UserTableSeeder::class);
+        $this->call(ExamTableSeeder::class);
+        $this->call(QuizTableSeeder::class);
+        $this->call(QuestionTableSeeder::class);
+        $this->call(AnswerTableSeeder::class);
     }
+
 }

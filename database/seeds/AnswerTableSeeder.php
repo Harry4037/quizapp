@@ -11,7 +11,7 @@ class AnswerTableSeeder extends Seeder {
      */
     public function run() {
 
-        for ($i = 1; $i <= 22; $i++) {
+        for ($i = 1; $i <= 24; $i++) {
             DB::table('answers')->insert([
                 'question_id' => $i,
                 'is_answer' => 0,
