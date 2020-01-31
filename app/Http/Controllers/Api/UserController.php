@@ -165,6 +165,8 @@ class UserController extends Controller {
      *               "designation": "Student",
      *               "qualification": "M.Com",
      *               "into_line": null,
+     *               "about": null,
+     *               "experience": null,
      *               "lang": 1,
      *               "user_type_id": 2,
      *               "otp": "12345",
@@ -391,6 +393,10 @@ class UserController extends Controller {
      * @apiParam {String} designation Designation*.
      * @apiParam {String}  into_line About Me*.
      * @apiParam {String} experience Experience
+     * @apiParam {String} qualification Qualification
+     * @apiParam {String} lang Language (1=>English, 2=>Hindi).
+     * @apiParam {String} user_type User Type (2=>Creator, 3=>User).
+     * @apiParam {String} about About
      *
      *
      * @apiSuccess {String} success true
@@ -466,11 +472,23 @@ class UserController extends Controller {
         if ($request->experience) {
             $userArray['experience'] = $request->experience;
         }
+        if ($request->about) {
+            $userArray['about'] = $request->about;
+        }
         if ($request->dob) {
             $userArray['dob'] = $request->dob;
         }
         if ($request->designation) {
             $userArray['designation'] = $request->designation;
+        }
+        if ($request->qualification) {
+            $userArray['qualification'] = $request->qualification;
+        }
+        if ($request->lang) {
+            $userArray['lang'] = $request->lang;
+        }
+        if ($request->user_type) {
+            $userArray['user_type'] = $request->user_type;
         }
         $userArray['updated_at'] = new \DateTime("now");
         User::where('id', $request->user_id)->update($userArray);
@@ -503,9 +521,11 @@ class UserController extends Controller {
      *      "id": 1,
      *      "name": "quiz",
      *      "email": "admin@mail.com",
-     *          "mobile_number": null,
+     *      "mobile_number": null,
      *      "dob": "2020-01-08",
      *      "designation": null,
+     *      "about": null,
+     *      "experience": null,
      *      "qualification": null,
      *      "lang": 1,
      *      "user_type_id": 2,
