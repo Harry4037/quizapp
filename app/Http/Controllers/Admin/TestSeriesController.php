@@ -108,7 +108,6 @@ class TestSeriesController extends Controller {
                 Question::where('test_series_id',$testseries->id)->delete();
                 Invite::where('test_series_id',$testseries->id)->delete();
                 foreach($ques as $que){
-
                     Answer::where('question_id',$que->id)->delete();
                 }
                 return ['status' => true, "message" => "Question deleted."];
