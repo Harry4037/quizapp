@@ -248,6 +248,12 @@ class BookmarkController extends Controller
                 $bookmarkArray[$key]['subject_id'] = $bookmark->usertestseriesDetail->subject_id;
                 $bookmarkArray[$key]['name'] = $bookmark->usertestseriesDetail->name;
                 $bookmarkArray[$key]['flag'] = 2;
+                if($bookmark->usertestseriesDetail->is_attempted == 1)
+                {
+                    $bookmarkArray[$key]['is_attempted'] = TRUE;
+                }else{
+                    $bookmarkArray[$key]['is_attempted'] = FALSE;
+                }
                 $bookmarkArray[$key]['total_question'] = NULL;
                 $bookmarkArray[$key]['lang'] = $bookmark->usertestseriesDetail->lang;
                 $subject = Subject::where("id", $bookmark->usertestseriesDetail->subject_id)->first();

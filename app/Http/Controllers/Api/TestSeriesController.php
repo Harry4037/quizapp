@@ -277,7 +277,7 @@ class TestSeriesController extends Controller {
             }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
-        $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id', 'name', 'created_at')->get();
+        $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id', 'name', 'is_attempted', 'created_at')->get();
         foreach ($result1 as $k => $test1) {
             $dataArray1[$k]['id'] = $test1->id;
             $dataArray1[$k]['name'] = $test1->name;
@@ -290,6 +290,12 @@ class TestSeriesController extends Controller {
                 $dataArray1[$k]['is_bookmark'] = true;
             } else {
                 $dataArray1[$k]['is_bookmark'] = false;
+            }
+            if($test1->is_attempted == 1)
+            {
+                $dataArray1[$k]['is_attempted'] = TRUE;
+            }else{
+                $dataArray1[$k]['is_attempted'] = FALSE;
             }
             $result1 = UserTestSeriesQuestionAnswer::where("user_test_series_id", $test1->id)->get();
             $dataArray1[$k]['total_ques_no'] = count($result1);
@@ -324,6 +330,12 @@ class TestSeriesController extends Controller {
                 $inviteArray1[$k]['is_bookmark'] = true;
             } else {
                 $inviteArray1[$k]['is_bookmark'] = false;
+            }
+            if($invite1->usertestseries->is_attempted == 1)
+            {
+                $inviteArray1[$k]['is_attempted'] = TRUE;
+            }else{
+                $inviteArray1[$k]['is_attempted'] = FALSE;
             }
         }
         $res = array_merge($dataArray, $dataArray1);
@@ -400,7 +412,7 @@ class TestSeriesController extends Controller {
             }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
-        $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'created_at')->get();
+        $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'is_attempted', 'created_at')->get();
         foreach ($result1 as $k => $test1) {
             $dataArray1[$k]['id'] = $test1->id;
             $dataArray1[$k]['name'] = $test1->name;
@@ -413,6 +425,12 @@ class TestSeriesController extends Controller {
                 $dataArray1[$k]['is_bookmark'] = true;
             } else {
                 $dataArray1[$k]['is_bookmark'] = false;
+            }
+            if($test1->is_attempted == 1)
+            {
+                $dataArray1[$k]['is_attempted'] = TRUE;
+            }else{
+                $dataArray1[$k]['is_attempted'] = FALSE;
             }
             $dataArray1[$k]['total_ques_no'] = NULL;
         }
@@ -676,6 +694,12 @@ class TestSeriesController extends Controller {
                     }}else{
                         $dataArray['test_series']['is_bookmark'] = false;
                     }
+                    if($testSeries->is_attempted == 1)
+                    {
+                        $dataArray['test_series']['is_attempted'] = TRUE;
+                    }else{
+                        $dataArray['test_series']['is_attempted'] = FALSE;
+                    }
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
                 $totalTime = 0;
                 foreach ($result1 as $k => $result) {
@@ -772,6 +796,12 @@ class TestSeriesController extends Controller {
                 $dataArrayRecent[$k]['id'] =  $testSeries->id ? $testSeries->id :'';
                 $dataArrayRecent[$k]['name'] = $testSeries->name ? $testSeries->name : '';
                 $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
+                if($testSeries->is_attempted == 1)
+                {
+                    $dataArrayRecent[$k]['is_attempted'] = TRUE;
+                }else{
+                    $dataArrayRecent[$k]['is_attempted'] = FALSE;
+                }
             }
         }
         $data['trend_search'] = $dataArrayTrending;
