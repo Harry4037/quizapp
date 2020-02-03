@@ -261,22 +261,22 @@ class TestSeriesController extends Controller {
 
         $inviteArray = [];
         $inviteArray1 = [];
-        $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
-        foreach ($result as $k => $test) {
-            $dataArray[$k]['id'] = $test->id;
-            $dataArray[$k]['name'] = $test->name;
-            $dataArray[$k]['created_at'] = $test->created_at;
-            $date = Carbon::parse($test->created_at);
-            $dataArray[$k]['date'] = $date->format("d-M-Y");
-            $dataArray[$k]['flag'] = 1;
-            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
-            if ($fav) {
-                $dataArray[$k]['is_bookmark'] = true;
-            } else {
-                $dataArray[$k]['is_bookmark'] = false;
-            }
-            $dataArray[$k]['total_ques_no'] = $test->total_question;
-        }
+//        $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
+//        foreach ($result as $k => $test) {
+//            $dataArray[$k]['id'] = $test->id;
+//            $dataArray[$k]['name'] = $test->name;
+//            $dataArray[$k]['created_at'] = $test->created_at;
+//            $date = Carbon::parse($test->created_at);
+//            $dataArray[$k]['date'] = $date->format("d-M-Y");
+//            $dataArray[$k]['flag'] = 1;
+//            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
+//            if ($fav) {
+//                $dataArray[$k]['is_bookmark'] = true;
+//            } else {
+//                $dataArray[$k]['is_bookmark'] = false;
+//            }
+//            $dataArray[$k]['total_ques_no'] = $test->total_question;
+//        }
         $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id', 'name', 'created_at')->get();
         foreach ($result1 as $k => $test1) {
             $dataArray1[$k]['id'] = $test1->id;
@@ -285,6 +285,7 @@ class TestSeriesController extends Controller {
             $date = Carbon::parse($test1->created_at);
             $dataArray1[$k]['date'] = $date->format("d-M-Y");
             $dataArray1[$k]['flag'] = 2;
+            $dataArray1[$k]['is_attempted'] = $test1->is_attempted;
             $fav = Bookmark::where('user_id', $request->user_id)->where("user_test_series_id", $test1->id)->first();
             if ($fav) {
                 $dataArray1[$k]['is_bookmark'] = true;
@@ -326,7 +327,8 @@ class TestSeriesController extends Controller {
                 $inviteArray1[$k]['is_bookmark'] = false;
             }
         }
-        $res = array_merge($dataArray, $dataArray1);
+//        $res = array_merge($dataArray, $dataArray1);
+        $res = $dataArray1;
         $res1 = array_merge($inviteArray, $inviteArray1);
         $data['TestSeries_list'] = $res;
         $data['Invite_list'] = $res1;
