@@ -257,6 +257,7 @@ class QuestionController extends Controller {
             if ($testSeries->save()) {
                 foreach ($questions as $k => $question) {
                     $UserTestSeriesQuestionAnswer = new UserTestSeriesQuestionAnswer();
+                    $UserTestSeriesQuestionAnswer->user_id = $request->user_id;
                     $UserTestSeriesQuestionAnswer->user_test_series_id = $testSeries->id;
                     $UserTestSeriesQuestionAnswer->question_id = $question->id;
                     $UserTestSeriesQuestionAnswer->answer_id = NULL;
