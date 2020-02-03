@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use App\Models\User;
 use App\Models\TestSeries;
+use App\Models\Bookmark;
 use Carbon\Carbon;
 use App\Models\UserExam;
 use Illuminate\Support\Facades\Storage;
@@ -595,6 +596,12 @@ class UserController extends Controller {
                $date = Carbon::parse($test->created_at);
                $dataArray[$k]['date'] = $date->format("d-M-Y");
                $dataArray[$k]['flag'] = 1;
+               $fav = Bookmark::where('user_id', $request->user_id)->where('test_series_id', $test->id)->first();
+                if ($fav) {
+                    $dataArray[$k]['is_bookmark'] = true;
+                } else {
+                    $dataArray[$k]['is_bookmark'] = false;
+                }
                $dataArray[$k]['total_ques_no'] = $test->total_question;
                $count++;
            }
