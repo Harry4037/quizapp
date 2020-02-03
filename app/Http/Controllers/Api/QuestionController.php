@@ -164,7 +164,7 @@ class QuestionController extends Controller {
 //            return $this->errorResponse("Invalid User.");
 //        }
         if ($request->flag == 1) {
-            $questions = Question::where("lang", $user ? $user->lang : 0)->limit(500)->get();
+            $questions = Question::where("lang", $user ? $user->lang : 1)->limit(500)->get();
             if (count($questions) > 10) {
                 $questions = $questions->random(10);
             }
@@ -257,6 +257,7 @@ class QuestionController extends Controller {
             if ($testSeries->save()) {
                 foreach ($questions as $k => $question) {
                     $UserTestSeriesQuestionAnswer = new UserTestSeriesQuestionAnswer();
+                    $UserTestSeriesQuestionAnswer->user_id = $request->user_id;
                     $UserTestSeriesQuestionAnswer->user_test_series_id = $testSeries->id;
                     $UserTestSeriesQuestionAnswer->question_id = $question->id;
                     $UserTestSeriesQuestionAnswer->answer_id = NULL;

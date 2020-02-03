@@ -16,6 +16,7 @@ class CreateUserTestSeriesQuestionAnswersTable extends Migration
         Schema::create('user_test_series_question_answers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger("user_test_series_id")->default(0);
+            $table->bigInteger("user_id")->default(0);
             $table->bigInteger("question_id")->default(0);
             $table->bigInteger("answer_id")->nullable();
             $table->tinyInteger("is_correct")->nullable();
