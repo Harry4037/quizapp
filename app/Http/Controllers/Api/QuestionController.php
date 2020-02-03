@@ -159,7 +159,7 @@ class QuestionController extends Controller {
 //        if (!$request->user_id) {
 //            return $this->errorResponse("User ID is missing.");
 //        }
-//        $user = User::find($request->user_id);
+        $user = User::find($request->user_id);
 //        if (!$user) {
 //            return $this->errorResponse("Invalid User.");
 //        }
