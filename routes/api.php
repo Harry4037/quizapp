@@ -42,7 +42,7 @@ Route::namespace("Api")->group(function() {
     Route::post('/comment', 'QuestionCommentController@comment');
     Route::get('/comment-list', 'QuestionCommentController@commentList');
     Route::get('/notification', 'NotificationController@notificationlist');
-    
+
     //Quiz
     Route::get('/quiz-detail', 'QuizController@quizDetail');
     Route::get('/start-quiz', 'QuizController@startQuiz');
@@ -81,6 +81,8 @@ Route::namespace("Api")->group(function() {
 
     Route::post('/invite', 'InviteController@invite');
     Route::get('/invite-status', 'InviteController@inviteStatus');
+
+    Route::get('/terms-conditions', 'CmsController@termContidion');
 
 });
 
