@@ -46,7 +46,7 @@
             </li>
             <li>
                 <a href="{{ route('admin.quiz.index')}}">
-                    <i class="fa fa-question"></i> <span>Quiz</span>
+                    <i class="fa fa-question"></i> <span>Daily Quiz Management</span>
                 </a>
             </li>
             <li>
