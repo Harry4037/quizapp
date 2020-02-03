@@ -156,15 +156,15 @@ class QuestionController extends Controller {
         if (!$request->flag) {
             return $this->errorResponse("Flag is missing.");
         }
-        if (!$request->user_id) {
-            return $this->errorResponse("User ID is missing.");
-        }
+//        if (!$request->user_id) {
+//            return $this->errorResponse("User ID is missing.");
+//        }
         $user = User::find($request->user_id);
-        if (!$user) {
-            return $this->errorResponse("Invalid User.");
-        }
+//        if (!$user) {
+//            return $this->errorResponse("Invalid User.");
+//        }
         if ($request->flag == 1) {
-            $questions = Question::where("lang", $user->lang)->limit(500)->get();
+            $questions = Question::where("lang", $user ? $user->lang : 0)->limit(500)->get();
             if (count($questions) > 10) {
                 $questions = $questions->random(10);
             }
