@@ -81,22 +81,22 @@ class AuthController extends Controller {
                     return $this->errorResponse("Something went wrong.", (object) []);
                 }
             } else {
-
-                $user = new User();
-                $user->mobile_number = $request->mobile_number;
-                $user->user_type_id = $request->user_type;
-                $user->name = "Welcome User";
-                $user->lang = $request->lang;
-                $user->otp = $otp;
-                if ($request->device_token) {
-                    $user->device_token = $request->device_token;
-                }
-                $user->is_active = 1;
-                if ($user->save()) {
-                    return $this->successResponse("OTP sent successfully.", (object) []);
-                } else {
-                    return $this->errorResponse("Something went wrong.", (object) []);
-                }
+                return $this->errorResponse("Your are not registered with us.", (object) []);
+//                $user = new User();
+//                $user->mobile_number = $request->mobile_number;
+//                $user->user_type_id = $request->user_type;
+//                $user->name = "Welcome User";
+//                $user->lang = $request->lang;
+//                $user->otp = $otp;
+//                if ($request->device_token) {
+//                    $user->device_token = $request->device_token;
+//                }
+//                $user->is_active = 1;
+//                if ($user->save()) {
+//                    return $this->successResponse("OTP sent successfully.", (object) []);
+//                } else {
+//                    return $this->errorResponse("Something went wrong.", (object) []);
+//                }
             }
         }
 

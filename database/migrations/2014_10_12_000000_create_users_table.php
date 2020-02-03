@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration {
             $table->text("into_line")->nullable();;
             $table->text("about")->nullable();;
             $table->tinyInteger("lang")->default(0);
-            $table->text("experience")->default(0);
+            $table->text("experience")->nullable();
             $table->string('password')->nullable();
             $table->bigInteger('user_type_id')->default(0);
             $table->string('otp')->nullable();

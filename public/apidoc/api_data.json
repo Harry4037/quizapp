@@ -2589,7 +2589,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"TestSeries List\",\n   \"data\": {\n       \"TestSeries_list\": [\n       {\n           \"id\": 1,\n           \"name\": \"fdgfdg\",\n           \"created_at\": null,\n           \"flag\": 1,\n           \"total_ques_no\": 12\n       }\n     ]\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"TestSeries List\",\n   \"data\": {\n       \"TestSeries_list\": [\n       {\n           \"id\": 1,\n           \"name\": \"fdgfdg\",\n           \"created_at\": null,\n           \"flag\": 1,\n           \"total_ques_no\": 12,\n           \"is_attempted\": 0,\n       }\n     ]\n  }\n}",
           "type": "json"
         }
       ]
