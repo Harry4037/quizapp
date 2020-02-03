@@ -231,7 +231,8 @@ class TestSeriesController extends Controller {
      *            "name": "fdgfdg",
      *            "created_at": null,
      *            "flag": 1,
-     *            "total_ques_no": 12
+     *            "total_ques_no": 12,
+     *            "is_attempted": 0,
      *        }
      *      ]
      *   }
