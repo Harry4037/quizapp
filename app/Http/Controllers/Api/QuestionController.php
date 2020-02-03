@@ -164,7 +164,7 @@ class QuestionController extends Controller {
 //            return $this->errorResponse("Invalid User.");
 //        }
         if ($request->flag == 1) {
-            $questions = Question::where("lang", $user ? $user->lang : 0)->limit(500)->get();
+            $questions = Question::where("lang", $user ? $user->lang : 1)->limit(500)->get();
             if (count($questions) > 10) {
                 $questions = $questions->random(10);
             }
