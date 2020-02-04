@@ -1004,7 +1004,7 @@ class TestSeriesController extends Controller {
         }
         if ($request->flag == 1) {
             $series = TestSeries::where("id", $request->test_series_id)->first();
-                $dataArray['name'] = $series->name;
+                $dataArray['name'] = $series->name ;
                 $dataArray['total_question'] = $series->total_question;
                 $minut = 0;
                 $ques = Question::where('test_series_id',$request->test_series_id)->get();
@@ -1015,7 +1015,7 @@ class TestSeriesController extends Controller {
         }
         if ($request->flag == 2) {
             $series1 = UserTestSeries::where("id", $request->test_series_id)->first();
-            $dataArray['name'] = $series->name;
+            $dataArray['name'] = $series1->name;
               $minut = 0;
             $series = UserTestSeriesQuestionAnswer::where('user_test_series_id',$request->test_series_id)->get();
             foreach ($series as $k => $ser) {
