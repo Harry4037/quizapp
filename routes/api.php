@@ -83,10 +83,11 @@ Route::namespace("Api")->group(function() {
     Route::get('/invite-status', 'InviteController@inviteStatus');
 
     Route::get('/terms-conditions', 'CmsController@termContidion');
-    
+
     //RankingController
     Route::get('/user-ranking', 'RankingController@userRanking');
 
+    Route::get('/test-series-details', 'TestSeriesController@testSeriesDetails');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
