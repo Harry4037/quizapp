@@ -999,6 +999,7 @@ class TestSeriesController extends Controller {
         if (!$user) {
             return $this->errorResponse("Invalid User ID");
         }
+        $dataArray = [];
         if (!$request->test_series_id) {
             return $this->errorResponse("Test Series ID Missing.");
         }
