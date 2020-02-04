@@ -1005,6 +1005,9 @@ class TestSeriesController extends Controller {
         }
         if ($request->flag == 1) {
             $series = TestSeries::find($request->test_series_id);
+            if (!$series) {
+                return $this->errorResponse("Invalid Test Series ID");
+            }
                 $dataArray['name'] = $series->name ;
                 $dataArray['total_question'] = $series->total_question;
                 $minut = 0;
@@ -1016,6 +1019,9 @@ class TestSeriesController extends Controller {
         }
         if ($request->flag == 2) {
             $series1 = UserTestSeries::find($request->test_series_id);
+            if (!$series1) {
+                return $this->errorResponse("Invalid Test Series ID");
+            }
             $dataArray['name'] = $series1->name;
               $minut = 0;
             $series = UserTestSeriesQuestionAnswer::where('user_test_series_id',$request->test_series_id)->get();
