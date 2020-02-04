@@ -1003,7 +1003,7 @@ class TestSeriesController extends Controller {
             return $this->errorResponse("Test Series ID Missing.");
         }
         if ($request->flag == 1) {
-            $series = TestSeries::where("id", $request->test_series_id)->first();
+            $series = TestSeries::find($request->test_series_id);
                 $dataArray['name'] = $series->name ;
                 $dataArray['total_question'] = $series->total_question;
                 $minut = 0;
@@ -1014,7 +1014,7 @@ class TestSeriesController extends Controller {
                 $dataArray['total_time'] = $minut;
         }
         if ($request->flag == 2) {
-            $series1 = UserTestSeries::where("id", $request->test_series_id)->first();
+            $series1 = UserTestSeries::find($request->test_series_id);
             $dataArray['name'] = $series1->name;
               $minut = 0;
             $series = UserTestSeriesQuestionAnswer::where('user_test_series_id',$request->test_series_id)->get();
