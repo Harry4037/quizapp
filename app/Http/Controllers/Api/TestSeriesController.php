@@ -419,7 +419,7 @@ class TestSeriesController extends Controller {
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
         $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'is_attempted', 'created_at')->get();
-        
+
         foreach ($result1 as $k => $test1) {
             $dataArray1[$k]['id'] = $test1->id;
             $dataArray1[$k]['name'] = $test1->name;
@@ -958,6 +958,74 @@ class TestSeriesController extends Controller {
                 return $this->successResponse("test_series Removed.", (object) []);
             }
         }
+    }
+    /**
+     * @api {get} /api/test-series-details Test Series Details
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetTestSeriesDetails
+     * @apiGroup TestSeries
+     *
+     * @apiParam {String} user_id User ID.
+     * @apiParam {String} flag FLag Key.
+     * @apiParam {String} test_series_id Test Series ID*.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message TestSeries Details.
+     * @apiSuccess {JSON} data response.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Test Series Details.",
+     *       "data": {
+     *                  "name": "Demo",
+     *                  "total_question": 54,
+     *                  "total_time": 45
+     *               }
+     *   }
+     *
+     */
+    public function testSeriesDetails(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID Missing.");
+        }
+        if (!in_array($request->flag, [1, 2])) {
+            return $this->errorResponse("Select valid flag type");
+        }
+        $user = User::find($request->user_id);
+        if (!$user) {
+            return $this->errorResponse("Invalid User ID");
+        }
+        if (!$request->test_series_id) {
+            return $this->errorResponse("Test Series ID Missing.");
+        }
+        if ($request->flag == 1) {
+            $series = TestSeries::where("id", $request->test_series_id)->get();
+                $dataArray['name'] = $series->name;
+                $dataArray['total_question'] = $series->total_question;
+                $minut = 0;
+                $ques = Question::where('test_series_id',$request->test_series_id)->get();
+                foreach($ques as $que){
+                   $minut = $minut + $que->ques_time;
+                }
+                $dataArray['total_time'] = $minut;
+        }
+        if ($request->flag == 2) {
+            $series = UserTestSeries::where("id", $request->test_series_id)->get();
+            $dataArray['name'] = $series->name;
+              $minut = 0;
+            $series = UserTestSeriesQuestionAnswer::where('user_test_series_id',$request->test_series_id)->get();
+            foreach ($series as $k => $ser) {
+                $que = Question::find($request->test_series_id);
+                $minut = $minut + $que->ques_time;
+            }
+            $dataArray['total_question'] = count($series);;
+            $dataArray['total_time'] = $minut;
+        }
+        return $this->successResponse("Test Series Details.", $dataArray);
     }
 
 }
