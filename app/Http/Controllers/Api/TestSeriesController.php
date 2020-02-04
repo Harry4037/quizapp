@@ -294,10 +294,9 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray1[$k]['is_bookmark'] = false;
             }
-            if($test1->is_attempted == 1)
-            {
+            if ($test1->is_attempted == 1) {
                 $dataArray1[$k]['is_attempted'] = TRUE;
-            }else{
+            } else {
                 $dataArray1[$k]['is_attempted'] = FALSE;
             }
             $result1 = UserTestSeriesQuestionAnswer::where("user_test_series_id", $test1->id)->get();
@@ -334,10 +333,9 @@ class TestSeriesController extends Controller {
             } else {
                 $inviteArray1[$k]['is_bookmark'] = false;
             }
-            if($invite1->usertestseries->is_attempted == 1)
-            {
+            if ($invite1->usertestseries->is_attempted == 1) {
                 $inviteArray1[$k]['is_attempted'] = TRUE;
-            }else{
+            } else {
                 $inviteArray1[$k]['is_attempted'] = FALSE;
             }
         }
@@ -356,6 +354,7 @@ class TestSeriesController extends Controller {
      * @apiGroup Search
      *
      * @apiParam {String} name Name*.
+     * @apiParam {String} user_id User ID*.
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -396,6 +395,9 @@ class TestSeriesController extends Controller {
         if (!$request->name) {
             return $this->errorResponse("Input Missing.");
         }
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID Missing.");
+        }
 
         $searchKeyword = $request->name;
         $dataArray = [];
@@ -417,6 +419,7 @@ class TestSeriesController extends Controller {
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
         $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'is_attempted', 'created_at')->get();
+        
         foreach ($result1 as $k => $test1) {
             $dataArray1[$k]['id'] = $test1->id;
             $dataArray1[$k]['name'] = $test1->name;
@@ -430,10 +433,9 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray1[$k]['is_bookmark'] = false;
             }
-            if($test1->is_attempted == 1)
-            {
+            if ($test1->is_attempted == 1) {
                 $dataArray1[$k]['is_attempted'] = TRUE;
-            }else{
+            } else {
                 $dataArray1[$k]['is_attempted'] = FALSE;
             }
             $dataArray1[$k]['total_ques_no'] = NULL;
@@ -700,10 +702,9 @@ class TestSeriesController extends Controller {
                 } else {
                     $dataArray['test_series']['is_bookmark'] = false;
                 }
-                if($testSeries->is_attempted == 1)
-                {
+                if ($testSeries->is_attempted == 1) {
                     $dataArray['test_series']['is_attempted'] = TRUE;
-                }else{
+                } else {
                     $dataArray['test_series']['is_attempted'] = FALSE;
                 }
 
@@ -802,10 +803,9 @@ class TestSeriesController extends Controller {
                 $dataArrayRecent[$k]['id'] = $testSeries->id ? $testSeries->id : '';
                 $dataArrayRecent[$k]['name'] = $testSeries->name ? $testSeries->name : '';
                 $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
-                if($testSeries->is_attempted == 1)
-                {
+                if ($testSeries->is_attempted == 1) {
                     $dataArrayRecent[$k]['is_attempted'] = TRUE;
-                }else{
+                } else {
                     $dataArrayRecent[$k]['is_attempted'] = FALSE;
                 }
             }

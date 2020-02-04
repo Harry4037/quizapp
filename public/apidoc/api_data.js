@@ -2305,6 +2305,13 @@ define({ "api": [
             "optional": false,
             "field": "name",
             "description": "<p>Name*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User ID*.</p>"
           }
         ]
       }
