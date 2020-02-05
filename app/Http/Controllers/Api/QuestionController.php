@@ -689,16 +689,16 @@ class QuestionController extends Controller {
         if (!$request->description) {
             return $this->errorResponse("description missing");
         }
-        if (!$request->ans1) {
+        if ($request->ans1 == '') {
             return $this->errorResponse("description missing");
         }
-        if (!$request->ans2) {
+        if ($request->ans2 == '') {
             return $this->errorResponse("description missing");
         }
-        if (!$request->ans3) {
+        if ($request->ans3 == '') {
             return $this->errorResponse("description missing");
         }
-        if (!$request->ans4) {
+        if ($request->ans4 == '') {
             return $this->errorResponse("description missing");
         }
         if (!$request->correct_ans) {
