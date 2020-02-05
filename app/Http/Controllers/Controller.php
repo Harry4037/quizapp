@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use App\Models\Notification;
+use LaravelFCM\Message\OptionsBuilder;
+use LaravelFCM\Message\PayloadDataBuilder;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use LaravelFCM\Facades\FCM;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController {
@@ -29,6 +34,45 @@ class Controller extends BaseController {
                     'message' => $message,
                     'data' => $data
         ]);
+    }
+
+    public function generateNotification($user_id, $type, $title, $message) {
+
+        $notification = new Notification();
+        $notification->user_id = $user_id;
+        $notification->type = $type;
+        $notification->title = $title;
+        $notification->message = $message;
+        $notification->save();
+    }
+
+    public function androidPushNotification($user_type, $title, $message, $token, $notificationType, $count = 0, $record_id = 0) {
+            config(['fcm.http.server_key' => 'AAAAL6SPjhI:APA91bEWevQCGFbJDxtt0o2mVwDkVo20ZWHEnGGFwW8ER42_4lEfr-FOL7xTtERhqBndBcztbW7bjOTyyuPDke3VfgyT905KHgFVhTPJsSnRgp3bBgj39nd4PzOg8rZ__UtswTc8OwQJ']);
+            config(['fcm.http.sender_id' => '204624334354']);
+            $clkAction = 'com.example.quizz.DashBoard.MainActivity';
+        $optionBuilder = new OptionsBuilder();
+        $optionBuilder->setTimeToLive(60 * 20)
+                ->setPriority('high');
+        $notificationBuilder = new PayloadNotificationBuilder($title);
+        $notificationBuilder->setBody($message)
+                ->setClickAction($clkAction)
+                ->setSound('default');
+        $dataBuilder = new PayloadDataBuilder();
+        $dataBuilder->addData([
+            'title' => $title,
+            'message' => $message,
+            'type' => $notificationType,
+            'notification_count' => $count,
+            'record_id' => $record_id
+        ]);
+
+        $option = $optionBuilder->build();
+        $notification = $notificationBuilder->build();
+        $data = $dataBuilder->build();
+        //  $tokens = "erzc_FmUdSQ:APA91bHAcG8FQehCYfcFxt-KQxrVJzpMzStgjXGoPEUGmQk2FB_muNhpd5hs7hI6Oy8WuFyKHEeMUoCMQOGbaQr85JyXSRp6GMzvZH90zvpcowrfQ3vxtNrgunEuoPQZmkGPu6iqCEk7";
+
+        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+        return $downstreamResponse;
     }
 
 }
