@@ -609,7 +609,7 @@ class QuestionController extends Controller {
      * @apiParam {String} ans2 Second Answer.
      * @apiParam {String} ans3 Third Answer.
      * @apiParam {String} ans4 Fourth Answer.
-     * @apiParam {String} Correct_ans Correct Answer (ans1,ans2,ans3,an4).
+     * @apiParam {String} correct_ans Correct Answer (ans1,ans2,ans3,an4).
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -744,7 +744,8 @@ class QuestionController extends Controller {
             for ($i = 1; $i <= 4; $i++) {
                 $answer = new Answer();
                 $answer->question_id = $question->id;
-                $answer->description = $request->ans . $i;
+                $f = "ans" . $i;
+                $answer->description = $request->$f;
                 if ($request->correct_ans == "ans" . $i) {
                     $answer->is_answer = 1;
                 } else {
