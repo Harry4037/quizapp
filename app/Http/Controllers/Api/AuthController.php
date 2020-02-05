@@ -201,7 +201,7 @@ class AuthController extends Controller {
         if (!$request->otp) {
             return $this->errorResponse("OTP missing");
         }
-        $user = User::where(["mobile_number" => $request->mobile_number, "user_type_id" => $request->user_type, "otp" => $request->otp])->first();
+        $user = User::where(["mobile_number" => $request->mobile_number, "otp" => $request->otp])->first();
         if ($user) {
             $data['user_detail'] = $user;
             $data['user']['following'] = 10;
