@@ -164,7 +164,7 @@ class QuestionController extends Controller {
 //            return $this->errorResponse("Invalid User.");
 //        }
         if ($request->flag == 1) {
-            $questions = Question::where("lang", $user ? $user->lang : 1)->where("is_approve", 1)->limit(500)->get();
+            $questions = Question::where("lang", $user ? $user->lang : 1)->where("is_approve", 2)->limit(500)->get();
             if (count($questions) > 10) {
                 $questions = $questions->random(10);
             }
@@ -214,7 +214,7 @@ class QuestionController extends Controller {
             $query = Question::Query();
             $query->where(function($query) use($request) {
                 $query->where("lang", $request->lang)
-                        ->where("is_approve", 1)
+                        ->where("is_approve", 2)
                         ->whereIn('exam_id', $request->exam_id)
                         ->whereIn('subject_id', $request->subject_id);
             });
