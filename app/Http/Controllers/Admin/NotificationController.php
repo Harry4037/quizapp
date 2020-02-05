@@ -22,7 +22,7 @@ class NotificationController extends Controller {
             'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
         ];
 
-        $users = User::where('user_type_id', 3)->get();
+        $users = User::where('user_type_id', 3)->orWhere('user_type_id', 2)->get();
         return view('admin.notification.index', [
             'users' => $users,
             'css' => $css,
@@ -42,28 +42,29 @@ class NotificationController extends Controller {
             return $this->sendErrorResponse($validator->errors()->all()[0], (object) [], 200);
         }
 
-        if ($request->user_type == 1) {
-            $tokensUn = UnregisterToken::query()
-                            ->pluck("device_token")->toArray();
-            if (count($tokensUn)) {
-                $this->androidPushNotification(3, $request->title, $request->message, $tokensUn, 999);
-            }
-        }
+        // if ($request->user_type == 1) {
+        //     $tokensUn = UnregisterToken::query()
+        //                     ->pluck("device_token")->toArray();
+        //     if (count($tokensUn)) {
+        //         $this->androidPushNotification(3, $request->title, $request->message, $tokensUn, 999);
+        //     }
+        // }
 
-        $tokens = User::where('user_type_id', '=', 3)
-                        ->where("device_token", '!=', null)
-                        ->when($request->user_type == 2, function($query) use($request) {
-                            return $query->whereIn('id', $request->notify_user);
-                        })
-                        ->when($request->user_type == 3, function($query) use($request) {
-                            return $query->where('is_active', 1);
-                        })
-                        ->pluck("device_token")->toArray();
-        if (count($tokens)) {
-            $this->androidPushNotification(3, $request->title, $request->message, $tokens, 999);
-        }
+        // $tokens = User::where('user_type_id', '=', 3)
+        //                 ->where("device_token", '!=', null)
+        //                 ->when($request->user_type == 2, function($query) use($request) {
+        //                     return $query->whereIn('id', $request->notify_user);
+        //                 })
+        //                 ->when($request->user_type == 3, function($query) use($request) {
+        //                     return $query->where('is_active', 1);
+        //                 })
+        //                 ->pluck("device_token")->toArray();
+        // if (count($tokens)) {
+        //     $this->androidPushNotification(3, $request->title, $request->message, $tokens, 999);
+        // }
 
         $userIds = User::where('user_type_id', '=', 3)
+                        ->orWhere("user_type_id", '=', 2)
                         ->where("device_token", '!=', null)
                         ->when($request->user_type == 2, function($query) use($request) {
                             return $query->whereIn('id', $request->notify_user);
