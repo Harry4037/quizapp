@@ -121,7 +121,7 @@ class NotificationController extends Controller {
     public function searchUser(Request $request) {
         $searchKeyword = $request->get('search_keyword');
         $query = User::query();
-        $query->where('user_type_id', 3)->orWhere('user_type_id', 2);
+        $query->where('user_type_id', '=', 3)->orWhere('user_type_id', '=', 2);
         if ($searchKeyword) {
             $query->where(function($query) use($searchKeyword) {
                 $query->where('name', 'LIKE', "%$searchKeyword%")
