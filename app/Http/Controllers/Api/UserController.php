@@ -617,4 +617,79 @@ class UserController extends Controller {
         }
     }
 
+      /**
+     * @api {post} /api/token-update  Token Update
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostTokenUpdate
+     * @apiGroup Auth
+     *
+     * @apiParam {String} user_id User ID*.
+     * @apiParam {String} token Token key.
+     *
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} Token Updated..
+     * @apiSuccess {JSON} data blank object.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Token Updated.",
+     *       "data": {}
+     *   }
+     *
+     * @apiError Useridmissing User Id missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "User Id missing",
+     *     "data": {}
+     *  }
+     *
+     * @apiError Usernotfound User not found.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "User not found",
+     *     "data": {}
+     *  }
+     *
+     * @apiError Tokenismissing Token Is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Token Is missing",
+     *     "data": {}
+     *  }
+     *
+     */
+    public function tokenUpdate(Request $request) {
+
+        if ($request->user_id == '') {
+            return $this->errorResponse("User Id missing");
+        }
+        if (!$request->token) {
+            return $this->errorResponse("Token Is missing");
+        } else {
+            $user = User::find($request->user_id);
+            if (!$user) {
+
+            } else {
+                $userArray['device_token'] = $request->token;
+                $userArray['updated_at'] = new \DateTime("now");
+                User::where('id', $request->user_id)->update($userArray);
+                return $this->successResponse("Token Updated.", (object) []);
+            }
+        }
+    }
+
 }

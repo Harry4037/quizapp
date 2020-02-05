@@ -59,6 +59,11 @@
                     <i class="fa fa-question-circle"></i> <span>TestSeries Management</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.notification.index')}}">
+                    <i class="fa fa-question-circle"></i> <span>Notification Management</span>
+                </a>
+            </li>
         </ul>
     </section>
     <!-- /.sidebar -->

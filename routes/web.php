@@ -104,4 +104,12 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/accept-series', 'TestSeriesController@acceptTestSeries')->name('admin.test-series.accept-ques');
         Route::post('/reject-series', 'TestSeriesController@rejectTestSeries')->name('admin.test-series.reject-ques');
     });
+
+    // Notification Routes
+    Route::prefix('notification')->group(function() {
+        Route::get('/', 'NotificationController@index')->name('admin.notification.index');
+        Route::get('/list', 'NotificationController@listNotification')->name('admin.notification.list');
+        Route::post('/send-notification', 'NotificationController@sendNotification')->name('admin.notification.send');
+        Route::get('/search-user', 'NotificationController@searchUser')->name('admin.notification.search-user');
+    });
 });
