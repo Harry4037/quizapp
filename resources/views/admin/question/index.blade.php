@@ -87,7 +87,7 @@
             var record_id = this.id;
             var th = $(this);
             var status = th.attr('data-status');
-            var update_status = (status == '1') ? 1 : 2;
+            var update_status = (status == '0') ? 0 : 1;
             $.ajax({
                 url: "{{route('admin.question.accept-ques')}}",
                 type: 'post',
@@ -120,7 +120,7 @@
             var record_id = this.id;
             var th = $(this);
             var status = th.attr('data-status');
-            var update_status = (status == '1') ? 2 : 3;
+            var update_status = (status == '1') ? 1 : 2;
             $.ajax({
                 url: "{{route('admin.question.reject-ques')}}",
                 type: 'post',
