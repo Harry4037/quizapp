@@ -99,6 +99,24 @@
     </div>
 </div>
 <div class="form-group">
+    <label class="control-label col-md-4 col-sm-4 col-xs-12">Lang <span class="error">*</span></label>
+    <div class="col-md-4 col-sm-6 col-xs-6">
+        @if(isset($question))
+        <select class="form-control" id="lang_type" name="lang_type">
+            <option value="">Choose option</option>
+            <option value="1" @if($question->lang == "1"){{'selected'}}@endif>English</option>
+            <option value="2" @if($question->lang == "2"){{'selected'}}@endif>Hindi</option>
+        </select>
+        @else
+        <select class="form-control" id="lang_type" name="lang_type">
+            <option value="">Choose option</option>
+            <option value="1">English</option>
+            <option value="2">Hindi</option>
+        </select>
+        @endif
+    </div>
+</div>
+<div class="form-group">
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Question Year </label>
     <div class="col-md-4 col-sm-6 col-xs-6">
         <input type="number" class="form-control" name="year" id="year" value="@if(isset($question)){{$question->year}}@endif">

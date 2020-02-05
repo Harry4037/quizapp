@@ -124,6 +124,7 @@ class QuestionController extends Controller {
                 $question->exam_id = $request->exam_id;
                 $question->subject_id = $request->subject_id;
                 $question->description = $request->description;
+                $question->lang = $request->lang_type;
                 $question->ques_time = $request->time;
                 $question->year = $request->year;
                 if ($question->save()) {
@@ -195,6 +196,7 @@ class QuestionController extends Controller {
                 $question->description = $request->description;
                 $question->exam_id = $request->exam_id;
                 $question->year = $request->year;
+                $question->lang = $request->lang_type;
                 $question->subject_id = $request->subject_id;
                 if ($request->hasFile('ques_image')) {
                     $ques_image = $request->file("ques_image");
