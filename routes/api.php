@@ -31,6 +31,7 @@ Route::namespace("Api")->group(function() {
     Route::post('/send-otp', 'AuthController@sendOTP');
     Route::post('/verify-otp', 'AuthController@verifyOTP');
     Route::post('/register', 'UserController@userRegister');
+    Route::post('/token-update', 'UserController@tokenUpdate');
     Route::get('/user-profile', 'UserController@userProfile');
     Route::post('/user-update', 'UserController@userUpdate');
     Route::get('/question-list', 'QuestionController@questionList');
