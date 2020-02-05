@@ -74,5 +74,9 @@ class Controller extends BaseController {
         $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
         return $downstreamResponse;
     }
+    public function notificationCount($userId) {
+        $nCount = Notification::where(["user_id" => $userId, "is_read" => 0])->count();
+        return $nCount;
+    }
 
 }
