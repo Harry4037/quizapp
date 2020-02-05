@@ -104,6 +104,7 @@ class QuizController extends Controller {
                         $question->subject_id = 0;
                         $question->test_series_id = 0;
                         $question->quiz_id = $quiz->id;
+                        $question->is_approve = 2;
                         $question->description = $ques;
 
                         $question->ques_time = 0;
@@ -265,6 +266,7 @@ class QuizController extends Controller {
                 $question->test_series_id = 0;
                 $question->quiz_id = $quiz->id;
                 $question->lang = $quiz->lang;
+                $question->is_approve = 2;
                 $question->description = $ques;
 
                 $question->ques_time = 0;

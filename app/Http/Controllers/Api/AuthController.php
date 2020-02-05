@@ -71,7 +71,7 @@ class AuthController extends Controller {
         $otp = 1234;
 //        $otp = rand(1000, 9999);
         if (($request->user_type == 2) || ($request->user_type == 3)) {
-            $existingUser = User::where(['user_type_id' => $request->user_type, 'mobile_number' => $request->mobile_number])->first();
+            $existingUser = User::where([ 'mobile_number' => $request->mobile_number])->first();
             if ($existingUser) {
                 $existingUser->otp = $otp;
                 $existingUser->is_active = 1;
@@ -201,7 +201,7 @@ class AuthController extends Controller {
         if (!$request->otp) {
             return $this->errorResponse("OTP missing");
         }
-        $user = User::where(["mobile_number" => $request->mobile_number, "user_type_id" => $request->user_type, "otp" => $request->otp])->first();
+        $user = User::where(["mobile_number" => $request->mobile_number, "otp" => $request->otp])->first();
         if ($user) {
             $data['user_detail'] = $user;
             $data['user']['following'] = 10;

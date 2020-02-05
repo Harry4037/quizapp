@@ -100,7 +100,7 @@ class UserController extends Controller {
         if (!in_array($request->user_type, [2, 3])) {
             return $this->errorResponse("Select valid user type");
         }
-        $existingUser = User::where(['user_type_id' => $request->user_type, 'mobile_number' => $request->mobile_number])->first();
+        $existingUser = User::where(['mobile_number' => $request->mobile_number])->first();
         if ($existingUser) {
             return $this->errorResponse("User already registered with us", (object) []);
         }
