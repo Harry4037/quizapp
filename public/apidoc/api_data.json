@@ -1751,7 +1751,7 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "ques_image",
+            "field": "ques_pic",
             "description": "<p>Question Image*.</p>"
           },
           {
@@ -1786,7 +1786,7 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Correct_ans",
+            "field": "correct_ans",
             "description": "<p>Correct Answer (ans1,ans2,ans3,an4).</p>"
           }
         ]
@@ -2324,6 +2324,70 @@
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/QuizController.php",
     "groupTitle": "Quiz"
+  },
+  {
+    "type": "get",
+    "url": "/api/leadership",
+    "title": "Leadership",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetLeadership",
+    "group": "Rank",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Leadership List.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Leadership list\",\n      \"data\":[\n             {\n              \"user_id\":2,\n              \"name\":\"Ankit_creator\",\n              \"profile_pic\":\"http:\\/\\/127.0.0.1:8000\\/img\\/no-image.jpg\",\n               \"points\":3\n              },\n              {\n              \"user_id\":5,\n              \"name\":\"shantanu\",\n              \"profile_pic\":\"http:\\/\\/127.0.0.1:8000\\/img\\/no-image.jpg\",\n              \"points\":0\n              },\n              {\n              \"user_id\":7,\n             \"name\":\"Sonali\",\n              \"profile_pic\":\"http:\\/\\/127.0.0.1:8000\\/storage\\/profile_pic\\/P4dx2wtCWVdOSL3j34DOZCiu6Kvn9uSy2dKsFpMw.jpeg\",\n              \"points\":0\n              },\n              {\n              \"user_id\":9,\n              \"name\":\"sonali\",\n              \"profile_pic\":\"http:\\/\\/127.0.0.1:8000\\/img\\/no-image.jpg\",\n              \"points\":0\n          }\n      ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/RankingController.php",
+    "groupTitle": "Rank"
   },
   {
     "type": "get",
