@@ -744,7 +744,7 @@ class QuestionController extends Controller {
                 return $this->errorResponse("Question pic not valid file type.");
             }
             $ques_image = $request->file("ques_pic");
-            $ques = Storage::disk('public')->put('ques_pic', $ques_image);
+            $ques = Storage::disk('public')->put('ques_image', $ques_image);
             $ques_file_name = basename($ques);
             $question->ques_image = $ques_file_name;
         } else {

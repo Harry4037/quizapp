@@ -182,7 +182,7 @@ class TestSeriesController extends Controller {
                 $testSeriesQuestion->description = $question["question_discription"];
                 if ($question["ques_pic"]) {
                     $ques_image = $question->file("ques_pic");
-                    $ques = Storage::disk('public')->put('ques_pic', $ques_image);
+                    $ques = Storage::disk('public')->put('ques_image', $ques_image);
                     $ques_file_name = basename($ques);
                     $testSeriesQuestion->ques_image = $ques_file_name;
                 }else{
