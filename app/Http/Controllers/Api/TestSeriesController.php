@@ -180,6 +180,12 @@ class TestSeriesController extends Controller {
                 $testSeriesQuestion->exam_id = $request->input("exam_id");
                 $testSeriesQuestion->subject_id = $request->input("subject_id");
                 $testSeriesQuestion->description = $question["question_discription"];
+                if ($question["ques_pic"]) {
+                    $ques_image = $question->file("ques_pic");
+                    $ques = Storage::disk('public')->put('ques_pic', $ques_image);
+                    $ques_file_name = basename($ques);
+                    $testSeriesQuestion->ques_image = $ques_file_name;
+                }
                 $testSeriesQuestion->ques_image = '';
                 $testSeriesQuestion->ques_time = $question["time_per_question"];
                 $testSeriesQuestion->test_series_id = $testSeries->id;
