@@ -162,7 +162,7 @@ class RankingController extends Controller {
         } else {
             $dataArray['users_leadership'] = [];
         }
-        $dataArray1['users_leadership'] = collect($dataArray['users_leadership'])->SortByDesc('points');
+        $dataArray1 = collect($dataArray)->SortByDesc('points');
         return $this->successResponse("Leadership list", $dataArray1);
     }
 }
