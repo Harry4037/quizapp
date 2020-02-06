@@ -69,7 +69,7 @@ class CreatorController extends Controller {
             $user = User::find($request->id);
             if ($user) {
                 $user->delete();
-                return ['status' => true, "message" => "User deleted."];
+                return ['status' => true, "message" => "Creator deleted."];
             } else {
                 return ['status' => false, "message" => "Something went be wrong."];
             }
@@ -109,7 +109,7 @@ class CreatorController extends Controller {
                 $user->dob = $request->dob;
                 $user->into_line = $request->about;
                 if ($user->save()) {
-                    return redirect()->route('admin.creator.index')->with('status', 'User has been updated successfully.');
+                    return redirect()->route('admin.creator.index')->with('status', 'Creator has been updated successfully.');
                 } else {
                     return redirect()->route('admin.creator.index')->with('error', 'Something went be wrong.');
                 }
@@ -170,7 +170,7 @@ class CreatorController extends Controller {
                     $user_file_name = basename($userImage);
                     $user->profile_pic = $user_file_name;
                 }
-                $user->user_type_id = 3;
+                $user->user_type_id = 2;
                 $user->is_active = 1;
                 $user->mobile_number = $request->mobile_number;
                 $user->email = $request->user_email;
@@ -184,7 +184,7 @@ class CreatorController extends Controller {
                 $user->updated_by = auth()->user()->id;
 
                 if ($user->save()) {
-                    return redirect()->route('admin.creator.index')->with('status', 'User has been added successfully.');
+                    return redirect()->route('admin.creator.index')->with('status', 'Creator has been added successfully.');
                 } else {
                     return redirect()->route('admin.creator.index')->with('error', 'Something went be wrong.');
                 }
