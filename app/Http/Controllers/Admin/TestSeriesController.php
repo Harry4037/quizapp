@@ -124,7 +124,7 @@ class TestSeriesController extends Controller {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'name' => [
+                            'testseries_name' => [
                                 'bail',
                                 'required',
                             ],
