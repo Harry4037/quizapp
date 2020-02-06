@@ -78,7 +78,7 @@
 <div class="box-footer">
     <div class="form-group">
         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-4">
-            <a class="btn btn-default" href="{{ route('admin.user.index') }}">Cancel</a>
+            <a class="btn btn-default" href="{{ route('admin.creator.index') }}">Cancel</a>
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </div>

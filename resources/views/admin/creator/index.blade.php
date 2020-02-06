@@ -18,7 +18,7 @@
                 @include('errors.errors-and-messages')
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">User List</h3>
+                        <h3 class="box-title">Creator List</h3>
                         <div class="pull-right">
                             <a href="{{route('admin.creator.add')}}" class="btn btn-block btn-primary">Add</a>
                         </div>
