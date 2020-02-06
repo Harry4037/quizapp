@@ -63,7 +63,7 @@ class TestSeriesController extends Controller {
                 $testseriesArray[$k]['subject'] = $testseries->subject->name;
                 $testseriesArray[$k]['name'] = $testseries->name;
                 $testseriesArray[$k]['total_ques'] = $testseries->total_question;
-                $testseriesArray[$k]['lang'] = $testseries->lang;
+                // $testseriesArray[$k]['lang'] = $testseries->lang;
                 if($testseries->is_approve == 2){
                     $testseriesArray[$k]['status'] = '<label class="btn btn-success btn-xs disabled">Approved</label>';
                 }elseif($testseries->is_approve == 3){
