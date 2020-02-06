@@ -71,10 +71,15 @@ class AuthController extends Controller {
         $otp = 1234;
 //        $otp = rand(1000, 9999);
         if (($request->user_type == 2) || ($request->user_type == 3)) {
-            $existingUser = User::where([ 'mobile_number' => $request->mobile_number])->first();
+            $existingUser = User::where(['mobile_number' => $request->mobile_number])->first();
             if ($existingUser) {
                 $existingUser->otp = $otp;
-                $existingUser->is_active = 1;
+                if ($request->user_type == 3) {
+                    $existingUser->is_active = 0;
+                } else {
+                    $existingUser->is_active = 1;
+                }
+
                 if ($existingUser->save()) {
                     return $this->successResponse("OTP sent successfully.", (object) []);
                 } else {
