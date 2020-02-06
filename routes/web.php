@@ -112,4 +112,5 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/send-notification', 'NotificationController@sendNotification')->name('admin.notification.send');
         Route::get('/search-user', 'NotificationController@searchUser')->name('admin.notification.search-user');
     });
+
 });

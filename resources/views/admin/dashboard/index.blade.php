@@ -19,10 +19,10 @@
 
             <div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="info-box">
-                    <span class="info-box-icon bg-aqua"><i class="fa fa-question"></i></span>
+                    <a href="{{ route('admin.question.index')}}"> <span class="info-box-icon bg-aqua"><i class="fa fa-question"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Questions</span>
+                        <span class="info-box-text">Questions</span></a>
                         <span class="info-box-number">{{$totalQuestionCount}}</span>
                     </div>
                     <!-- /.info-box-content -->
@@ -32,10 +32,10 @@
             <!-- /.col -->
             <div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="info-box">
-                    <span class="info-box-icon bg-yellow"><i class="fa fa-users"></i></span>
+                    <a href="{{ route('admin.creator.index')}}"><span class="info-box-icon bg-yellow"><i class="fa fa-users"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Creater</span>
+                        <span class="info-box-text">Creator</span></a>
                         <span class="info-box-number">{{$creatorCount}}</span>
                     </div>
                     <!-- /.info-box-content -->
@@ -46,10 +46,10 @@
 
             <div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="info-box">
-                    <span class="info-box-icon bg-green"><i class="ion ion-ios-people-outline"></i></span>
+                    <a href="{{ route('admin.user.index')}}"> <span class="info-box-icon bg-green"><i class="ion ion-ios-people-outline"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Users</span>
+                        <span class="info-box-text">Users</span></a>
                         <span class="info-box-number">{{$usersCount}}</span>
                     </div>
                     <!-- /.info-box-content -->
