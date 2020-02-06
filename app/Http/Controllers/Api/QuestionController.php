@@ -243,7 +243,9 @@ class QuestionController extends Controller {
                 $questions = $query->where('year', $request->year)->get();
             }
 
-
+            if (!$questions) {
+                return $this->errorResponse("Question not found.");
+            }
             $dataArray = [];
             $totatlTime = 0;
             foreach ($questions as $k => $question) {
