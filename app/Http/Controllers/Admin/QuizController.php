@@ -99,7 +99,7 @@ class QuizController extends Controller {
                             $question->ques_image = '';
                         }
 
-                        $question->user_id = 0;
+                        $question->user_id = 1;
                         $question->exam_id = 0;
                         $question->subject_id = 0;
                         $question->test_series_id = 0;
@@ -260,7 +260,7 @@ class QuizController extends Controller {
                     $question->ques_image = '';
                 }
 
-                $question->user_id = 0;
+                $question->user_id = 1;
                 $question->exam_id = 0;
                 $question->subject_id = 0;
                 $question->test_series_id = 0;
