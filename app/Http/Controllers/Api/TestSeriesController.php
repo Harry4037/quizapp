@@ -533,7 +533,7 @@ class TestSeriesController extends Controller {
         }
         $questions = Question::where("test_series_id", $request->test_series_id)->get();
         foreach ($questions as $k => $question) {
-            Question::where('id', $question->id)->where('test_series_id', $question->test_series_id)->update(['is_approve' => 1]);
+            Question::where('id', $question->id)->where('test_series_id', $question->test_series_id)->update(['is_approve' => 2]);
         }
         return $this->successResponse("Publish Successfully", (object) []);
     }
