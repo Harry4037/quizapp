@@ -100,7 +100,12 @@ class UserController extends Controller {
         if (!in_array($request->user_type, [2, 3])) {
             return $this->errorResponse("Select valid user type");
         }
-        $existingUser = User::where(['mobile_number' => $request->mobile_number])->first();
+        $existingUser = User::where(['mobile_number' => $request->mobile_number])
+                ->where(function($query) {
+                    $query->where("user_type_id", 2)
+                    ->orWhere("user_type_id", 3);
+                })
+                ->first();
         if ($existingUser) {
             return $this->errorResponse("User already registered with us", (object) []);
         }
@@ -579,7 +584,6 @@ class UserController extends Controller {
      *   }
      *
      */
-
     public function CreatorUserProfile(Request $request) {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing");
@@ -588,23 +592,23 @@ class UserController extends Controller {
         if ($user) {
             $dataArray = [];
             $count = 0;
-            $result = TestSeries::where("user_id", $request->user_id)->select('id','name','total_question','created_at')->get();
+            $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
             foreach ($result as $k => $test) {
-               $dataArray[$k]['id'] = $test->id;
-               $dataArray[$k]['name'] = $test->name;
-               $dataArray[$k]['created_at'] = $test->created_at;
-               $date = Carbon::parse($test->created_at);
-               $dataArray[$k]['date'] = $date->format("d-M-Y");
-               $dataArray[$k]['flag'] = 1;
-               $fav = Bookmark::where('user_id', $request->user_id)->where('test_series_id', $test->id)->first();
+                $dataArray[$k]['id'] = $test->id;
+                $dataArray[$k]['name'] = $test->name;
+                $dataArray[$k]['created_at'] = $test->created_at;
+                $date = Carbon::parse($test->created_at);
+                $dataArray[$k]['date'] = $date->format("d-M-Y");
+                $dataArray[$k]['flag'] = 1;
+                $fav = Bookmark::where('user_id', $request->user_id)->where('test_series_id', $test->id)->first();
                 if ($fav) {
                     $dataArray[$k]['is_bookmark'] = true;
                 } else {
                     $dataArray[$k]['is_bookmark'] = false;
                 }
-               $dataArray[$k]['total_ques_no'] = $test->total_question;
-               $count++;
-           }
+                $dataArray[$k]['total_ques_no'] = $test->total_question;
+                $count++;
+            }
             $data['user_profile'] = $user;
             $data['user']['following'] = 10;
             $data['user']['follower'] = 50;
@@ -617,7 +621,7 @@ class UserController extends Controller {
         }
     }
 
-      /**
+    /**
      * @api {post} /api/token-update  Token Update
      * @apiHeader {String} Accept application/json.
      * @apiName PostTokenUpdate
@@ -682,7 +686,7 @@ class UserController extends Controller {
         } else {
             $user = User::find($request->user_id);
             if (!$user) {
-
+                
             } else {
                 $userArray['device_token'] = $request->token;
                 $userArray['updated_at'] = new \DateTime("now");
