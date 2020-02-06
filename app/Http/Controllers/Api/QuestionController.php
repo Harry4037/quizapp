@@ -621,7 +621,7 @@ class QuestionController extends Controller {
      * @apiParam {String} description Description.
      * @apiParam {String} ques_time Question Time.
      * @apiParam {String} test_series_id Test Series Id.
-     * @apiParam {String} ques_image Question Image*.
+     * @apiParam {String} ques_pic Question Image*.
      * @apiParam {String} ans1 First Answer.
      * @apiParam {String} ans2 Second Answer.
      * @apiParam {String} ans3 Third Answer.
