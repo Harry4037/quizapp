@@ -243,7 +243,7 @@ class QuestionController extends Controller {
                 $questions = $query->where('year', $request->year)->get();
             }
 
-            if (count($questions) > 0) {
+            if ($questions->count() <= 0) {
                 return $this->errorResponse("Question not found.");
             }
             $dataArray = [];
