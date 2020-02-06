@@ -153,10 +153,10 @@ class RankingController extends Controller {
                 $question = Question::where('user_id', $user->id)->where('is_approve', 2)->count();
                 $followers = Follow::where('follow_user_id',$user->id)->count();
                 $total = $question + $followers;
-                $dataArray[$k]['user_id'] = $user->id;
-                $dataArray[$k]['name'] = $user ? $user->name : 'User';
-                $dataArray[$k]['profile_pic'] = $user ? $user->profile_pic : '';
-                $dataArray[$k]['points'] = $total;
+                $dataArray['users_leadership'][$k]['user_id'] = $user->id;
+                $dataArray['users_leadership'][$k]['name'] = $user ? $user->name : 'User';
+                $dataArray['users_leadership'][$k]['profile_pic'] = $user ? $user->profile_pic : '';
+                $dataArray['users_leadership'][$k]['points'] = $total;
 
             }
         } else {
