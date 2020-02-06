@@ -267,7 +267,7 @@ class QuestionController extends Controller {
             $testSeries = new UserTestSeries();
             $testSeries->user_id = $request->user_id;
             $exam_name = Exam::where('id', $request->exam_id)->first();
-            $testSeries->name = $exam_name->name . "_" . date('s');
+            $testSeries->name = $exam_name->name . "_" . time();
             $testSeries->exam_id = $request->exam_id[0];
             $testSeries->subject_id = $request->subject_id[0];
             $testSeries->lang = $request->lang;
