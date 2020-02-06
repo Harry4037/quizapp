@@ -160,11 +160,27 @@ class QuestionController extends Controller {
 //            return $this->errorResponse("User ID is missing.");
 //        }
         $user = User::find($request->user_id);
-//        if (!$user) {
-//            return $this->errorResponse("Invalid User.");
-//        }
+        $userAnswerCount = UserAnswer::where("user_id", $request->user_id)->count();
+        $userTestSeriesAnswerCount = UserTestSeriesQuestionAnswer::where("user_id", $request->user_id)->count();
+        $userAnswerArray = [];
+        $userTestSeriesAnswerCountArray = [];
+        if ($userAnswerCount > 0) {
+            $userAnswerArray = UserAnswer::where("user_id", $request->user_id)->pluck("question_id")->toArray();
+        }
+        if ($userTestSeriesAnswerCount > 0) {
+            $userTestSeriesAnswerCountArray = UserTestSeriesQuestionAnswer::where("user_id", $request->user_id)->pluck("question_id")->toArray();
+        }
+
+        $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
+
         if ($request->flag == 1) {
-            $questions = Question::where("lang", $user ? $user->lang : 1)->where("is_approve", 2)->limit(500)->get();
+            $questions = Question::where("lang", $user ? $user->lang : 1)
+                    ->where(function($query) use($userQuestionIds) {
+                        $query->where("is_approve", 2)
+                        ->whereNotIn("id", $userQuestionIds);
+                    })
+                    ->limit(500)
+                    ->get();
             if (count($questions) > 10) {
                 $questions = $questions->random(10);
             }
@@ -217,7 +233,7 @@ class QuestionController extends Controller {
                         ->where("is_approve", 2)
                         ->whereIn('exam_id', $request->exam_id)
                         ->whereIn('subject_id', $request->subject_id);
-            });
+            })->whereNotIn("id", $userQuestionIds);
             $query->limit($request->total_questions);
             if (!$request->year) {
                 $questions = $query->get();
