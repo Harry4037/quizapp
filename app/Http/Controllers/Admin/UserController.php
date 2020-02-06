@@ -103,6 +103,7 @@ class UserController extends Controller {
                 }
                 $user->name = $request->user_name;
                 $user->email = $request->user_email;
+                $user->into_line = $request->about;
                 $user->lang = $request->lang_type;
                 $user->designation = $request->designation;
                 $user->qualification = $request->qualification;
@@ -198,7 +199,7 @@ class UserController extends Controller {
     }
 
     public function checkMobileNumber(Request $request) {
-        $existing = User::where(['mobile_number' => $request->mobile_number, 'user_type_id' => 3])->first();
+        $existing = User::where(['mobile_number' => $request->mobile_number])->first();
         if ($existing) {
             return response()->json(false);
         } else {
