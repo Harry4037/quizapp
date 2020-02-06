@@ -137,7 +137,7 @@ class TestSeriesController extends Controller {
                 $testseries->subject_id = $request->subject_id;
                 $testseries->name = $request->testseries_name;
                 $testseries->lang = $request->lang_type;
-                $testseries->total_question = $request->total_ques;
+
                 if ($testseries->save()) {
                     return redirect()->route('admin.test-series.index')->with('status', 'Test Series has been updated successfully.');
                 } else {
