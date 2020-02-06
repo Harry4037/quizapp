@@ -172,18 +172,19 @@ class QuestionController extends Controller {
         }
 
         $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
-
+        $page = $request->page == 0 ? 1 : $request->page * 10;
         if ($request->flag == 1) {
             $questions = Question::where("lang", $user ? $user->lang : 1)
                     ->where(function($query) use($userQuestionIds) {
                         $query->where("is_approve", 2)
                         ->whereNotIn("id", $userQuestionIds);
                     })
-                    ->limit(500)
+                    ->take($page)
+                    ->limit(10)
                     ->get();
-            if (count($questions) > 10) {
-                $questions = $questions->random(10);
-            }
+//            if (count($questions) > 10) {
+//                $questions = $questions->random(10);
+//            }
             $dataArray = [];
             $totatlTime = 0;
             foreach ($questions as $k => $question) {
