@@ -194,6 +194,7 @@ class TestSeriesController extends Controller {
                         $question->exam_id = $request->exam_id;
                         $question->subject_id = $request->subject_id;
                         $question->test_series_id = $testseries->id;
+                        $question->lang = $request->lang_type;
                         $question->quiz_id = 0;
                         $question->description = $ques;
 
@@ -339,6 +340,7 @@ class TestSeriesController extends Controller {
                 $question->exam_id = $request->exam_id;
                 $question->subject_id = $request->subject_id;
                 $question->test_series_id = $testseries->id;
+                $question->lang = $request->lang_type;
                 $question->quiz_id = 0;
                 $question->description = $ques;
                 $question->ques_time = $request->time[$k];
