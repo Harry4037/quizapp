@@ -27,6 +27,7 @@ class QuestionController extends Controller {
      * @apiGroup Question/Answer
      *
      * @apiParam {String} user_id User ID.
+     * @apiParam {String} page Page No.
      * @apiParam {String} flag Flag*.(1=>Random question, 2=> Filtered Question)
      * @apiParam {String} exam_id Exam Id in array format*.
      * @apiParam {String} subject_id Subject Id in array format*.
