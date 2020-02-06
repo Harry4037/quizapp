@@ -32,10 +32,9 @@
                                     <th style="width: 8%;">User_name</th>
                                     <th style="width: 8%;">Exam</th>
                                     <th style="width: 7%;">Subject</th>
-                                    <th style="width: 24%;">Name</th>
+                                    <th style="width: 26%;">Name</th>
                                     <th style="width: 8%;">Total_ques</th>
-                                    <th style="width: 5%;">Series_time</th>
-                                    <th style="width: 7%;">lang</th>
+                                    <th style="width: 10%;">Series_time</th>
                                     <th style="width: 11%;">Status</th>
                                     <th style="width: 18%;">Action</th>
                                 </tr>
@@ -82,7 +81,6 @@
             {"data": "name", sortable: false},
             {"data": "total_ques", sortable: false},
             {"data": "series_time", sortable: false},
-            {"data": "lang", sortable: false},
             {"data": "status", sortable: false},
             {"data": "action", sortable: false},
         ]

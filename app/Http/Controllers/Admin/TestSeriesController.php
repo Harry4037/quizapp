@@ -63,7 +63,7 @@ class TestSeriesController extends Controller {
                 $testseriesArray[$k]['subject'] = $testseries->subject->name;
                 $testseriesArray[$k]['name'] = $testseries->name;
                 $testseriesArray[$k]['total_ques'] = $testseries->total_question;
-                $testseriesArray[$k]['lang'] = $testseries->lang;
+                // $testseriesArray[$k]['lang'] = $testseries->lang;
                 if($testseries->is_approve == 2){
                     $testseriesArray[$k]['status'] = '<label class="btn btn-success btn-xs disabled">Approved</label>';
                 }elseif($testseries->is_approve == 3){
@@ -194,6 +194,7 @@ class TestSeriesController extends Controller {
                         $question->exam_id = $request->exam_id;
                         $question->subject_id = $request->subject_id;
                         $question->test_series_id = $testseries->id;
+                        $question->lang = $request->lang_type;
                         $question->quiz_id = 0;
                         $question->description = $ques;
 
@@ -339,6 +340,7 @@ class TestSeriesController extends Controller {
                 $question->exam_id = $request->exam_id;
                 $question->subject_id = $request->subject_id;
                 $question->test_series_id = $testseries->id;
+                $question->lang = $request->lang_type;
                 $question->quiz_id = 0;
                 $question->description = $ques;
                 $question->ques_time = $request->time[$k];
