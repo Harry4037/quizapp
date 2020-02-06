@@ -12,8 +12,8 @@ class DashboardController extends Controller {
 
     public function index(Request $request) {
         $totalQuestionCount = Question::count();
-        $usersCount = User::where('user_type_id', 2)->count();
-        $creatorCount = User::where('user_type_id', 3)->count();
+        $usersCount = User::where('user_type_id', 3)->count();
+        $creatorCount = User::where('user_type_id', 2)->count();
         return view('admin.dashboard.index', [
             'usersCount' => $usersCount,
             'creatorCount' => $creatorCount,
