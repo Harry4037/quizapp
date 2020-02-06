@@ -83,8 +83,8 @@ class QuizController extends Controller {
                 $quiz->user_id = auth()->user()->id;
                 $quiz->name = $request->quiz_name;
                 $quiz->total_questions = $request->total_question;
-                $quiz->start_date_time = date('Y-m-d h:i:s', strtotime($request->start_date_time));
-                $quiz->end_date_time = date('Y-m-d h:i:s', strtotime($request->end_date_time));
+                $quiz->start_date_time = date('Y-m-d H:i:s', strtotime($request->start_date_time));
+                $quiz->end_date_time = date('Y-m-d H:i:s', strtotime($request->end_date_time));
                 $quiz->lang = $request->lang;
 
                 if ($quiz->save()) {
@@ -207,8 +207,8 @@ class QuizController extends Controller {
             if ($request->isMethod("post")) {
                 $quiz->user_id = auth()->user()->id;
                 $quiz->name = $request->quiz_name;
-                $quiz->start_date_time = date('Y-m-d h:i:s', strtotime($request->start_date_time));
-                $quiz->end_date_time = date('Y-m-d h:i:s', strtotime($request->end_date_time));
+                $quiz->start_date_time = date('Y-m-d H:i:s', strtotime($request->start_date_time));
+                $quiz->end_date_time = date('Y-m-d H:i:s', strtotime($request->end_date_time));
                 $quiz->lang = $request->lang;
                 if ($quiz->save()) {
                     return redirect()->route('admin.quiz.index')->with('status', 'Quiz has been updated successfully.');
