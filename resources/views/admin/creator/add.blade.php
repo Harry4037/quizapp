@@ -6,7 +6,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            User Management
+            Creator Management
         </h1>
         @include('layout.admin.breadcrumbs')
     </section>
@@ -18,13 +18,13 @@
                 @include('errors.errors-and-messages')
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">User Add</h3>
+                        <h3 class="box-title">Creator Add</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form class="form-horizontal form-label-left" action="{{ route('admin.user.add') }}" method="post" id="userForm" enctype="multipart/form-data">
+                    <form class="form-horizontal form-label-left" action="{{ route('admin.creator.add') }}" method="post" id="userForm" enctype="multipart/form-data">
                         @csrf
-                        @include('admin.user._form')
+                        @include('admin.creator._form')
                     </form>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                     minlength: 10,
                     maxlength: 10,
                     remote: {
-                        url: "{{route('admin.user.check-mobile-no')}}",
+                        url: "{{route('admin.creator.check-mobile-no')}}",
                         type: "post",
                         data: {
                             mobile_number: function () {
