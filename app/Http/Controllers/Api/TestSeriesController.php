@@ -185,8 +185,9 @@ class TestSeriesController extends Controller {
                     $ques = Storage::disk('public')->put('ques_pic', $ques_image);
                     $ques_file_name = basename($ques);
                     $testSeriesQuestion->ques_image = $ques_file_name;
+                }else{
+                    $testSeriesQuestion->ques_image = '';
                 }
-                $testSeriesQuestion->ques_image = '';
                 $testSeriesQuestion->ques_time = $question["time_per_question"];
                 $testSeriesQuestion->test_series_id = $testSeries->id;
                 if ($testSeriesQuestion->save()) {
