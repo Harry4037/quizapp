@@ -52,8 +52,8 @@ class LeadershipController extends Controller {
                 $dataArray[$k]['image'] = '<img class="img-bordered" height="60" width="100" src=' . $user->profile_pic . '>';
                 $dataArray[$k]['points'] = $total;
             }
-            //$dataArray1 = collect($dataArray)->SortByDesc('points');
-            $data['data'] = $dataArray;
+            $dataArray1 = collect($dataArray)->SortByDesc('points');
+            $data['data'] = $dataArray1;
             return $data;
         } catch (\Exception $e) {
             dd($e);
