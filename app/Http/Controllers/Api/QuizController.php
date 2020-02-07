@@ -144,8 +144,8 @@ class QuizController extends Controller {
      *
      */
     public function startQuiz(Request $request) {
-//        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
-        $quiz = Quiz::where('id', 1)->first();
+       $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
+ //       $quiz = Quiz::where('id', 1)->first();
         if ($quiz) {
 //            $startDateTime = Carbon::parse($quiz->start_date_time);
 //            $endDateTime = Carbon::parse($quiz->start_date_time)->addMinutes(5);
