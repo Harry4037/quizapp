@@ -32,6 +32,7 @@ class CreateUsersTable extends Migration {
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->tinyInteger('is_active')->default(1);
+            $table->tinyInteger('is_approve')->default(1)->comment("1=>idle, 2=>approve, 3=>reject");;
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->string('created_by')->default(0);
