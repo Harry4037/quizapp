@@ -48,12 +48,15 @@ class LeadershipController extends Controller {
                 $question = Question::where('user_id', $user->id)->where('is_approve', 2)->count();
                 $followers = Follow::where('follow_user_id',$user->id)->count();
                 $total = $question + $followers;
-                $dataArray[$k]['name'] =  $user->name;
-                $dataArray[$k]['image'] = '<img class="img-bordered" height="60" width="100" src=' . $user->profile_pic . '>';
-                $dataArray[$k]['points'] = $total;
+                $dataArray['users_leadership'][$k]['name'] =  $user->name;
+                $dataArray['users_leadership'][$k]['image'] = '<img class="img-bordered" height="60" width="100" src=' . $user->profile_pic . '>';
+                $dataArray['users_leadership'][$k]['points'] = $total;
             }
-           // $dataArray1 = collect($dataArray)->SortByDesc('points');
-            $data['data'] = $dataArray;
+            usort($dataArray['users_leadership'], function($a, $b) {
+                return $a['points'] <=> $b['points'];
+            });
+            $dadt = array_reverse($dataArray['users_leadership']);
+            $data['data'] = $dadt;
             return $data;
         } catch (\Exception $e) {
             dd($e);

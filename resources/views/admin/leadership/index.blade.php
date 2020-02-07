@@ -54,7 +54,7 @@
 <script>
     var t = $('#list').DataTable({
         lengthMenu: [[10, 25, 50], [10, 25, 50]],
-        searching: true,
+        searching: false,
         processing: true,
         serverSide: true,
         stateSave: true,
