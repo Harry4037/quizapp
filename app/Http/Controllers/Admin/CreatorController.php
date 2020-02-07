@@ -53,6 +53,14 @@ class CreatorController extends Controller {
                 $usersArray[$k]['lang'] = $user->lang;
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$k]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
+                if($user->is_approve == 2){
+                    $usersArray[$k]['approval'] = '<label class="btn btn-success btn-xs disabled">Approved</label>';
+                }elseif($user->is_approve == 3){
+                    $usersArray[$k]['approval'] = '<label class="btn btn-danger btn-xs disabled">Rejected</label>';
+                }else{
+                    $usersArray[$k]['approval'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_creator" id="' . $user->id . '" data-status="' . $user->is_approve .'"><i class="fa fa-check"></i> Accept </a>&nbsp;&nbsp;'
+                    . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_creator" id="' . $user->id . '" data-status="' . $user->is_approve .'"><i class="fa fa-times"></i> Reject </a>';
+                }
                 $usersArray[$k]['action'] = '<a href="' . route('admin.creator.edit', $user) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $user->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
@@ -202,6 +210,41 @@ class CreatorController extends Controller {
             return response()->json(false);
         } else {
             return response()->json(true);
+        }
+    }
+
+    public function acceptCreator(Request $request) {
+        try {
+            if ($request->isMethod('post')) {
+                $question = User::findOrFail($request->record_id);
+                $question->is_approve = $request->status;
+                if ($question->save()) {
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Creator Approve successfully."]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
+                }
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
+            }
+        } catch (\Exception $e) {
+            return ['status' => false, "message" => $e->getMessage()];
+        }
+    }
+    public function rejectCreator(Request $request) {
+        try {
+            if ($request->isMethod('post')) {
+                $question = User::findOrFail($request->record_id);
+                $question->is_approve = $request->status;
+                if ($question->save()) {
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Creator Rejected."]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
+                }
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
+            }
+        } catch (\Exception $e) {
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 

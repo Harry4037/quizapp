@@ -44,6 +44,8 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/delete', 'CreatorController@userDelete')->name('admin.creator.delete');
         Route::post('/status', 'CreatorController@userStatus')->name('admin.creator.status');
         Route::post('/check-mobile-number', 'CreatorController@checkMobileNumber')->name('admin.creator.check-mobile-no');
+        Route::post('/accept-creator', 'CreatorController@acceptCreator')->name('admin.creator.accept-creator');
+        Route::post('/reject-creator', 'CreatorController@rejectCreator')->name('admin.creator.reject-creator');
     });
 
     // Subject Routes
