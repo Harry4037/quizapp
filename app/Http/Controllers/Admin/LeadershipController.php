@@ -44,15 +44,16 @@ class LeadershipController extends Controller {
             $creatorUser = $query->take($limit)->offset($offset)->get();
 
             $dataArray = [];
+            $dataArray1 = [];
             foreach ($creatorUser as $k => $user) {
                 $question = Question::where('user_id', $user->id)->where('is_approve', 2)->count();
                 $followers = Follow::where('follow_user_id',$user->id)->count();
                 $total = $question + $followers;
-                $dataArray[$k]['name'] =  $user->name;
-                $dataArray[$k]['image'] = '<img class="img-bordered" height="60" width="100" src=' . $user->profile_pic . '>';
-                $dataArray[$k]['points'] = $total;
+                $dataArray['leadership'][$k]['name'] =  $user->name;
+                $dataArray['leadership'][$k]['image'] = '<img class="img-bordered" height="60" width="100" src=' . $user->profile_pic . '>';
+                $dataArray['leadership'][$k]['points'] = $total;
             }
-            $dataArray1 = collect($dataArray)->SortByDesc('points');
+            $dataArray1 = collect($dataArray['leadership'])->SortByDesc('points');
             $data['data'] = $dataArray1;
             return $data;
         } catch (\Exception $e) {
