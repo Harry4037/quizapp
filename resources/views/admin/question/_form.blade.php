@@ -14,7 +14,7 @@
 @endif
 @if(isset($exams))
     <div class="form-group">
-        <label class="control-label col-md-4 col-sm-4 col-xs-12">Exams <span class="error">*</span></label>
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Exams </label>
         <div class="col-md-4 col-sm-6 col-xs-6">
             <select class="form-control" name="exam_id" id="exam_id" multiple="multiple">
 
