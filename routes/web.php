@@ -115,4 +115,10 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::get('/search-user', 'NotificationController@searchUser')->name('admin.notification.search-user');
     });
 
+    // Leadership Routes
+    Route::prefix('leadership')->group(function() {
+        Route::get('/', 'LeadershipController@index')->name('admin.leadership.index');
+        Route::get('/list', 'LeadershipController@listNotification')->name('admin.leadership.list');
+    });
+
 });

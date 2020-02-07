@@ -95,4 +95,10 @@ Breadcrumbs::for('admin.testseries.edit', function ($trail, $testseries) {
     $trail->push("Edit", route('admin.testseries.edit', $testseries));
 });
 
+// Home > [Leadership]
+Breadcrumbs::for('admin.leadership.index', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push("Leadership", route('admin.leadership.index'));
+});
+
 
