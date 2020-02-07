@@ -71,7 +71,28 @@ class AuthController extends Controller {
         $otp = 1234;
 //        $otp = rand(1000, 9999);
         if (($request->user_type == 2) || ($request->user_type == 3)) {
-            $existingUser = User::where(['mobile_number' => $request->mobile_number])->first();
+
+            if($request->user_type == 2){
+                $existingUser = User::where(['is_approve' => 2 ,'mobile_number' => $request->mobile_number])->first();
+            if ($existingUser) {
+                $existingUser->otp = $otp;
+                if ($request->user_type == 3) {
+                    $existingUser->is_active = 0;
+                } else {
+                    $existingUser->is_active = 1;
+                }
+
+                if ($existingUser->save()) {
+                    return $this->successResponse("OTP sent successfully.", (object) []);
+                } else {
+                    return $this->errorResponse("Something went wrong.", (object) []);
+                }
+            } else {
+                return $this->errorResponse("Your are not Approved with us.", (object) []);
+
+            }}
+            if($request->user_type == 3){
+                $existingUser = User::where(['mobile_number' => $request->mobile_number])->first();
             if ($existingUser) {
                 $existingUser->otp = $otp;
                 if ($request->user_type == 3) {
@@ -87,22 +108,9 @@ class AuthController extends Controller {
                 }
             } else {
                 return $this->errorResponse("Your are not registered with us.", (object) []);
-//                $user = new User();
-//                $user->mobile_number = $request->mobile_number;
-//                $user->user_type_id = $request->user_type;
-//                $user->name = "Welcome User";
-//                $user->lang = $request->lang;
-//                $user->otp = $otp;
-//                if ($request->device_token) {
-//                    $user->device_token = $request->device_token;
-//                }
-//                $user->is_active = 1;
-//                if ($user->save()) {
-//                    return $this->successResponse("OTP sent successfully.", (object) []);
-//                } else {
-//                    return $this->errorResponse("Something went wrong.", (object) []);
-//                }
-            }
+
+            }}
+
         }
 
         return $this->errorResponse("Incorrect user type.");
