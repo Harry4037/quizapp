@@ -166,6 +166,7 @@ class TestSeriesController extends Controller {
             return $this->errorResponse("Questions missing.");
         }
         try {
+            
             $testSeries = new TestSeries();
             $testSeries->user_id = $request->input("user_id");
             $testSeries->exam_id = $request->input("exam_id");
