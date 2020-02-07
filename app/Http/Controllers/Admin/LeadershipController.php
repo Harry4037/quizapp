@@ -49,6 +49,7 @@ class LeadershipController extends Controller {
                 $followers = Follow::where('follow_user_id',$user->id)->count();
                 $total = $question + $followers;
                 $dataArray['users_leadership'][$k]['name'] =  $user->name;
+                $dataArray['users_leadership'][$k]['mob'] =  $user->mobile_number;
                 $dataArray['users_leadership'][$k]['image'] = '<img class="img-bordered" height="60" width="100" src=' . $user->profile_pic . '>';
                 $dataArray['users_leadership'][$k]['points'] = $total;
             }
