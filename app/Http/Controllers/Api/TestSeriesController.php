@@ -165,50 +165,53 @@ class TestSeriesController extends Controller {
         if (!$request->input("questions")) {
             return $this->errorResponse("Questions missing.");
         }
-
-        $testSeries = new TestSeries();
-        $testSeries->user_id = $request->input("user_id");
-        $testSeries->exam_id = $request->input("exam_id");
-        $testSeries->subject_id = $request->input("subject_id");
-        $testSeries->name = $request->input("series_name");
-        $testSeries->total_question = $request->input("question_count");
-        $testSeries->lang = $request->input("lang");
-        if ($testSeries->save()) {
-            foreach ($request->input("questions") as $question) {
-                $testSeriesQuestion = new Question();
-                $testSeriesQuestion->user_id = $request->input("user_id");
-                $testSeriesQuestion->exam_id = $request->input("exam_id");
-                $testSeriesQuestion->subject_id = $request->input("subject_id");
-                $testSeriesQuestion->description = $question["question_discription"];
-                if ($question["ques_pic"]) {
-                    $ques_image = $question->file("ques_pic");
-                    $ques = Storage::disk('public')->put('ques_image', $ques_image);
-                    $ques_file_name = basename($ques);
-                    $testSeriesQuestion->ques_image = $ques_file_name;
-                }else{
-                    $testSeriesQuestion->ques_image = '';
-                }
-                $testSeriesQuestion->ques_time = $question["time_per_question"];
-                $testSeriesQuestion->test_series_id = $testSeries->id;
-                if ($testSeriesQuestion->save()) {
-                    for ($i = 1; $i <= 4; $i++) {
-                        $kk = 'ans_' . $i;
-                        $answer = new Answer();
-                        $answer->question_id = $testSeriesQuestion->id;
-                        $answer->description = $question[$kk];
-                        if ($question['correct_ans'] == $i) {
-                            $answer->is_answer = 1;
-                        } else {
-                            $answer->is_answer = 0;
+        try {
+            $testSeries = new TestSeries();
+            $testSeries->user_id = $request->input("user_id");
+            $testSeries->exam_id = $request->input("exam_id");
+            $testSeries->subject_id = $request->input("subject_id");
+            $testSeries->name = $request->input("series_name");
+            $testSeries->total_question = $request->input("question_count");
+            $testSeries->lang = $request->input("lang");
+            if ($testSeries->save()) {
+                foreach ($request->input("questions") as $question) {
+                    $testSeriesQuestion = new Question();
+                    $testSeriesQuestion->user_id = $request->input("user_id");
+                    $testSeriesQuestion->exam_id = $request->input("exam_id");
+                    $testSeriesQuestion->subject_id = $request->input("subject_id");
+                    $testSeriesQuestion->description = $question["question_discription"];
+                    if ($question["ques_pic"]) {
+                        $ques_image = $question->file("ques_pic");
+                        $ques = Storage::disk('public')->put('ques_image', $ques_image);
+                        $ques_file_name = basename($ques);
+                        $testSeriesQuestion->ques_image = $ques_file_name;
+                    } else {
+                        $testSeriesQuestion->ques_image = '';
+                    }
+                    $testSeriesQuestion->ques_time = $question["time_per_question"];
+                    $testSeriesQuestion->test_series_id = $testSeries->id;
+                    if ($testSeriesQuestion->save()) {
+                        for ($i = 1; $i <= 4; $i++) {
+                            $kk = 'ans_' . $i;
+                            $answer = new Answer();
+                            $answer->question_id = $testSeriesQuestion->id;
+                            $answer->description = $question[$kk];
+                            if ($question['correct_ans'] == $i) {
+                                $answer->is_answer = 1;
+                            } else {
+                                $answer->is_answer = 0;
+                            }
+                            $answer->save();
                         }
-                        $answer->save();
                     }
                 }
+                $idd['test_series_id'] = $testSeries->id;
+                return $this->successResponse("Test Series created succesfully.", $idd);
+            } else {
+                return $this->errorResponse("Something went wrong.");
             }
-            $idd['test_series_id'] = $testSeries->id;
-            return $this->successResponse("Test Series created succesfully.", $idd);
-        } else {
-            return $this->errorResponse("Something went wrong.");
+        } catch (Exception $ex) {
+            return $this->errorResponse($ex->getMessage());
         }
     }
 
@@ -966,6 +969,7 @@ class TestSeriesController extends Controller {
             }
         }
     }
+
     /**
      * @api {get} /api/test-series-details Test Series Details
      * @apiHeader {String} Accept application/json.
@@ -1015,14 +1019,14 @@ class TestSeriesController extends Controller {
             if (!$series) {
                 return $this->errorResponse("Invalid Test Series ID");
             }
-                $dataArray['name'] = $series->name ;
-                $dataArray['total_question'] = $series->total_question;
-                $minut = 0;
-                $ques = Question::where('test_series_id',$request->test_series_id)->get();
-                foreach($ques as $que){
-                   $minut = $minut + $que->ques_time;
-                }
-                $dataArray['total_time'] = $minut;
+            $dataArray['name'] = $series->name;
+            $dataArray['total_question'] = $series->total_question;
+            $minut = 0;
+            $ques = Question::where('test_series_id', $request->test_series_id)->get();
+            foreach ($ques as $que) {
+                $minut = $minut + $que->ques_time;
+            }
+            $dataArray['total_time'] = $minut;
         }
         if ($request->flag == 2) {
             $series1 = UserTestSeries::find($request->test_series_id);
@@ -1030,13 +1034,14 @@ class TestSeriesController extends Controller {
                 return $this->errorResponse("Invalid Test Series ID");
             }
             $dataArray['name'] = $series1->name;
-              $minut = 0;
-            $series = UserTestSeriesQuestionAnswer::where('user_test_series_id',$request->test_series_id)->get();
+            $minut = 0;
+            $series = UserTestSeriesQuestionAnswer::where('user_test_series_id', $request->test_series_id)->get();
             foreach ($series as $k => $ser) {
                 $que = Question::find($request->test_series_id);
                 $minut = $minut + $que->ques_time;
             }
-            $dataArray['total_question'] = count($series);;
+            $dataArray['total_question'] = count($series);
+            ;
             $dataArray['total_time'] = $minut;
         }
         return $this->successResponse("Test Series Details.", $dataArray);
