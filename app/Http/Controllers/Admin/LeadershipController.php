@@ -41,7 +41,7 @@ class LeadershipController extends Controller {
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
-            $creatorUser = $query->take($limit)->offset($offset)->latest()->get();
+            $creatorUser = $query->take($limit)->offset($offset)->get();
 
             $dataArray = [];
             foreach ($creatorUser as $k => $user) {
@@ -52,7 +52,7 @@ class LeadershipController extends Controller {
                 $dataArray[$k]['image'] = $user ? $user->profile_pic : '';
                 $dataArray[$k]['points'] = $total;
             }
-            $dataArray1 = collect($dataArray)->SortByDesc('points');
+            //$dataArray1 = collect($dataArray)->SortByDesc('points');
             $data['data'] = $dataArray;
             return $data;
         } catch (\Exception $e) {
