@@ -73,14 +73,14 @@ class AuthController extends Controller {
         if (($request->user_type == 2) || ($request->user_type == 3)) {
 
             if($request->user_type == 2){
-                $existingUser = User::where(['is_approve' => 2 ,'mobile_number' => $request->mobile_number])->first();
+                $existingUser = User::where(['is_active' => 0 ,'mobile_number' => $request->mobile_number])->first();
             if ($existingUser) {
                 $existingUser->otp = $otp;
-                if ($request->user_type == 3) {
-                    $existingUser->is_active = 0;
-                } else {
-                    $existingUser->is_active = 1;
-                }
+                // if ($request->user_type == 3) {
+                //     $existingUser->is_active = 0;
+                // } else {
+                //     $existingUser->is_active = 1;
+                // }
 
                 if ($existingUser->save()) {
                     return $this->successResponse("OTP sent successfully.", (object) []);
@@ -88,18 +88,18 @@ class AuthController extends Controller {
                     return $this->errorResponse("Something went wrong.", (object) []);
                 }
             } else {
-                return $this->errorResponse("Your are not Approved with us.", (object) []);
+                return $this->errorResponse("Your are Blocked by us.", (object) []);
 
             }}
             if($request->user_type == 3){
                 $existingUser = User::where(['mobile_number' => $request->mobile_number])->first();
             if ($existingUser) {
                 $existingUser->otp = $otp;
-                if ($request->user_type == 3) {
-                    $existingUser->is_active = 0;
-                } else {
-                    $existingUser->is_active = 1;
-                }
+                // if ($request->user_type == 3) {
+                //     $existingUser->is_active = 0;
+                // } else {
+                //     $existingUser->is_active = 1;
+                // }
 
                 if ($existingUser->save()) {
                     return $this->successResponse("OTP sent successfully.", (object) []);
