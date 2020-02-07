@@ -20,7 +20,7 @@
                     <div class="box-header">
                         <h3 class="box-title">Question List</h3>
                         <div class="pull-right">
-                            <a href="{{ route('admin.test-series.add-question', $testseries) }}" class="btn btn-block btn-primary">Add</a>
+                            {{-- <a href="{{ route('admin.test-series.add-question', $testseries) }}" class="btn btn-block btn-primary">Add</a> --}}
                         </div>
                     </div>
                     <!-- /.box-header -->

@@ -28,13 +28,14 @@
                         <table id="list" class="table table-bordered table-hover text-center">
                             <thead>
                                 <tr>
-                                     <th style="width: 6%">Sr. No.</th>
-                                    <th>Profile Pic.</th>
-                                    <th>Mobile No.</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th style="width: 44px">Status</th>
-                                    <th>Action</th>
+                                     <th style="width: 6%">Sr.No.</th>
+                                    <th style="width: 10%">Profile Pic.</th>
+                                    <th style="width: 10%">Mobile No.</th>
+                                    <th style="width: 19%">Name</th>
+                                    <th style="width: 15%">Email</th>
+                                    <th style="width: 15%">Status</th>
+                                    <th style="width: 10%">Approval</th>
+                                    <th style="width: 15%">Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -77,6 +78,7 @@
             {"data": "mobile_number", sortable: false},
             {"data": "name", sortable: false},
             {"data": "email", sortable: false},
+            {"data": "approval", sortable: false},
             {"data": "status", sortable: false},
             {"data": "action", sortable: false},
         ]
@@ -87,8 +89,8 @@
         $(document).on("click", ".delete", function () {
             var record_id = this.id;
             deletePopup(
-                    "Deleting User",
-                    "Are you sure want to delete this user?",
+                    "Deleting Creator",
+                    "Are you sure want to delete this Creator?",
                     record_id,
                     "{{route('admin.creator.delete')}}"
                     );
@@ -115,6 +117,72 @@
                         th.attr('data-status', res.data.status);
                         showSuccessMessage(res.data.message);
                         $(".overlay").hide();
+                    } else {
+                        showErrorMessage(res.message);
+                        $(".overlay").hide();
+                    }
+                }
+            });
+
+        });
+
+        $(document).on("click", ".accept_creator", function () {
+
+            var record_id = this.id;
+            var th = $(this);
+            var status = th.attr('data-status');
+            var update_status = (status == '1') ? 1 : 2;
+            $.ajax({
+                url: "{{route('admin.creator.accept-creator')}}",
+                type: 'post',
+                data: {status: update_status, record_id: record_id},
+                dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
+                success: function (res) {
+
+                    if (res.status)
+                    {
+                        th.attr('data-status', res.data.status);
+                        showSuccessMessage(res.data.message);
+                        $(".overlay").hide();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showErrorMessage(res.message);
+                        $(".overlay").hide();
+                    }
+                }
+            });
+
+        });
+
+        $(document).on("click", ".reject_creator", function () {
+
+            var record_id = this.id;
+            var th = $(this);
+            var status = th.attr('data-status');
+            var update_status = (status == '1') ? 2 : 3;
+            $.ajax({
+                url: "{{route('admin.creator.reject-creator')}}",
+                type: 'post',
+                data: {status: update_status, record_id: record_id},
+                dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
+                success: function (res) {
+
+                    if (res.status)
+                    {
+                        th.attr('data-status', res.data.status);
+                        showSuccessMessage(res.data.message);
+                        $(".overlay").hide();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
                     } else {
                         showErrorMessage(res.message);
                         $(".overlay").hide();

@@ -82,9 +82,6 @@ class UserController extends Controller {
         if (!$request->dob) {
             return $this->errorResponse("dob missing");
         }
-        if (!$request->designation) {
-            return $this->errorResponse("Designation missing");
-        }
         if (!$request->qualification) {
             return $this->errorResponse("Qualification missing");
         }
@@ -130,7 +127,10 @@ class UserController extends Controller {
         if ($request->experience) {
             $user->experience = $request->experience;
         }
-        $user->designation = $request->designation;
+        if ($request->designation) {
+            $user->designation = $request->designation;
+        }
+
         $user->qualification = $request->qualification;
         $user->lang = $request->lang;
         $user->user_type_id = $request->user_type;
@@ -686,7 +686,7 @@ class UserController extends Controller {
         } else {
             $user = User::find($request->user_id);
             if (!$user) {
-                
+
             } else {
                 $userArray['device_token'] = $request->token;
                 $userArray['updated_at'] = new \DateTime("now");

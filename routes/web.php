@@ -44,6 +44,8 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/delete', 'CreatorController@userDelete')->name('admin.creator.delete');
         Route::post('/status', 'CreatorController@userStatus')->name('admin.creator.status');
         Route::post('/check-mobile-number', 'CreatorController@checkMobileNumber')->name('admin.creator.check-mobile-no');
+        Route::post('/accept-creator', 'CreatorController@acceptCreator')->name('admin.creator.accept-creator');
+        Route::post('/reject-creator', 'CreatorController@rejectCreator')->name('admin.creator.reject-creator');
     });
 
     // Subject Routes
@@ -111,6 +113,12 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::get('/list', 'NotificationController@listNotification')->name('admin.notification.list');
         Route::post('/send-notification', 'NotificationController@sendNotification')->name('admin.notification.send');
         Route::get('/search-user', 'NotificationController@searchUser')->name('admin.notification.search-user');
+    });
+
+    // Leadership Routes
+    Route::prefix('leadership')->group(function() {
+        Route::get('/', 'LeadershipController@index')->name('admin.leadership.index');
+        Route::get('/list', 'LeadershipController@leadershipList')->name('admin.leadership.list');
     });
 
 });
