@@ -28,8 +28,9 @@
                         <table id="list" class="table table-bordered table-hover text-center">
                             <thead>
                                 <tr>
-                                    <th>Sr. No.</th>
+                                    <th>Ranking</th>
                                     <th>Name</th>
+                                    <th>Mobile Number</th>
                                     <th>Image</th>
                                     <th>Points</th>
                                 </tr>
@@ -70,6 +71,7 @@
                 }
             },
             {"data": "name", sortable: false},
+            {"data": "mob", sortable: false},
             {"data": "image", sortable: false},
             {"data": "points", sortable: false},
         ]
