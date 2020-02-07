@@ -64,6 +64,11 @@
                     <i class="fa fa-question-circle"></i> <span>Notification Management</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.leadership.index')}}">
+                    <i class="fa fa-question-circle"></i> <span>Leadership Board</span>
+                </a>
+            </li>
         </ul>
     </section>
     <!-- /.sidebar -->
