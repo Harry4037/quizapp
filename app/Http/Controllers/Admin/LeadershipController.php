@@ -39,10 +39,9 @@ class LeadershipController extends Controller {
             if ($searchKeyword) {
                 $query->where('name', 'LIKE', "%$searchKeyword%");
             }
-            $data['recordsTotal'] = $query->count();
-            $data['recordsFiltered'] = $query->count();
-            $creatorUser = $query->offset($offset)->get();
-
+            $data['recordsTotal'] = 10;
+            $data['recordsFiltered'] = 10;
+            $creatorUser = $query->take(10000)->offset($offset)->latest()->get();
             $dataArray = [];
             foreach ($creatorUser as $k => $user) {
                 $question = Question::where('user_id', $user->id)->where('is_approve', 2)->count();
@@ -57,7 +56,8 @@ class LeadershipController extends Controller {
                 return $a['points'] <=> $b['points'];
             });
             $dadt = array_reverse($dataArray['users_leadership']);
-            $data['data'] = array_slice($dadt,10);
+             $rr = array_slice($dadt,0,10);
+             $data['data'] = $rr;
             return $data;
         } catch (\Exception $e) {
             dd($e);
