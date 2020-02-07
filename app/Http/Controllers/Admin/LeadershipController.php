@@ -48,8 +48,8 @@ class LeadershipController extends Controller {
                 $question = Question::where('user_id', $user->id)->where('is_approve', 2)->count();
                 $followers = Follow::where('follow_user_id',$user->id)->count();
                 $total = $question + $followers;
-                $dataArray[$k]['name'] = $user ? $user->name : 'User';
-                $dataArray[$k]['image'] = $user ? $user->profile_pic : '';
+                $dataArray[$k]['name'] =  $user->name;
+                $dataArray[$k]['image'] = '<img class="img-bordered" height="60" width="100" src=' . $user->profile_pic . '>';
                 $dataArray[$k]['points'] = $total;
             }
             //$dataArray1 = collect($dataArray)->SortByDesc('points');
