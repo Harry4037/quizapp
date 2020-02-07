@@ -41,7 +41,7 @@ class LeadershipController extends Controller {
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
-            $creatorUser = $query->get();
+            $creatorUser = $query->offset($offset)->get();
 
             $dataArray = [];
             foreach ($creatorUser as $k => $user) {
