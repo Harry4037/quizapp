@@ -61,7 +61,7 @@
 <!-- /.row -->
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <!-- DIRECT CHAT -->
         <div class="box box-warning direct-chat direct-chat-warning">
             <div class="box-header with-border">
@@ -117,7 +117,7 @@
                     </button>
                 </div>
             </div>
-             /.box-header 
+             /.box-header
             <div class="box-body no-padding">
                 <ul class="users-list clearfix">
                     <li>
@@ -161,13 +161,13 @@
                         <span class="users-list-date">15 Jan</span>
                     </li>
                 </ul>
-                 /.users-list 
+                 /.users-list
             </div>
-             /.box-body 
+             /.box-body
             <div class="box-footer text-center">
                 <a href="javascript:void(0)" class="uppercase">View All Users</a>
             </div>
-             /.box-footer 
+             /.box-footer
         </div>-->
         <!--/.box -->
     </div>
