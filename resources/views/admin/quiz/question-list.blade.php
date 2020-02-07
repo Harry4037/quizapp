@@ -28,9 +28,9 @@
                         <table id="list" class="table table-bordered table-hover text-center">
                             <thead>
                                 <tr>
-                                    <th>Sr. No.</th>
-                                    <th>Question</th>
-                                    <th>Action</th>
+                                    <th style="width: 5%;">Sr. No.</th>
+                                    <th style="width: 80%;">Question</th>
+                                    <th style="width: 20%;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

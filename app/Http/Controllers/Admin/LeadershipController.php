@@ -41,7 +41,7 @@ class LeadershipController extends Controller {
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
-            $creatorUser = $query->take($limit)->offset($offset)->get();
+            $creatorUser = $query->get();
 
             $dataArray = [];
             foreach ($creatorUser as $k => $user) {
@@ -57,7 +57,7 @@ class LeadershipController extends Controller {
                 return $a['points'] <=> $b['points'];
             });
             $dadt = array_reverse($dataArray['users_leadership']);
-            $data['data'] = $dadt;
+            $data['data'] = array_slice($dadt,10);
             return $data;
         } catch (\Exception $e) {
             dd($e);
