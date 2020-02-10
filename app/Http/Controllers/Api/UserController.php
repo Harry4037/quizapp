@@ -9,6 +9,7 @@ use Exception;
 use App\Models\User;
 use App\Models\TestSeries;
 use App\Models\Bookmark;
+use App\Models\Follow;
 use Carbon\Carbon;
 use App\Models\UserExam;
 use Illuminate\Support\Facades\Storage;
@@ -614,6 +615,22 @@ class UserController extends Controller {
             $data['user']['follower'] = 50;
             $data['user']['post'] = $count;
             $data['user']['Test_series'] = $dataArray;
+            if ($request->follow_user_id) {
+
+                $follow_user_id = User::find($request->follow_user_id);
+                if (!$follow_user_id) {
+                    return $this->errorResponse("Follow User not found.");
+                }
+                $user = User::find($request->user_id);
+                $remove = Follow::where("user_id", $request->follow_user_id)->where("follow_user_id", $request->user_id)->first();
+                if (!$user) {
+                    return $this->errorResponse("user not found.");
+                } elseif ($remove) {
+                    $data['user_follow']['is_follow'] = TRUE;
+                } else {
+                    $data['user_follow']['is_follow'] = FALSE;
+                }
+            }
 
             return $this->successResponse("user Profile.", $data);
         } else {
