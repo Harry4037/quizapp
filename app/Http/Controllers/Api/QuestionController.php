@@ -266,7 +266,7 @@ class QuestionController extends Controller {
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
 
-     if ($questions->count() <= 0) {
+
             $testSeries = new UserTestSeries();
             $testSeries->user_id = $request->user_id;
             $exam_name = Exam::where('id', $request->exam_id)->first();
@@ -288,7 +288,7 @@ class QuestionController extends Controller {
                 }
             }
             $data['test_series_id'] = $testSeries->id;
-        }
+
             return $this->successResponse("Question list.", $data);
         } else {
             return $this->errorResponse("Invlaid flag type.");
