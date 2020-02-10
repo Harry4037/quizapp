@@ -84,7 +84,7 @@
                         @foreach($rankingArray as $k=>$ranking)
                         <tr>
                             <td>{{ $k+1 }}</td>
-                            <td><img class="img-circle" width="50" src="{{ $ranking['profile_pic'] }}"></td>
+                            <td><img class="img-circle" width="50" height="50"  src="{{ $ranking['profile_pic'] }}"></td>
                             <td>{{ $ranking['name'] }}</td>
                             <td>{{ $ranking['total_correct_answer'] }}</td>
                         </tr>
