@@ -166,7 +166,7 @@ class TestSeriesController extends Controller {
             return $this->errorResponse("Questions missing.");
         }
         try {
-            
+
             $testSeries = new TestSeries();
             $testSeries->user_id = $request->input("user_id");
             $testSeries->exam_id = $request->input("exam_id");
@@ -798,9 +798,12 @@ class TestSeriesController extends Controller {
                 } else {
                     $testSeries = UserTestSeries::find($trendSearch->test_series_id);
                 }
-                $dataArrayTrending[$k]['id'] = $testSeries->id ? $testSeries->id : '';
-                $dataArrayTrending[$k]['name'] = $testSeries->name ? $testSeries->name : '';
-                $dataArrayTrending[$k]['flag'] = $trendSearch->flag;
+                if($testSeries){
+                    $dataArrayTrending[$k]['id'] = $testSeries->id ? $testSeries->id : '';
+                    $dataArrayTrending[$k]['name'] = $testSeries->name ? $testSeries->name : '';
+                    $dataArrayTrending[$k]['flag'] = $trendSearch->flag;
+                }
+
             }
         }
         $dataArrayRecent = [];
@@ -811,14 +814,17 @@ class TestSeriesController extends Controller {
                 } else {
                     $testSeries = UserTestSeries::find($trendSearch->test_series_id);
                 }
-                $dataArrayRecent[$k]['id'] = $testSeries->id ? $testSeries->id : '';
-                $dataArrayRecent[$k]['name'] = $testSeries->name ? $testSeries->name : '';
-                $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
-                if ($testSeries->is_attempted == 1) {
-                    $dataArrayRecent[$k]['is_attempted'] = TRUE;
-                } else {
-                    $dataArrayRecent[$k]['is_attempted'] = FALSE;
+                if($testSeries){
+                    $dataArrayRecent[$k]['id'] = $testSeries->id ? $testSeries->id : '';
+                    $dataArrayRecent[$k]['name'] = $testSeries->name ? $testSeries->name : '';
+                    $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
+                    if ($testSeries->is_attempted == 1) {
+                        $dataArrayRecent[$k]['is_attempted'] = TRUE;
+                    } else {
+                        $dataArrayRecent[$k]['is_attempted'] = FALSE;
+                    }
                 }
+
             }
         }
         $data['trend_search'] = $dataArrayTrending;
