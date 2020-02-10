@@ -814,7 +814,7 @@ class TestSeriesController extends Controller {
                 } else {
                     $testSeries = UserTestSeries::find($trendSearch->test_series_id);
                 }
-                if($testSeries){
+
                     $dataArrayRecent[$k]['id'] = $testSeries->id ? $testSeries->id : '';
                     $dataArrayRecent[$k]['name'] = $testSeries->name ? $testSeries->name : '';
                     $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
@@ -823,7 +823,6 @@ class TestSeriesController extends Controller {
                     } else {
                         $dataArrayRecent[$k]['is_attempted'] = FALSE;
                     }
-                }
 
             }
         }
