@@ -237,8 +237,11 @@ class QuestionController extends Controller {
                         ->whereIn('subject_id', $request->subject_id);
             })->whereNotIn("id", $userQuestionIds);
             $query->limit($request->total_questions);
-
+            if (!$request->year) {
                 $questions = $query->get();
+            } else {
+                $questions = $query->where('year', $request->year)->get();
+            }
 
             if ($questions->count() <= 0) {
                 return $this->errorResponse("Question not found.");
@@ -252,9 +255,9 @@ class QuestionController extends Controller {
                 $dataArray[$k]['description'] = $question->description;
                 $dataArray[$k]['ques_image'] = $question->ques_image;
                 $dataArray[$k]['ques_time'] = $question->ques_time;
-                // if ($request->year) {
-                //     $dataArray[$k]['year'] = $question->year;
-                // }
+                if ($request->year) {
+                    $dataArray[$k]['year'] = $question->year;
+                }
                 $dataArray[$k]['is_like'] = $isLike ? true : false;
                 $dataArray[$k]['answers'] = $answers;
                 $totatlTime += $question->ques_time;
@@ -263,7 +266,7 @@ class QuestionController extends Controller {
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
 
-
+            if ($questions->count() <= 0) {
             $testSeries = new UserTestSeries();
             $testSeries->user_id = $request->user_id;
             $exam_name = Exam::where('id', $request->exam_id)->first();
@@ -284,6 +287,7 @@ class QuestionController extends Controller {
                     $UserTestSeriesQuestionAnswer->save();
                 }
             }
+        }
             $data['test_series_id'] = $testSeries->id;
             return $this->successResponse("Question list.", $data);
         } else {
