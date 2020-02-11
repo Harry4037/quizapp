@@ -155,7 +155,7 @@ class RankingController extends Controller {
         $creatorUser = User::where('user_type_id',2)->get();
         $dataArray = [];
         $dataArray1 = [];
-        $myRanking = 0;
+  
         $myRankingNo = 0;
         if ($creatorUser) {
             foreach ($creatorUser as $k => $user) {
@@ -171,7 +171,7 @@ class RankingController extends Controller {
                     $dataArray1['user']['name'] = $user ? $user->name : 'User';
                     $dataArray1['user']['profile_pic'] = $user ? $user->profile_pic : '';
                     $dataArray1['user']['points'] = $total;
-                    $dataArray1['user']['rank_number'] = $k + 1;;                   
+                                     
                 }
 
             }
@@ -181,11 +181,16 @@ class RankingController extends Controller {
         usort($dataArray['users_leadership'], function($a, $b) {
             return $a['points'] <=> $b['points'];
         });
-        $dadt['users_leadership'] = array_reverse($dataArray['users_leadership']);
+        $dadt = array_reverse($dataArray['users_leadership']);
 
-         $rr['users_leadership'] = array_slice($dadt['users_leadership'],0,10);
+         $rr['users_leadership'] = array_slice($dadt,0,10);      
+
+foreach($dadt as $y => $xyz){
+     if($xyz['user_id'] == $request->user_id){
+        $dataArray1['user']['rank_number'] =  $y +1; 
+ }
+}
          $fdf = array_merge($rr, $dataArray1);
-       // $dataArray1 = collect($dataArray)->SortByDesc('points');
         return $this->successResponse("Leadership list", $fdf);
     }
 }
