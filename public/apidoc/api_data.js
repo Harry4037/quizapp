@@ -3425,8 +3425,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "question_ids",
-            "description": "<p>Question ID'd in Array Format.</p>"
+            "field": "test_series_id",
+            "description": "<p>Test series ID.</p>"
           }
         ]
       }

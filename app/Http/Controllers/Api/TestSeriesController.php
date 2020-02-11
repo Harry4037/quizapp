@@ -1059,7 +1059,7 @@ class TestSeriesController extends Controller {
      * @apiGroup TestSeries
      *
      * @apiParam {String} test_series_images Images in Array Format.
-     * @apiParam {String} question_ids Question ID'd in Array Format.
+     * @apiParam {String} test_series_id Test series ID.
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -1084,28 +1084,29 @@ class TestSeriesController extends Controller {
             return $this->errorResponse("Provide Images in proper format.");
         }
 
-        if (!$request->question_ids) {
-            return $this->errorResponse("Question ID's missing");
+        if (!$request->test_series_id) {
+            return $this->errorResponse("Testseries ID missing");
         }
-        if (!is_array($request->question_ids)) {
-            return $this->errorResponse("Provide question Id's in proper format.");
-        }
+        $questionList = Question::where("test_series_id", $request->test_series_id)->get();
 
-        foreach ($request->test_series_images as $k => $image) {
-            $question = Question::find($request->question_ids[$k]);
-            if ($question) {
-                if (!$request->hasFile("test_series_images." . $k)) {
-                    return $this->errorResponse("Question pic not valid file type.");
+        if ($questionList) {
+            foreach ($request->test_series_images as $k => $image) {
+                $question = Question::find($questionList[$k]->id);
+                if ($question) {
+                    if (!$request->hasFile("test_series_images." . $k)) {
+                        return $this->errorResponse("Question pic not valid file type.");
+                    }
+                    $ques_image = $request->file("test_series_images." . $k);
+                    $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                    $ques_file_name = basename($quesImage);
+                    $question->ques_image = $ques_file_name;
+                    $question->save();
                 }
-                $ques_image = $request->file("test_series_images." . $k);
-                $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
-                $ques_file_name = basename($quesImage);
-                $question->ques_image = $ques_file_name;
-                $question->save();
             }
+            return $this->successResponse("Image uploaded succefully.", (object) []);
+        } else {
+            return $this->errorResponse("questions not found.");
         }
-
-        return $this->successResponse("Image uploaded succefully.", (object) []);
     }
 
 }
