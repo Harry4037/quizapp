@@ -45,7 +45,6 @@ class TestSeriesController extends Controller {
      *                           "ans_2":"detail ans 2",
      *                           "ans_3":"detail ans 3",
      *                           "ans_4":"detail ans 4",
-     *                           "image_path":"sdafsadfasdfasdfs",
      *                           "correct_ans":1,
      *                           "time_per_question":1
      *                   }
@@ -1081,6 +1080,9 @@ class TestSeriesController extends Controller {
             return $this->errorResponse("Testseries ID missing");
         }
         $questionList = Question::where("test_series_id", $request->test_series_id)->get();
+        if($questionList->count() != count($request->test_series_images)){
+            return $this->errorResponse("Pleae provide images proper lenght array");
+        }
 
         if ($questionList) {
             foreach ($request->test_series_images as $k => $image) {
