@@ -41,10 +41,10 @@ class QuestionController extends Controller {
             if ($searchKeyword) {
                 $query->whereHas("subject", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
-                 });
-                 $query->orWhereHas("exam", function($query) use($searchKeyword) {
+                });
+                $query->orWhereHas("exam", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
-              });
+                });
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
@@ -53,20 +53,20 @@ class QuestionController extends Controller {
             $questionsArray = [];
             foreach ($questions as $k => $question) {
                 $questionsArray[$k]['description'] = $question->description;
-                if($question->exam_id){
-                $questionsArray[$k]['exam'] = $question->exam->name;
-                $questionsArray[$k]['subject'] = $question->subject->name;
-                }else{
+                if ($question->exam_id) {
+                    $questionsArray[$k]['exam'] = $question->exam->name;
+                    $questionsArray[$k]['subject'] = $question->subject->name;
+                } else {
                     $questionsArray[$k]['exam'] = "Quiz";
                     $questionsArray[$k]['subject'] = "Quiz";
                 }
-                if($question->is_approve == 2){
+                if ($question->is_approve == 2) {
                     $questionsArray[$k]['status'] = '<label class="btn btn-success btn-xs disabled">Approved</label>';
-                }elseif($question->is_approve == 3){
+                } elseif ($question->is_approve == 3) {
                     $questionsArray[$k]['status'] = '<label class="btn btn-danger btn-xs disabled">Rejected</label>';
-                }else{
-                    $questionsArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $question->id . '" data-status="' . $question->is_approve .'"><i class="fa fa-check"></i> Accept </a>&nbsp;&nbsp;'
-                    . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $question->id . '" data-status="' . $question->is_approve .'"><i class="fa fa-times"></i> Reject </a>';
+                } else {
+                    $questionsArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $question->id . '" data-status="' . $question->is_approve . '"><i class="fa fa-check"></i> Accept </a>&nbsp;&nbsp;'
+                            . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $question->id . '" data-status="' . $question->is_approve . '"><i class="fa fa-times"></i> Reject </a>';
                 }
                 $questionsArray[$k]['action'] = '<a href="' . route('admin.question.edit', $question) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;<a href="' . route('admin.question.comment-list', $question) . '" class="btn btn-warning btn-xs"><i class="fa fa-comment"></i> Comment </a>&nbsp;&nbsp;&nbsp;'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $question->id . '" ><i class="fa fa-trash"></i> Delete </a>';
@@ -84,7 +84,7 @@ class QuestionController extends Controller {
             $question = Question::find($request->id);
             if ($question) {
                 $question->delete();
-                Answer::where('question_id',$request->id)->delete();
+                Answer::where('question_id', $request->id)->delete();
                 return ['status' => true, "message" => "Question deleted."];
             } else {
                 return ['status' => false, "message" => "Something went be wrong."];
@@ -102,13 +102,12 @@ class QuestionController extends Controller {
                             'description' => [
                                 'bail',
                                 'required',
-                            'description' => ['required'],
+                                'description' => ['required'],
                                 Rule::unique('questions', 'description')->ignore($question->id)->where(function ($query) use($request) {
                                             return $query->where(['description' => $request->description])
                                                             ->whereNull('deleted_at');
                                         }),
                             ],
-
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.question.edit', $question->id)->withErrors($validator)->withInput();
@@ -128,30 +127,29 @@ class QuestionController extends Controller {
                 $question->ques_time = $request->time;
                 $question->year = $request->year;
                 if ($question->save()) {
-                    if($request->correct_answer == "opt1"){
-                        Answer::where('id',$request->answer1)->update(['description' => $request->ans1, 'is_answer' => 1]);
-                        Answer::where('id',$request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
-                        Answer::where('id',$request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
-                        Answer::where('id',$request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+                    if ($request->correct_answer == "opt1") {
+                        Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 1]);
+                        Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                        Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                        Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
                     }
-                    if($request->correct_answer == "opt2"){
-                        Answer::where('id',$request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
-                        Answer::where('id',$request->answer2)->update(['description' => $request->ans2, 'is_answer' => 1]);
-                        Answer::where('id',$request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
-                        Answer::where('id',$request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
-
+                    if ($request->correct_answer == "opt2") {
+                        Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                        Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 1]);
+                        Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                        Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
                     }
-                    if($request->correct_answer == "opt3"){
-                        Answer::where('id',$request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
-                        Answer::where('id',$request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
-                        Answer::where('id',$request->answer3)->update(['description' => $request->ans3, 'is_answer' => 1]);
-                        Answer::where('id',$request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+                    if ($request->correct_answer == "opt3") {
+                        Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                        Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                        Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 1]);
+                        Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
                     }
-                    if($request->correct_answer == "opt4"){
-                        Answer::where('id',$request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
-                        Answer::where('id',$request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
-                        Answer::where('id',$request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
-                        Answer::where('id',$request->answer4)->update(['description' => $request->ans4, 'is_answer' => 1]);
+                    if ($request->correct_answer == "opt4") {
+                        Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                        Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                        Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                        Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 1]);
                     }
                     return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
                 } else {
@@ -160,7 +158,7 @@ class QuestionController extends Controller {
             }
             $subjects = Subject::get();
             $exams1 = Exam::get();
-            $answers = Answer::where('question_id',$question->id)->get();
+            $answers = Answer::where('question_id', $question->id)->get();
 
             return view('admin.question.edit', [
                 'question' => $question,
@@ -185,26 +183,86 @@ class QuestionController extends Controller {
                                                             ->whereNull('deleted_at');
                                         }),
                             ],
-                    ]);
+                ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.question.add')->withErrors($validator)->withInput();
                 }
-                $question = new Question();
-                $question->ques_time = $request->time;
-                $question->user_id = 1;
-                $question->is_approve = 2;
-                $question->description = $request->description;
-                $question->exam_id = $request->exam_id;
-                $question->year = $request->year;
-                $question->lang = $request->lang_type;
-                $question->subject_id = $request->subject_id;
-                if ($request->hasFile('ques_image')) {
-                    $ques_image = $request->file("ques_image");
-                    $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
-                    $ques_file_name = basename($quesImage);
-                    $question->ques_image = $ques_file_name;
-                }
-                if ($question->save()) {
+                if (!$request->exam_id) {
+                    $exams = Exam::all();
+                    foreach ($exams as $exam) {
+                        $question = new Question();
+                        $question->ques_time = $request->time;
+                        $question->user_id = 1;
+                        $question->is_approve = 2;
+                        $question->description = $request->description;
+                        $question->exam_id = $exam->id;
+                        $question->year = $request->year;
+                        $question->lang = $request->lang_type;
+                        $question->subject_id = $request->subject_id;
+                        if ($request->hasFile('ques_image')) {
+                            $ques_image = $request->file("ques_image");
+                            $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                            $ques_file_name = basename($quesImage);
+                            $question->ques_image = $ques_file_name;
+                        }
+                        if ($question->save()) {
+                            $answer = new Answer();
+                            $answer->question_id = $question->id;
+                            $answer->description = $request->ans1;
+                            if ($request->correct_answer == "opt1") {
+                                $answer->is_answer = 1;
+                            } else {
+                                $answer->is_answer = 0;
+                            }
+                            $answer->save();
+                            $answer = new Answer();
+                            $answer->question_id = $question->id;
+                            $answer->description = $request->ans2;
+                            if ($request->correct_answer == "opt2") {
+                                $answer->is_answer = 1;
+                            } else {
+                                $answer->is_answer = 0;
+                            }
+                            $answer->save();
+                            $answer = new Answer();
+                            $answer->question_id = $question->id;
+                            $answer->description = $request->ans3;
+                            if ($request->correct_answer == "opt3") {
+                                $answer->is_answer = 1;
+                            } else {
+                                $answer->is_answer = 0;
+                            }
+                            $answer->save();
+                            $answer = new Answer();
+                            $answer->question_id = $question->id;
+                            $answer->description = $request->ans4;
+                            if ($request->correct_answer == "opt4") {
+                                $answer->is_answer = 1;
+                            } else {
+                                $answer->is_answer = 0;
+                            }
+                            $answer->save();
+                        }
+                    }
+                    
+                    return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
+                } else {
+                    $question = new Question();
+                    $question->ques_time = $request->time;
+                    $question->user_id = 1;
+                    $question->is_approve = 2;
+                    $question->description = $request->description;
+                    $question->exam_id = $request->exam_id;
+                    $question->year = $request->year;
+                    $question->lang = $request->lang_type;
+                    $question->subject_id = $request->subject_id;
+                    if ($request->hasFile('ques_image')) {
+                        $ques_image = $request->file("ques_image");
+                        $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                        $ques_file_name = basename($quesImage);
+                        $question->ques_image = $ques_file_name;
+                    }
+                    if ($question->save()) {
                         $answer = new Answer();
                         $answer->question_id = $question->id;
                         $answer->description = $request->ans1;
@@ -242,9 +300,10 @@ class QuestionController extends Controller {
                         }
                         $answer->save();
 
-                    return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
-                } else {
-                    return redirect()->route('admin.question.index')->with('error', 'Something went be wrong.');
+                        return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
+                    } else {
+                        return redirect()->route('admin.question.index')->with('error', 'Something went be wrong.');
+                    }
                 }
             }
             $css = [
@@ -283,6 +342,7 @@ class QuestionController extends Controller {
             return ['status' => false, "message" => $e->getMessage()];
         }
     }
+
     public function rejectQues(Request $request) {
         try {
             if ($request->isMethod('post')) {
@@ -306,9 +366,9 @@ class QuestionController extends Controller {
         $comm = QuestionComment::where('question_id', $question->id)->with(['user'])->get();
 
 
-            return view('admin.question.comment-list', [
-                'comments' => $comm
-            ]);
-
+        return view('admin.question.comment-list', [
+            'comments' => $comm
+        ]);
     }
+
 }

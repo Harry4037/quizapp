@@ -53,7 +53,7 @@
     <div class="form-group">
         <label class="control-label col-md-4 col-sm-4 col-xs-12">Subjects <span class="error">*</span></label>
         <div class="col-md-4 col-sm-6 col-xs-6">
-            <select class="form-control" name="subject_id" id="subject_id">
+            <select class="form-control" name="subject_id" id="subject_id" required>
                 <option value="">Choose Option</option>
                 @foreach($subjects as $subject)
                 <option value="{{$subject->id}}"
