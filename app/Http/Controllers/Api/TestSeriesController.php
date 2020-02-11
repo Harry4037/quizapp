@@ -1089,10 +1089,10 @@ class TestSeriesController extends Controller {
                 foreach ($request->test_series_images as $k => $image) {
                     $question = Question::find($questionList[$k]->id);
                     if ($question) {
-                        if (!$request->hasFile("test_series_images." . $k)) {
+                        if (!$request->hasFile("test_series_images")) {
                             return $this->errorResponse("Question pic not valid file type.");
                         }
-                        $ques_image = $request->file("test_series_images." . $k);
+                        $ques_image = $request->file("test_series_images");
                         $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
                         $ques_file_name = basename($quesImage);
                         $question->ques_image = $ques_file_name;
