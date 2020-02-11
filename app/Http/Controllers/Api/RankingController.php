@@ -184,7 +184,7 @@ class RankingController extends Controller {
         $dadt = array_reverse($dataArray['users_leadership']);
 
          $rr = array_slice($dadt,0,10);
-         $fdf = array_merge($rr, $dataArray1)
+         $fdf = array_merge($rr, $dataArray1);
        // $dataArray1 = collect($dataArray)->SortByDesc('points');
         return $this->successResponse("Leadership list", $fdf);
     }
