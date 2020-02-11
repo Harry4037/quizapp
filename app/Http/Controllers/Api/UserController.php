@@ -74,18 +74,18 @@ class UserController extends Controller {
         if (!$request->name) {
             return $this->errorResponse("Name missing");
         }
-        if (!$request->email_id) {
-            return $this->errorResponse("Email ID missing");
-        }
+        // if (!$request->email_id) {
+        //     return $this->errorResponse("Email ID missing");
+        // }
         if (!$request->mobile_number) {
             return $this->errorResponse("Mobile number missing");
         }
-        if (!$request->dob) {
-            return $this->errorResponse("dob missing");
-        }
-        if (!$request->qualification) {
-            return $this->errorResponse("Qualification missing");
-        }
+        // if (!$request->dob) {
+        //     return $this->errorResponse("dob missing");
+        // }
+        // if (!$request->qualification) {
+        //     return $this->errorResponse("Qualification missing");
+        // }
         if (!$request->lang) {
             return $this->errorResponse("Language missing");
         }
@@ -119,9 +119,13 @@ class UserController extends Controller {
             $user->profile_pic = $profile_file_name;
         }
         $user->name = $request->name;
+        if ($request->email_id) {
         $user->email = $request->email_id;
+        }
         $user->mobile_number = $request->mobile_number;
+        if ($request->dob) {
         $user->dob = $request->dob;
+        }
         if ($request->into_line) {
             $user->into_line = $request->into_line;
         }
@@ -131,8 +135,9 @@ class UserController extends Controller {
         if ($request->designation) {
             $user->designation = $request->designation;
         }
-
+        if ($request->qualification) {
         $user->qualification = $request->qualification;
+        }
         $user->lang = $request->lang;
         $user->user_type_id = $request->user_type;
 
