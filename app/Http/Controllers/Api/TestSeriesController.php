@@ -1069,38 +1069,42 @@ class TestSeriesController extends Controller {
      *
      */
     public function uploadTestseriesImages(Request $request) {
-        if (!$request->test_series_images) {
-            return $this->errorResponse("Images missing.");
-        }
-        if (!is_array($request->test_series_images)) {
-            return $this->errorResponse("Provide Images in proper format.");
-        }
-
-        if (!$request->test_series_id) {
-            return $this->errorResponse("Testseries ID missing");
-        }
-        $questionList = Question::where("test_series_id", $request->test_series_id)->get();
-        if($questionList->count() != count($request->test_series_images)){
-            return $this->errorResponse("Pleae provide images proper lenght array");
-        }
-
-        if ($questionList) {
-            foreach ($request->test_series_images as $k => $image) {
-                $question = Question::find($questionList[$k]->id);
-                if ($question) {
-                    if (!$request->hasFile("test_series_images." . $k)) {
-                        return $this->errorResponse("Question pic not valid file type.");
-                    }
-                    $ques_image = $request->file("test_series_images." . $k);
-                    $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
-                    $ques_file_name = basename($quesImage);
-                    $question->ques_image = $ques_file_name;
-                    $question->save();
-                }
+        try {
+            if (!$request->test_series_images) {
+                return $this->errorResponse("Images missing.");
             }
-            return $this->successResponse("Image uploaded succefully.", (object) []);
-        } else {
-            return $this->errorResponse("questions not found.");
+//        if (!is_array($request->test_series_images)) {
+//            return $this->errorResponse("Provide Images in proper format.");
+//        }
+
+            if (!$request->test_series_id) {
+                return $this->errorResponse("Testseries ID missing");
+            }
+            $questionList = Question::where("test_series_id", $request->test_series_id)->get();
+            if ($questionList->count() != count($request->test_series_images)) {
+                return $this->errorResponse("Pleae provide images proper lenght array");
+            }
+
+            if ($questionList) {
+                foreach ($request->test_series_images as $k => $image) {
+                    $question = Question::find($questionList[$k]->id);
+                    if ($question) {
+                        if (!$request->hasFile("test_series_images." . $k)) {
+                            return $this->errorResponse("Question pic not valid file type.");
+                        }
+                        $ques_image = $request->file("test_series_images." . $k);
+                        $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                        $ques_file_name = basename($quesImage);
+                        $question->ques_image = $ques_file_name;
+                        $question->save();
+                    }
+                }
+                return $this->successResponse("Image uploaded succefully.", (object) []);
+            } else {
+                return $this->errorResponse("questions not found.");
+            }
+        } catch (Exception $ex) {
+            return $this->errorResponse($ex->getMessage());
         }
     }
 
