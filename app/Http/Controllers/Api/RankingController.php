@@ -171,7 +171,7 @@ class RankingController extends Controller {
                     $dataArray1['user']['name'] = $user ? $user->name : 'User';
                     $dataArray1['user']['profile_pic'] = $user ? $user->profile_pic : '';
                     $dataArray1['user']['points'] = $total;
-                    $dataArray['user']['rank_number'] = $k + 1;;                   
+                    $dataArray1['user']['rank_number'] = $k + 1;;                   
                 }
 
             }
