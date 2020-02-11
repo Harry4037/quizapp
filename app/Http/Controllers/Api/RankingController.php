@@ -181,9 +181,9 @@ class RankingController extends Controller {
         usort($dataArray['users_leadership'], function($a, $b) {
             return $a['points'] <=> $b['points'];
         });
-        $dadt = array_reverse($dataArray['users_leadership']);
+        $dadt['users_leadership'] = array_reverse($dataArray['users_leadership']);
 
-         $rr = array_slice($dadt,0,10);
+         $rr['users_leadership'] = array_slice($dadt['users_leadership'],0,10);
          $fdf = array_merge($rr, $dataArray1);
        // $dataArray1 = collect($dataArray)->SortByDesc('points');
         return $this->successResponse("Leadership list", $fdf);
