@@ -78,6 +78,8 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::post('/accept-ques', 'QuestionController@acceptQues')->name('admin.question.accept-ques');
         Route::post('/reject-ques', 'QuestionController@rejectQues')->name('admin.question.reject-ques');
         Route::get('/{question}/comment-list', 'QuestionController@comment')->name('admin.question.comment-list');
+        Route::match(['get', 'post'], '/{question}/comment-add', 'QuestionController@commentAdd')->name('admin.question.comment-add');
+        //Route::get('/{question}/comment-add', 'QuestionController@commentAdd')->name('admin.question.comment-add');
     });
 
     // Quiz Routes

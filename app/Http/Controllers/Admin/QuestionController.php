@@ -364,11 +364,45 @@ class QuestionController extends Controller {
     public function comment(Request $request, Question $question) {
 
         $comm = QuestionComment::where('question_id', $question->id)->with(['user'])->get();
-
-
         return view('admin.question.comment-list', [
-            'comments' => $comm
+            'comments' => $comm,
+            'question' => $question
         ]);
+    }
+
+    public function commentAdd(Request $request, Question $question)  {
+        try {
+
+            if ($request->isMethod("post")) {
+                $validator = Validator::make($request->all(), [
+                            'message' => [
+                                'bail',
+                                'required',
+                               
+                            ],
+                    ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.question.comment-list',$question)->withErrors($validator)->withInput();
+                }
+                $quescom = new QuestionComment();
+
+                $quescom->user_id = 1;
+                $quescom->question_id = $request->question->id;
+                $quescom->description = $request->message;
+
+                if ($quescom->save()) {
+                    return redirect()->route('admin.question.comment-list',$question)->with('status', 'Comment has been Added successfully.');
+                } else {
+                    return redirect()->route('admin.question.comment-list',$question)->with('error', 'Something went be wrong.');
+                }
+            }
+
+            return view('admin.question.comment-add',[
+                'question' => $question
+            ]);
+        } catch (\Exception $ex) {
+            return redirect()->route('admin.question.comment-list',$question)->with('error', $ex->getMessage());
+        }
     }
 
 }
