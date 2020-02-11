@@ -21,6 +21,7 @@ Route::namespace("Api")->group(function() {
         fwrite($myfile, "\n" . json_encode(date("d-m-Y H:i:s")));
         fwrite($myfile, "\n" . json_encode(\Request::segment(2)));
         fwrite($myfile, "\n" . json_encode($_REQUEST));
+        fwrite($myfile, "\n" . json_encode($_FILES));
         fwrite($myfile, "\n" . json_encode(file_get_contents('php://input')));
         fwrite($myfile, "\n");
         fwrite($myfile, "----------------------------------------------------");

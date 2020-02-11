@@ -45,7 +45,6 @@ class TestSeriesController extends Controller {
      *                           "ans_2":"detail ans 2",
      *                           "ans_3":"detail ans 3",
      *                           "ans_4":"detail ans 4",
-     *                           "image_path":"sdafsadfasdfasdfs",
      *                           "correct_ans":1,
      *                           "time_per_question":1
      *                   }
@@ -181,14 +180,7 @@ class TestSeriesController extends Controller {
                     $testSeriesQuestion->exam_id = $request->input("exam_id");
                     $testSeriesQuestion->subject_id = $request->input("subject_id");
                     $testSeriesQuestion->description = $question["question_discription"];
-                    if ($question["ques_pic"]) {
-                        $ques_image = $question->file("ques_pic");
-                        $ques = Storage::disk('public')->put('ques_image', $ques_image);
-                        $ques_file_name = basename($ques);
-                        $testSeriesQuestion->ques_image = $ques_file_name;
-                    } else {
-                        $testSeriesQuestion->ques_image = '';
-                    }
+                    $testSeriesQuestion->ques_image = '';
                     $testSeriesQuestion->ques_time = $question["time_per_question"];
                     $testSeriesQuestion->test_series_id = $testSeries->id;
                     if ($testSeriesQuestion->save()) {
@@ -1088,6 +1080,9 @@ class TestSeriesController extends Controller {
             return $this->errorResponse("Testseries ID missing");
         }
         $questionList = Question::where("test_series_id", $request->test_series_id)->get();
+        if($questionList->count() != count($request->test_series_images)){
+            return $this->errorResponse("Pleae provide images proper lenght array");
+        }
 
         if ($questionList) {
             foreach ($request->test_series_images as $k => $image) {
