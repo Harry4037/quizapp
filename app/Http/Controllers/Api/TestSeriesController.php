@@ -1081,9 +1081,9 @@ class TestSeriesController extends Controller {
                 return $this->errorResponse("Testseries ID missing");
             }
             $questionList = Question::where("test_series_id", $request->test_series_id)->get();
-            if ($questionList->count() != count($request->test_series_images)) {
-                return $this->errorResponse("Pleae provide images proper lenght array");
-            }
+//            if ($questionList->count() != count($request->test_series_images)) {
+//                return $this->errorResponse("Pleae provide images proper lenght array");
+//            }
 
             if ($questionList) {
                 foreach ($request->test_series_images as $k => $image) {
