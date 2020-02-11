@@ -1042,7 +1042,7 @@ class TestSeriesController extends Controller {
             $minut = 0;
             $series = UserTestSeriesQuestionAnswer::where('user_test_series_id', $request->test_series_id)->get();
             foreach ($series as $k => $ser) {
-                $que = Question::find($request->test_series_id);
+                $que = Question::find($ser->question_id);
                 $minut = $minut + $que->ques_time;
             }
             $dataArray['total_question'] = count($series);
