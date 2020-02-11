@@ -173,7 +173,7 @@ class QuestionController extends Controller {
         }
 
         $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
-        $page = $request->page == 0 ? 1 : $request->page * 10;
+        $page = $request->page == 0 ? 1 : (($request->page * 10) + 1) ;
         if ($request->flag == 1) {
             $questions = Question::where("lang", $user ? $user->lang : 1)
                     ->where(function($query) use($userQuestionIds) {
