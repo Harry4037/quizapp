@@ -798,12 +798,11 @@ class TestSeriesController extends Controller {
                 } else {
                     $testSeries = UserTestSeries::find($trendSearch->test_series_id);
                 }
-                if($testSeries){
+                if ($testSeries) {
                     $dataArrayTrending[$k]['id'] = $testSeries->id ? $testSeries->id : '';
                     $dataArrayTrending[$k]['name'] = $testSeries->name ? $testSeries->name : '';
                     $dataArrayTrending[$k]['flag'] = $trendSearch->flag;
                 }
-
             }
         }
         $dataArrayRecent = [];
@@ -814,7 +813,7 @@ class TestSeriesController extends Controller {
                 } else {
                     $testSeries = UserTestSeries::find($trendSearch->test_series_id);
                 }
-                if($testSeries){
+                if ($testSeries) {
                     $dataArrayRecent[$k]['id'] = $testSeries->id ? $testSeries->id : '';
                     $dataArrayRecent[$k]['name'] = $testSeries->name ? $testSeries->name : '';
                     $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
@@ -824,7 +823,6 @@ class TestSeriesController extends Controller {
                         $dataArrayRecent[$k]['is_attempted'] = FALSE;
                     }
                 }
-
             }
         }
         $data['trend_search'] = $dataArrayTrending;
@@ -1052,6 +1050,62 @@ class TestSeriesController extends Controller {
             $dataArray['total_time'] = $minut;
         }
         return $this->successResponse("Test Series Details.", $dataArray);
+    }
+
+    /**
+     * @api {post} /api/upload-test-series-images Upload Test Series Images
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostUploadTestseriesImages
+     * @apiGroup TestSeries
+     *
+     * @apiParam {String} test_series_images Images in Array Format.
+     * @apiParam {String} question_ids Question ID'd in Array Format.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message TestSeries Images uploaded successfully.
+     * @apiSuccess {JSON} data response.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Image uploaded succefully.",
+     *       "data": {}
+     *   }
+     *
+     */
+    public function uploadTestseriesImages(Request $request) {
+        if (!$request->test_series_images) {
+            return $this->errorResponse("Images missing.");
+        }
+        if (!is_array($request->test_series_images)) {
+            return $this->errorResponse("Provide Images in proper format.");
+        }
+
+        if (!$request->question_ids) {
+            return $this->errorResponse("Question ID's missing");
+        }
+        if (!is_array($request->question_ids)) {
+            return $this->errorResponse("Provide question Id's in proper format.");
+        }
+
+        foreach ($request->test_series_images as $k => $image) {
+            $question = Question::find($request->question_ids[$k]);
+            if ($question) {
+                if (!$request->hasFile("test_series_images." . $k)) {
+                    return $this->errorResponse("Question pic not valid file type.");
+                }
+                $ques_image = $request->file("test_series_images." . $k);
+                $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                $ques_file_name = basename($quesImage);
+                $question->ques_image = $ques_file_name;
+                $question->save();
+            }
+        }
+
+        return $this->successResponse("Image uploaded succefully.", (object) []);
     }
 
 }
