@@ -155,7 +155,6 @@ class RankingController extends Controller {
         $creatorUser = User::where('user_type_id',2)->get();
         $dataArray = [];
         $dataArray1 = [];
-  
         $myRankingNo = 0;
         if ($creatorUser) {
             foreach ($creatorUser as $k => $user) {
@@ -170,10 +169,8 @@ class RankingController extends Controller {
                     $dataArray1['user']['id'] = $user ? $user->id : '';
                     $dataArray1['user']['name'] = $user ? $user->name : 'User';
                     $dataArray1['user']['profile_pic'] = $user ? $user->profile_pic : '';
-                    $dataArray1['user']['points'] = $total;
-                                     
+                    $dataArray1['user']['points'] = $total;                 
                 }
-
             }
         } else {
             $dataArray['users_leadership'] = [];
@@ -184,12 +181,11 @@ class RankingController extends Controller {
         $dadt = array_reverse($dataArray['users_leadership']);
 
          $rr['users_leadership'] = array_slice($dadt,0,10);      
-
-foreach($dadt as $y => $xyz){
-     if($xyz['user_id'] == $request->user_id){
-        $dataArray1['user']['rank_number'] =  $y +1; 
- }
-}
+        foreach($dadt as $y => $xyz){
+            if($xyz['user_id'] == $request->user_id){
+                $dataArray1['user']['rank_number'] =  $y +1; 
+            }
+        }
          $fdf = array_merge($rr, $dataArray1);
         return $this->successResponse("Leadership list", $fdf);
     }
