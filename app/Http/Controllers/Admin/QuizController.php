@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Validator;
+use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Quiz;
@@ -151,6 +152,14 @@ class QuizController extends Controller {
                             $answer->save();
                         }
                     }
+                    $users = User::whereNull("deleted_at")->get();
+                    foreach($users as $user){
+                        if ($user && $user->device_token) {
+                            $this->generateNotification($user->id, 1, "Quizz Application", "Daily Quiz Is Published Now");
+                            $this->androidPushNotification(2, "Quizz Application", "Daily Quiz Is Published Now", $user->device_token, 3, $this->notificationCount($user->id), $quiz->id);
+                        }
+                    }
+
                     return redirect()->route('admin.quiz.index')->with('status', 'Daily Quiz added successfully.');
                 } else {
                     return redirect()->route('admin.quiz.index')->with('error', 'Something went be wrong.');

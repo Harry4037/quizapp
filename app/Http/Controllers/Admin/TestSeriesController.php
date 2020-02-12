@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Exam;
+use App\Models\User;
 use App\Models\TestSeries;
 use App\Models\Subject;
 use App\Models\Invite;
@@ -281,6 +282,11 @@ class TestSeriesController extends Controller {
                         $upte->is_approve = 2;
                         $upte->save();
                     }
+                    $user = User::where('user_id',$question->user_id)->first();
+                    if ($user && $user->device_token) {
+                        $this->generateNotification($user->id, 1, "Quizz Application", "Test Series Approve successfully.");
+                        $this->androidPushNotification(2, "Quizz Application", "Test Series Approve successfully.", $user->device_token, 4, $this->notificationCount($user->id), $question->id);
+                    }
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Test Series Approve successfully."]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
@@ -303,6 +309,11 @@ class TestSeriesController extends Controller {
                         $upte = Question::findOrFail($que->id);
                         $upte->is_approve = 3;
                         $upte->save();
+                    }
+                    $user = User::where('user_id',$question->user_id)->first();
+                    if ($user && $user->device_token) {
+                        $this->generateNotification($user->id, 1, "Quizz Application", "Test Series Rejected.");
+                        $this->androidPushNotification(2, "Quizz Application", "Test Series Rejected.", $user->device_token, 4, $this->notificationCount($user->id), $question->id);
                     }
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Test Series Rejected."]];
                 } else {

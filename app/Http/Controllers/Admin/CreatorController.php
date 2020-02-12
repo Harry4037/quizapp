@@ -216,9 +216,14 @@ class CreatorController extends Controller {
     public function acceptCreator(Request $request) {
         try {
             if ($request->isMethod('post')) {
-                $question = User::findOrFail($request->record_id);
-                $question->is_approve = $request->status;
-                if ($question->save()) {
+                $user = User::findOrFail($request->record_id);
+                $user->is_approve = $request->status;
+                if ($user->save()) {
+
+            if ($user && $user->device_token) {
+                $this->generateNotification($user->id, 1, "Quizz Application", "You are successfully Approved");
+                $this->androidPushNotification(2, "Quizz Application", "You are successfully Approved", $user->device_token, 1, $this->notificationCount($user->id), $user->id);
+            }
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Creator Approve successfully."]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
@@ -233,9 +238,13 @@ class CreatorController extends Controller {
     public function rejectCreator(Request $request) {
         try {
             if ($request->isMethod('post')) {
-                $question = User::findOrFail($request->record_id);
-                $question->is_approve = $request->status;
-                if ($question->save()) {
+                $user = User::findOrFail($request->record_id);
+                $user->is_approve = $request->status;
+                if ($user->save()) {
+                    if ($user && $user->device_token) {
+                        $this->generateNotification($user->id, 1, "Quizz Application", "You are Rejected");
+                        $this->androidPushNotification(2, "Quizz Application", "You are Rejected", $user->device_token, 1, $this->notificationCount($user->id), $user->id);
+                    }
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Creator Rejected."]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
