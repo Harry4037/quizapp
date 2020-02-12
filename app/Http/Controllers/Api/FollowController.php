@@ -118,6 +118,11 @@ class FollowController extends Controller
             $Follow->save();
             $follow_count = Follow::where('follow_user_id', $request->follow_user_id)->count();
             $arr = array('follow' => true, 'count' => $follow_count);
+
+            if ($follow_user_id && $follow_user_id->device_token) {
+                $this->generateNotification($follow_user_id->id, 1, "Quizz Application", "Your Are Following By User.");
+                $this->androidPushNotification(2, "Quizz Application", "Your Are Following By User.", $follow_user_id->device_token, 0, $this->notificationCount($follow_user_id->id), $follow_user_id->id);
+            }
             return $this->successResponse("Following", $arr);
         }
     }
