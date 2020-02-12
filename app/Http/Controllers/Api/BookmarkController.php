@@ -118,6 +118,10 @@ class BookmarkController extends Controller
             $fav_count = Bookmark::where('test_series_id', $request->test_series_id)->count();
             // $dataArray['fav_count'] = $fav_count;
             $arr = array('favorite' => false, 'count' => $fav_count);
+            if ($user && $user->device_token) {
+                $this->generateNotification($user->id, 1, "Quizz Application", "Test Series bookmarked Removed.");
+                $this->androidPushNotification(2, "Quizz Application", "Test Series bookmarked Removed.", $user->device_token, 0, $this->notificationCount($user->id), $user->id);
+            }
             return $this->successResponse("test_series bookmarked Removed.", $arr);
         } else {
             $bookmark = new Bookmark();
@@ -128,6 +132,10 @@ class BookmarkController extends Controller
             $fav_count = Bookmark::where('test_series_id', $request->test_series_id)->count();
             // $dataArray['fav_count'] = $fav_count;
             $arr = array('favorite' => true, 'count' => $fav_count);
+            if ($user && $user->device_token) {
+                $this->generateNotification($user->id, 1, "Quizz Application", "Test Series bookmarked successfully.");
+                $this->androidPushNotification(2, "Quizz Application", "Test Series bookmarked successfully.", $user->device_token, 0, $this->notificationCount($user->id), $user->id);
+            }
             return $this->successResponse("test_series bookmarked successfully.", $arr);
         }
         }
