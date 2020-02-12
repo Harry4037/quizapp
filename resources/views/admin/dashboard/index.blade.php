@@ -76,7 +76,7 @@
                             <th>Rank No.</th>
                             <th>Profile Pic.</th>
                             <th>UserName</th>
-                            <th>Ranking</th>
+                            <th>Points</th>
                         </tr>
                     </thead>
                     <tbody>

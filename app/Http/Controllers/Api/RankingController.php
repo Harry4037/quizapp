@@ -102,6 +102,7 @@ class RankingController extends Controller {
      * @apiName GetLeadership
      * @apiGroup Rank
      *
+     * @apiParam {String} user_id User ID.
      *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -144,9 +145,16 @@ class RankingController extends Controller {
      *
      */
     public function leadership(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID Missing.");
+        } 
+        $user1 = User::where("id", $request->user_id)->first();
+        if (!$user1) {
+            return $this->errorResponse("User not found.");
+        }
         $creatorUser = User::where('user_type_id',2)->get();
         $dataArray = [];
-        $myRanking = 0;
+        $dataArray1 = [];
         $myRankingNo = 0;
         if ($creatorUser) {
             foreach ($creatorUser as $k => $user) {
@@ -157,12 +165,28 @@ class RankingController extends Controller {
                 $dataArray['users_leadership'][$k]['name'] = $user ? $user->name : 'User';
                 $dataArray['users_leadership'][$k]['profile_pic'] = $user ? $user->profile_pic : '';
                 $dataArray['users_leadership'][$k]['points'] = $total;
-
+                if($user->id == $request->user_id){
+                    $dataArray1['user']['id'] = $user ? $user->id : '';
+                    $dataArray1['user']['name'] = $user ? $user->name : 'User';
+                    $dataArray1['user']['profile_pic'] = $user ? $user->profile_pic : '';
+                    $dataArray1['user']['points'] = $total;                 
+                }
             }
         } else {
             $dataArray['users_leadership'] = [];
         }
-        $dataArray1 = collect($dataArray)->SortByDesc('points');
-        return $this->successResponse("Leadership list", $dataArray1);
+        usort($dataArray['users_leadership'], function($a, $b) {
+            return $a['points'] <=> $b['points'];
+        });
+        $dadt = array_reverse($dataArray['users_leadership']);
+
+         $rr['users_leadership'] = array_slice($dadt,0,10);      
+        foreach($dadt as $y => $xyz){
+            if($xyz['user_id'] == $request->user_id){
+                $dataArray1['user']['rank_number'] =  $y +1; 
+            }
+        }
+         $fdf = array_merge($rr, $dataArray1);
+        return $this->successResponse("Leadership list", $fdf);
     }
 }
