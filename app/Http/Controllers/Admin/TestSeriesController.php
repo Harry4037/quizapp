@@ -195,6 +195,7 @@ class TestSeriesController extends Controller {
                         $question->subject_id = $request->subject_id;
                         $question->test_series_id = $testseries->id;
                         $question->lang = $request->lang_type;
+                        $question->is_approve = 2;
                         $question->quiz_id = 0;
                         $question->description = $ques;
 
@@ -274,6 +275,12 @@ class TestSeriesController extends Controller {
                 $question = TestSeries::findOrFail($request->record_id);
                 $question->is_approve = $request->status;
                 if ($question->save()) {
+                    $ques = Question::where('test_series_id',$question->id)->get();
+                    foreach($ques as $que){
+                        $upte = Question::find($que->id);
+                        $upte->is_approve = 2;
+                        $upte->save();
+                    }
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Test Series Approve successfully."]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
@@ -291,6 +298,12 @@ class TestSeriesController extends Controller {
                 $question = TestSeries::findOrFail($request->record_id);
                 $question->is_approve = $request->status;
                 if ($question->save()) {
+                    $ques = Question::where('test_series_id',$request->record_id)->get();
+                    foreach($ques as $que){
+                        $upte = Question::findOrFail($que->id);
+                        $upte->is_approve = 3;
+                        $upte->save();
+                    }
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Test Series Rejected."]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
