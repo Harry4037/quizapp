@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Exam;
+use App\Models\User;
 use App\Models\Subject;
 use Carbon\Carbon;
 use App\Models\QuestionComment;
@@ -244,7 +245,7 @@ class QuestionController extends Controller {
                             $answer->save();
                         }
                     }
-                    
+
                     return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
                 } else {
                     $question = new Question();
@@ -331,6 +332,11 @@ class QuestionController extends Controller {
                 $question = Question::findOrFail($request->record_id);
                 $question->is_approve = $request->status;
                 if ($question->save()) {
+                    $user = User::Where('id', $question->user_id)->first();
+                    if ($user && $user->device_token) {
+                        $this->generateNotification($user->id, 1, "Quizz Application", "Your Question are successfully Approved");
+                        $this->androidPushNotification(2, "Quizz Application", "Your Question are successfully Approved", $user->device_token, 2, $this->notificationCount($user->id), $question->id);
+                    }
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Question Approve successfully."]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
@@ -349,6 +355,11 @@ class QuestionController extends Controller {
                 $question = Question::findOrFail($request->record_id);
                 $question->is_approve = $request->status;
                 if ($question->save()) {
+                    $user = User::Where('id', $question->user_id)->first();
+                    if ($user && $user->device_token) {
+                        $this->generateNotification($user->id, 1, "Quizz Application", "Your Question are Rejected");
+                        $this->androidPushNotification(2, "Quizz Application", "Your Question are Rejected", $user->device_token, 2, $this->notificationCount($user->id), $question->id);
+                    }
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Question Rejected."]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
@@ -378,7 +389,7 @@ class QuestionController extends Controller {
                             'message' => [
                                 'bail',
                                 'required',
-                               
+
                             ],
                     ]);
                 if ($validator->fails()) {
