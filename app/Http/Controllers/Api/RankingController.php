@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Question;
 use App\Models\Follow;
+use App\Models\UserQuizQuestionAnswer;
+use App\Models\Quiz;
+use App\Models\UserQuiz;
 use App\Models\UserAnswer;
 use Illuminate\Support\Arr;
 use App\Models\UserTestSeriesQuestionAnswer;
@@ -147,7 +150,7 @@ class RankingController extends Controller {
     public function leadership(Request $request) {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
-        } 
+        }
         $user1 = User::where("id", $request->user_id)->first();
         if (!$user1) {
             return $this->errorResponse("User not found.");
@@ -169,7 +172,7 @@ class RankingController extends Controller {
                     $dataArray1['user']['id'] = $user ? $user->id : '';
                     $dataArray1['user']['name'] = $user ? $user->name : 'User';
                     $dataArray1['user']['profile_pic'] = $user ? $user->profile_pic : '';
-                    $dataArray1['user']['points'] = $total;                 
+                    $dataArray1['user']['points'] = $total;
                 }
             }
         } else {
@@ -180,13 +183,61 @@ class RankingController extends Controller {
         });
         $dadt = array_reverse($dataArray['users_leadership']);
 
-         $rr['users_leadership'] = array_slice($dadt,0,10);      
+         $rr['users_leadership'] = array_slice($dadt,0,10);
         foreach($dadt as $y => $xyz){
             if($xyz['user_id'] == $request->user_id){
-                $dataArray1['user']['rank_number'] =  $y +1; 
+                $dataArray1['user']['rank_number'] =  $y +1;
             }
         }
          $fdf = array_merge($rr, $dataArray1);
         return $this->successResponse("Leadership list", $fdf);
+    }
+
+    public function quizRanking(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID Missing.");
+        }
+        $user1 = User::where("id", $request->user_id)->first();
+        if (!$user1) {
+            return $this->errorResponse("User not found.");
+        }
+        $datee = date('Y-m-d');
+        $quizzz = Quiz::where('start_date_time', 'LIKE', $datee.'%')->sortBy('start_date_time')->first();
+        $AllUser = UserQuiz::where('quiz_id',$quizzz->id)->with('user_quiz')->get();
+        $dataArray = [];
+        $dataArray1 = [];
+        $myRankingNo = 0;
+        if ($AllUser) {
+            foreach ($AllUser as $k => $user) {
+
+                $Details = User::where('id', $user->user_quiz->user_id)->first();
+                $points = UserQuizQuestionAnswer::where('user_quiz_id',$user->user_quiz->id)->where('is_correct',1)->count();
+                $dataArray['users_leadership'][$k]['user_id'] = $Details->id;
+                $dataArray['users_leadership'][$k]['name'] = $Details ? $Details->name : 'User';
+                $dataArray['users_leadership'][$k]['profile_pic'] = $Details ? $Details->profile_pic : '';
+                $dataArray['users_leadership'][$k]['points'] = $points;
+                // if($user->id == $request->user_id){
+                //     $dataArray1['user']['id'] = $user ? $user->id : '';
+                //     $dataArray1['user']['name'] = $user ? $user->name : 'User';
+                //     $dataArray1['user']['profile_pic'] = $user ? $user->profile_pic : '';
+                //     $dataArray1['user']['points'] = $total;
+                // }
+            }
+        } else {
+            $dataArray['users_leadership'] = [];
+        }
+        // usort($dataArray['users_leadership'], function($a, $b) {
+        //     return $a['points'] <=> $b['points'];
+        // });
+        // $dadt = array_reverse($dataArray['users_leadership']);
+
+        //  $rr['users_leadership'] = array_slice($dadt,0,10);
+        // foreach($dadt as $y => $xyz){
+        //     if($xyz['user_id'] == $request->user_id){
+        //         $dataArray1['user']['rank_number'] =  $y +1;
+        //     }
+        // }
+        //  $fdf = array_merge($rr, $dataArray1);
+        return $this->successResponse("Leadership list", $dataArray);
     }
 }
