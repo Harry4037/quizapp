@@ -193,6 +193,52 @@ class RankingController extends Controller {
         return $this->successResponse("Leadership list", $fdf);
     }
 
+    /**
+     * @api {get} /api/quiz-ranking Quiz Ranking
+     * @apiHeader {String} Accept application/json.
+     * @apiName Getquizranking
+     * @apiGroup Rank
+     *
+     * @apiParam {String} user_id User ID.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Quiz Ranking  list.
+     * @apiSuccess {JSON} data object.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "status":true,
+     *   "status_code":200,
+     *   "message":"Quiz Ranking list",
+     *   "data":{
+     *          "users_leadership":[
+     *          {
+     *"user_id":16,
+     *"name":"Sonali",
+     *"profile_pic":"http:\/\/127.0.0.1:8000\/storage\/profile_pic\/2gaeu9QoWVryb5WavH5mi1NJPRs12To9jKrXU3OA.jpeg",
+     *"points":9
+     *},
+     *{
+     *"user_id":24,
+     *"name":"11114",
+     *"profile_pic":"http:\/\/127.0.0.1:8000\/img\/no-image.jpg",
+     *"points":9
+     *}
+     *],
+     *"user":{
+     *"id":24,
+     *"name":"11114",
+     *"profile_pic":"http:\/\/127.0.0.1:8000\/img\/no-image.jpg",
+     *"points":9,
+     *"rank_number":2
+     *}
+     *}
+     *}
+     *
+     */
+
     public function quizRanking(Request $request) {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
@@ -202,42 +248,41 @@ class RankingController extends Controller {
             return $this->errorResponse("User not found.");
         }
         $datee = date('Y-m-d');
-        $quizzz = Quiz::where('start_date_time', 'LIKE', $datee.'%')->sortBy('start_date_time')->first();
+        $quizzz = Quiz::where('start_date_time', 'LIKE', $datee.'%')->first();
         $AllUser = UserQuiz::where('quiz_id',$quizzz->id)->with('user_quiz')->get();
         $dataArray = [];
         $dataArray1 = [];
         $myRankingNo = 0;
         if ($AllUser) {
             foreach ($AllUser as $k => $user) {
-
-                $Details = User::where('id', $user->user_quiz->user_id)->first();
+                $Details = User::where('id', $user->user_id)->first();
                 $points = UserQuizQuestionAnswer::where('user_quiz_id',$user->user_quiz->id)->where('is_correct',1)->count();
                 $dataArray['users_leadership'][$k]['user_id'] = $Details->id;
                 $dataArray['users_leadership'][$k]['name'] = $Details ? $Details->name : 'User';
                 $dataArray['users_leadership'][$k]['profile_pic'] = $Details ? $Details->profile_pic : '';
                 $dataArray['users_leadership'][$k]['points'] = $points;
-                // if($user->id == $request->user_id){
-                //     $dataArray1['user']['id'] = $user ? $user->id : '';
-                //     $dataArray1['user']['name'] = $user ? $user->name : 'User';
-                //     $dataArray1['user']['profile_pic'] = $user ? $user->profile_pic : '';
-                //     $dataArray1['user']['points'] = $total;
-                // }
+                if($Details->id == $request->user_id){
+                    $dataArray1['user']['id'] = $Details ? $Details->id : '';
+                    $dataArray1['user']['name'] = $Details ? $Details->name : 'User';
+                    $dataArray1['user']['profile_pic'] = $Details ? $Details->profile_pic : '';
+                    $dataArray1['user']['points'] = $points;
+                }
             }
         } else {
             $dataArray['users_leadership'] = [];
         }
-        // usort($dataArray['users_leadership'], function($a, $b) {
-        //     return $a['points'] <=> $b['points'];
-        // });
-        // $dadt = array_reverse($dataArray['users_leadership']);
+        usort($dataArray['users_leadership'], function($a, $b) {
+            return $a['points'] <=> $b['points'];
+        });
+        $dadt = array_reverse($dataArray['users_leadership']);
 
-        //  $rr['users_leadership'] = array_slice($dadt,0,10);
-        // foreach($dadt as $y => $xyz){
-        //     if($xyz['user_id'] == $request->user_id){
-        //         $dataArray1['user']['rank_number'] =  $y +1;
-        //     }
-        // }
-        //  $fdf = array_merge($rr, $dataArray1);
-        return $this->successResponse("Leadership list", $dataArray);
+         $rr['users_leadership'] = array_slice($dadt,0,10);
+        foreach($dadt as $y => $xyz){
+            if($xyz['user_id'] == $request->user_id){
+                $dataArray1['user']['rank_number'] =  $y +1;
+            }
+        }
+         $fdf = array_merge($rr, $dataArray1);
+        return $this->successResponse("Quiz Ranking  list", $fdf);
     }
 }

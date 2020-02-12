@@ -2351,6 +2351,19 @@
     },
     "name": "GetLeadership",
     "group": "Rank",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User ID.</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -2465,6 +2478,83 @@
         {
           "title": "Success-Response:",
           "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Ranking list\",\n      \"data\": {\n          \"users_ranking\": [\n              {\n                  \"user_id\": 2,\n                  \"name\": \"Ankit_creator\",\n                  \"profile_pic\": \"http://127.0.0.1:8000/img/no-image.jpg\",\n                  \"total_correct_answer\": \"6\"\n              },\n              {\n                  \"user_id\": 3,\n                  \"name\": \"Ankit_user\",\n                  \"profile_pic\": \"http://127.0.0.1:8000/img/no-image.jpg\",\n                  \"total_correct_answer\": \"4\"\n              }\n          ],\n          \"user\": {\n              \"id\": 3,\n              \"name\": \"Ankit_user\",\n              \"profile_pic\": \"http://127.0.0.1:8000/img/no-image.jpg\",\n              \"total_correct_answer\": \"4\",\n              \"rank_number\": 2\n          }\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/RankingController.php",
+    "groupTitle": "Rank"
+  },
+  {
+    "type": "get",
+    "url": "/api/quiz-ranking",
+    "title": "Quiz Ranking",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "Getquizranking",
+    "group": "Rank",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Quiz Ranking  list.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"status\":true,\n  \"status_code\":200,\n  \"message\":\"Quiz Ranking list\",\n  \"data\":{\n         \"users_leadership\":[\n         {\n\"user_id\":16,\n\"name\":\"Sonali\",\n\"profile_pic\":\"http:\\/\\/127.0.0.1:8000\\/storage\\/profile_pic\\/2gaeu9QoWVryb5WavH5mi1NJPRs12To9jKrXU3OA.jpeg\",\n\"points\":9\n},\n{\n\"user_id\":24,\n\"name\":\"11114\",\n\"profile_pic\":\"http:\\/\\/127.0.0.1:8000\\/img\\/no-image.jpg\",\n\"points\":9\n}\n],\n\"user\":{\n\"id\":24,\n\"name\":\"11114\",\n\"profile_pic\":\"http:\\/\\/127.0.0.1:8000\\/img\\/no-image.jpg\",\n\"points\":9,\n\"rank_number\":2\n}\n}\n}",
           "type": "json"
         }
       ]
@@ -3074,7 +3164,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "body:\n  {\n          \"user_id\":1,\n          \"series_name\" : \"SSC_1\",\n          \"exam_id\":1,\n          \"subject_id\":1,\n          \"question_count\":10,\n          \"lang\":1,\n          \"questions\":[\n                  {\n                          \"question_discription\":\"Detail of question\",\n                          \"ans_1\":\"detail ans 1\",\n                          \"ans_2\":\"detail ans 2\",\n                          \"ans_3\":\"detail ans 3\",\n                          \"ans_4\":\"detail ans 4\",\n                          \"image_path\":\"sdafsadfasdfasdfs\",\n                          \"correct_ans\":1,\n                          \"time_per_question\":1\n                  }\n          ]\n  }",
+        "content": "body:\n  {\n          \"user_id\":1,\n          \"series_name\" : \"SSC_1\",\n          \"exam_id\":1,\n          \"subject_id\":1,\n          \"question_count\":10,\n          \"lang\":1,\n          \"questions\":[\n                  {\n                          \"question_discription\":\"Detail of question\",\n                          \"ans_1\":\"detail ans 1\",\n                          \"ans_2\":\"detail ans 2\",\n                          \"ans_3\":\"detail ans 3\",\n                          \"ans_4\":\"detail ans 4\",\n                          \"correct_ans\":1,\n                          \"time_per_question\":1\n                  }\n          ]\n  }",
         "type": "json"
       }
     ],
