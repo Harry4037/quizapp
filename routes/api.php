@@ -90,6 +90,7 @@ Route::namespace("Api")->group(function() {
     //RankingController
     Route::get('/user-ranking', 'RankingController@userRanking');
     Route::get('/leadership', 'RankingController@leadership');
+    Route::get('/quiz-ranking', 'RankingController@quizRanking');
 
     Route::get('/test-series-details', 'TestSeriesController@testSeriesDetails');
 });
