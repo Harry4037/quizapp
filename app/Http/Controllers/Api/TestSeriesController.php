@@ -1081,7 +1081,7 @@ class TestSeriesController extends Controller {
         }
         $questionList = Question::where("test_series_id", $request->test_series_id)->get();
 //        $cc = count($request->test_series_images);
-        return $this->errorResponse(($_FILES['test_series_images']['name']));
+        return $this->errorResponse(count($_FILES['test_series_images']['name']));
         if ($questionList->count() != count($request->test_series_images)) {
             return $this->errorResponse("Pleae provide images proper lenght array");
         }
