@@ -893,7 +893,7 @@ class TestSeriesController extends Controller {
         $dataArray = [];
 
         $inviteArray = [];
-        $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
+        $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at','is_approve')->get();
         foreach ($result as $k => $test) {
             $dataArray[$k]['id'] = $test->id;
             $dataArray[$k]['name'] = $test->name;
@@ -901,6 +901,7 @@ class TestSeriesController extends Controller {
             $date = Carbon::parse($test->created_at);
             $dataArray[$k]['date'] = $date->format("d-M-Y");
             $dataArray[$k]['flag'] = 1;
+            $dataArray[$k]['is_approve'] = $test->is_approve;
             $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
             if ($fav) {
                 $dataArray[$k]['is_bookmark'] = true;
