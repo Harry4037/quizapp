@@ -131,5 +131,10 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::match(['get', 'post'], '/edit/{cms}', 'CmsController@cmsEdit')->name('admin.cms.edit');
     });
 
-
+    // Feedback Routes
+    Route::prefix('feedback')->group(function() {
+        Route::get('/', 'FeedbackController@index')->name('admin.feedback.index');
+        Route::get('/list', 'FeedbackController@feedList')->name('admin.feedback.list');
+        //   Route::match(['get', 'post'], '/edit/{cms}', 'CmsController@cmsEdit')->name('admin.feed.edit');
+    });
 });

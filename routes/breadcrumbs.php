@@ -111,4 +111,9 @@ Breadcrumbs::for('admin.cms.edit', function ($trail, $cms) {
     $trail->push("Edit", route('admin.cms.edit', $cms));
 });
 
+// Home > [Feed]
+Breadcrumbs::for('admin.feedback.index', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push("feedback", route('admin.feedback.index'));
+});
 
