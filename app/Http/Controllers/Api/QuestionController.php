@@ -234,7 +234,7 @@ class QuestionController extends Controller {
             $query->where(function($query) use($request) {
                 $query->where("lang", $request->lang)
                         ->where("is_approve", 2)
-                        ->whereIn('exam_id', $request->exam_id)
+//                        ->whereIn('exam_id', $request->exam_id)
                         ->whereIn('subject_id', $request->subject_id);
             })->whereNotIn("id", $userQuestionIds);
             $query->limit($request->total_questions);
