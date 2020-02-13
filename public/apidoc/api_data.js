@@ -634,6 +634,70 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/contact-us",
+    "title": "Contact Us",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetContactUs",
+    "group": "CMS",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Contact Us.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Array.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"status\":true,\n     \"status_code\":200,\n     \"message\":\"Contact Us\",\n     \"data\":\n         {\n             \"number\":\"+911234567890\",\n             \"email\":\"info@quizz.com\"\n         }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/CmsController.php",
+    "groupTitle": "CMS"
+  },
+  {
+    "type": "get",
     "url": "/api/feedback",
     "title": "Feedback",
     "header": {
@@ -759,70 +823,6 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/contact-us",
-    "title": "Contact Us",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Accept",
-            "description": "<p>application/json.</p>"
-          }
-        ]
-      }
-    },
-    "name": "GetContactUs",
-    "group": "Cms",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "success",
-            "description": "<p>true</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status_code",
-            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Contact Us.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "data",
-            "description": "<p>Array.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n     \"status\":true,\n     \"status_code\":200,\n     \"message\":\"Contact Us\",\n     \"data\":\n         {\n             \"number\":\"+911234567890\",\n             \"email\":\"info@quizz.com\"\n         }\n  }",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "app/Http/Controllers/Api/CmsController.php",
-    "groupTitle": "Cms"
-  },
-  {
-    "type": "get",
     "url": "/api/privacy-policy",
     "title": "Privacy Policy",
     "header": {
@@ -839,7 +839,7 @@ define({ "api": [
       }
     },
     "name": "GetPrivacyPolicy",
-    "group": "Cms",
+    "group": "CMS",
     "success": {
       "fields": {
         "Success 200": [
@@ -883,7 +883,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/CmsController.php",
-    "groupTitle": "Cms"
+    "groupTitle": "CMS"
   },
   {
     "type": "get",
@@ -903,7 +903,7 @@ define({ "api": [
       }
     },
     "name": "GetTermsConditions",
-    "group": "Cms",
+    "group": "CMS",
     "success": {
       "fields": {
         "Success 200": [
@@ -947,7 +947,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/CmsController.php",
-    "groupTitle": "Cms"
+    "groupTitle": "CMS"
   },
   {
     "type": "post",

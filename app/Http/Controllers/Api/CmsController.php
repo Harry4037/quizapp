@@ -12,7 +12,7 @@ class CmsController extends Controller
      * @api {get} /api/terms-conditions Terms Conditions
      * @apiHeader {String} Accept application/json.
      * @apiName GetTermsConditions
-     * @apiGroup Cms
+     * @apiGroup CMS
      *
      *
      * @apiSuccess {String} success true
@@ -61,7 +61,7 @@ class CmsController extends Controller
      * @api {get} /api/privacy-policy Privacy Policy
      * @apiHeader {String} Accept application/json.
      * @apiName GetPrivacyPolicy
-     * @apiGroup Cms
+     * @apiGroup CMS
      *
      *
      * @apiSuccess {String} success true
@@ -109,7 +109,7 @@ class CmsController extends Controller
      * @api {get} /api/contact-us Contact Us
      * @apiHeader {String} Accept application/json.
      * @apiName GetContactUs
-     * @apiGroup Cms
+     * @apiGroup CMS
      *
      *
      * @apiSuccess {String} success true
