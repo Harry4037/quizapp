@@ -278,7 +278,7 @@ class TestSeriesController extends Controller {
                         $upte->is_approve = 2;
                         $upte->save();
                     }
-                    $user = User::where('user_id',$question->user_id)->first();
+                    $user = User::where('id',$question->user_id)->first();
                     if ($user && $user->device_token) {
                         $this->generateNotification($user->id, 1, "Quizz Application", "Test Series Approve successfully.");
                         $this->androidPushNotification(2, "Quizz Application", "Test Series Approve successfully.", $user->device_token, 4, $this->notificationCount($user->id), $question->id);
@@ -306,7 +306,7 @@ class TestSeriesController extends Controller {
                         $upte->is_approve = 3;
                         $upte->save();
                     }
-                    $user = User::where('user_id',$question->user_id)->first();
+                    $user = User::where('id',$question->user_id)->first();
                     if ($user && $user->device_token) {
                         $this->generateNotification($user->id, 1, "Quizz Application", "Test Series Rejected.");
                         $this->androidPushNotification(2, "Quizz Application", "Test Series Rejected.", $user->device_token, 4, $this->notificationCount($user->id), $question->id);
