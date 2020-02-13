@@ -17,6 +17,7 @@ use App\Models\Exam;
 use App\Models\UserTestSeries;
 use App\Models\UserTestSeriesQuestionAnswer;
 use App\Models\User;
+use App\Models\QuestionExam;
 
 class QuestionController extends Controller {
 
@@ -173,7 +174,7 @@ class QuestionController extends Controller {
         }
 
         $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
-        $page = $request->page == 0 ? 1 : (($request->page * 10) + 1) ;
+        $page = $request->page == 0 ? 1 : (($request->page * 10) + 1);
         if ($request->flag == 1) {
             $questions = Question::where("lang", $user ? $user->lang : 1)
                     ->where(function($query) use($userQuestionIds) {
@@ -762,12 +763,17 @@ class QuestionController extends Controller {
         }
         $question->lang = $request->lang;
         $question->user_id = $request->user_id;
-        $question->exam_id = $exam->id;
+        $question->exam_id = 0;
         $question->description = $request->description;
         $question->ques_time = $request->ques_time;
         $question->subject_id = $subject->id;
         $question->test_series_id = $request->test_series_id;
         if ($question->save()) {
+            $questionExam = new QuestionExam();
+            $questionExam->question_id = $question->id;
+            $questionExam->exam_id = $request->exam_id;
+            $questionExam->save();
+
             for ($i = 1; $i <= 4; $i++) {
                 $answer = new Answer();
                 $answer->question_id = $question->id;

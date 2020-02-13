@@ -13,61 +13,61 @@
 </div>
 @endif
 @if(isset($exams))
-    <div class="form-group">
-        <label class="control-label col-md-4 col-sm-4 col-xs-12">Exams </label>
-        <div class="col-md-4 col-sm-6 col-xs-6">
-            <select class="form-control" name="exam_id" id="exam_id" multiple="multiple">
+<div class="form-group">
+    <label class="control-label col-md-4 col-sm-4 col-xs-12">Exams </label>
+    <div class="col-md-4 col-sm-6 col-xs-6">
+        <select class="form-control" name="exam_id[]" id="exam_id" multiple="multiple">
 
-                @foreach($exams as $exam)
-                <option value="{{$exam->id}}"
-                        @if(isset($question))
-                        @if($question->exam_id == $exam->id)
-                        {{ 'selected' }}
-                        @endif
-                        @endif
-                        >{{$exam->name}}</option>
-                @endforeach
-            </select>
-        </div>
+            @foreach($exams as $exam)
+            <option value="{{$exam->id}}"
+                    @if(isset($question))
+                     @if($question->exam_id == $exam1->id)
+                    {{ 'selected' }}
+                    @endif
+                    @endif
+                    >{{$exam->name}}</option>
+            @endforeach
+        </select>
     </div>
-    @elseif(isset($exams1))
-    <div class="form-group">
-        <label class="control-label col-md-4 col-sm-4 col-xs-12">Exams </label>
-        <div class="col-md-4 col-sm-6 col-xs-6">
-            <select class="form-control" name="exam_id" id="exam_id" >
+</div>
+@elseif(isset($exams1))
+<div class="form-group">
+    <label class="control-label col-md-4 col-sm-4 col-xs-12">Exams </label>
+    <div class="col-md-4 col-sm-6 col-xs-6">
+        <select class="form-control" name="exam_id[]" id="exam_id" multiple="multiple">
 
-                @foreach($exams1 as $exam1)
-                <option value="{{$exam1->id}}"
-                        @if(isset($question))
-                        @if($question->exam_id == $exam1->id)
-                        {{ 'selected' }}
-                        @endif
-                        @endif
-                        >{{$exam1->name}}</option>
-                @endforeach
-            </select>
-        </div>
+            @foreach($exams1 as $exam1)
+            <option value="{{$exam1->id}}"
+                    @if(isset($questionExam))
+                    @if(in_array($exam1->id,$questionExam))
+                    {{ 'selected' }}
+                    @endif
+                    @endif
+                    >{{$exam1->name}}</option>
+            @endforeach
+        </select>
     </div>
+</div>
 @endif
 @if(isset($subjects))
-    <div class="form-group">
-        <label class="control-label col-md-4 col-sm-4 col-xs-12">Subjects <span class="error">*</span></label>
-        <div class="col-md-4 col-sm-6 col-xs-6">
-            <select class="form-control" name="subject_id" id="subject_id" required>
-                <option value="">Choose Option</option>
-                @foreach($subjects as $subject)
-                <option value="{{$subject->id}}"
-                        @if(isset($question))
-                        @if($question->subject_id == $subject->id)
-                        {{ 'selected' }}
-                        @endif
-                        @endif
-                        >{{$subject->name}}</option>
-                @endforeach
-            </select>
-        </div>
+<div class="form-group">
+    <label class="control-label col-md-4 col-sm-4 col-xs-12">Subjects <span class="error">*</span></label>
+    <div class="col-md-4 col-sm-6 col-xs-6">
+        <select class="form-control" name="subject_id" id="subject_id" required>
+            <option value="">Choose Option</option>
+            @foreach($subjects as $subject)
+            <option value="{{$subject->id}}"
+                    @if(isset($question))
+                    @if($question->subject_id == $subject->id)
+                    {{ 'selected' }}
+                    @endif
+                    @endif
+                    >{{$subject->name}}</option>
+            @endforeach
+        </select>
     </div>
-    @endif
+</div>
+@endif
 <div class="form-group">
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Question Name <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
@@ -175,12 +175,12 @@
 
 <!-- /.box-body -->
 <div class="box-footer">
-<div class="form-group">
-    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-4">
-        <a class="btn btn-default" href="{{ route('admin.question.index') }}">Cancel</a>
-        <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="form-group">
+        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-4">
+            <a class="btn btn-default" href="{{ route('admin.question.index') }}">Cancel</a>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
     </div>
-</div>
 </div>
 <!-- /.box-footer -->
 </div>
