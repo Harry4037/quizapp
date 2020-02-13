@@ -101,4 +101,14 @@ Breadcrumbs::for('admin.leadership.index', function ($trail) {
     $trail->push("Leadership", route('admin.leadership.index'));
 });
 
+// Home > [Cms]
+Breadcrumbs::for('admin.cms.index', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push("Cms", route('admin.cms.index'));
+});
+Breadcrumbs::for('admin.cms.edit', function ($trail, $cms) {
+    $trail->parent('admin.cms.index');
+    $trail->push("Edit", route('admin.cms.edit', $cms));
+});
+
 
