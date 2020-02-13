@@ -169,7 +169,7 @@ class TestSeriesController extends Controller {
 
             $testSeries = new TestSeries();
             $testSeries->user_id = $request->input("user_id");
-            $testSeries->exam_id = $request->input("exam_id");
+            $testSeries->exam_id = 0;
             $testSeries->subject_id = $request->input("subject_id");
             $testSeries->name = $request->input("series_name");
             $testSeries->total_question = $request->input("question_count");
