@@ -134,10 +134,9 @@ class TestSeriesController extends Controller {
                 if ($validator->fails()) {
                     return redirect()->route('admin.test-series.edit', $testseries->id)->withErrors($validator)->withInput();
                 }
-                $testseries->exam_id = $request->exam_id;
-                $testseries->subject_id = $request->subject_id;
+
                 $testseries->name = $request->testseries_name;
-                $testseries->lang = $request->lang_type;
+
 
                 if ($testseries->save()) {
                     return redirect()->route('admin.test-series.index')->with('status', 'Test Series has been updated successfully.');
@@ -145,12 +144,9 @@ class TestSeriesController extends Controller {
                     return redirect()->route('admin.test-series.index')->with('error', 'Something went be wrong.');
                 }
             }
-            $subjects = Subject::get();
-            $exams = Exam::get();
+
             return view('admin.test-series.edit', [
-                'series' => $testseries,
-                'subjects' => $subjects,
-                'exams' => $exams
+                'series' => $testseries
 
             ]);
         } catch (\Exception $ex) {
