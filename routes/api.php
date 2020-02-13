@@ -86,6 +86,8 @@ Route::namespace("Api")->group(function() {
     Route::get('/invite-status', 'InviteController@inviteStatus');
 
     Route::get('/terms-conditions', 'CmsController@termContidion');
+    Route::get('/privacy-policy', 'CmsController@privacyPolicy');
+    Route::get('/contact-us', 'CmsController@contactUs');
 
     //RankingController
     Route::get('/user-ranking', 'RankingController@userRanking');
