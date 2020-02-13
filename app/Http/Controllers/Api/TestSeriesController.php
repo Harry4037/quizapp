@@ -20,6 +20,7 @@ use App\Models\UserTestSeries;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SearchHistory;
 use App\Models\UserTestSeriesQuestionAnswer;
+use App\Models\QuestionExam;
 
 class TestSeriesController extends Controller {
 
@@ -184,6 +185,11 @@ class TestSeriesController extends Controller {
                     $testSeriesQuestion->ques_time = $question["time_per_question"];
                     $testSeriesQuestion->test_series_id = $testSeries->id;
                     if ($testSeriesQuestion->save()) {
+                        $questionExam = new QuestionExam();
+                        $questionExam->question_id = $testSeriesQuestion->id;
+                        $questionExam->exam_id = $request->input("exam_id");
+                        $questionExam->save();
+
                         for ($i = 1; $i <= 4; $i++) {
                             $kk = 'ans_' . $i;
                             $answer = new Answer();
@@ -1080,7 +1086,7 @@ class TestSeriesController extends Controller {
             return $this->errorResponse("Testseries ID missing");
         }
         $questionList = Question::where("test_series_id", $request->test_series_id)->get();
-        if($questionList->count() != count($request->test_series_images)){
+        if ($questionList->count() != count($request->test_series_images)) {
             return $this->errorResponse("Pleae provide images proper lenght array");
         }
 

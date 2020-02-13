@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use App\Models\QuestionComment;
 use Validator;
 use Illuminate\Validation\Rule;
+use App\Models\QuestionExam;
 
 class QuestionController extends Controller {
 
@@ -38,12 +39,9 @@ class QuestionController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = Question::query()->with('subject')->with('exam');
+            $query = Question::query()->with('subject');
             if ($searchKeyword) {
                 $query->whereHas("subject", function($query) use($searchKeyword) {
-                    $query->where("name", "LIKE", "%$searchKeyword%");
-                });
-                $query->orWhereHas("exam", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
                 });
             }
@@ -55,10 +53,8 @@ class QuestionController extends Controller {
             foreach ($questions as $k => $question) {
                 $questionsArray[$k]['description'] = $question->description;
                 if ($question->exam_id) {
-                    $questionsArray[$k]['exam'] = $question->exam->name;
                     $questionsArray[$k]['subject'] = $question->subject->name;
                 } else {
-                    $questionsArray[$k]['exam'] = "Quiz";
                     $questionsArray[$k]['subject'] = "Quiz";
                 }
                 if ($question->is_approve == 2) {
@@ -86,6 +82,7 @@ class QuestionController extends Controller {
             if ($question) {
                 $question->delete();
                 Answer::where('question_id', $request->id)->delete();
+                QuestionExam::where('question_id', $request->id)->delete();
                 return ['status' => true, "message" => "Question deleted."];
             } else {
                 return ['status' => false, "message" => "Something went be wrong."];
@@ -121,13 +118,28 @@ class QuestionController extends Controller {
                     $ques_file_name = basename($quesImage);
                     $question->ques_image = $ques_file_name;
                 }
-                $question->exam_id = $request->exam_id;
+                $question->exam_id = 0;
                 $question->subject_id = $request->subject_id;
                 $question->description = $request->description;
                 $question->lang = $request->lang_type;
                 $question->ques_time = $request->time;
                 $question->year = $request->year;
                 if ($question->save()) {
+
+                    if (!$request->exam_id) {
+                        $exams = Exam::pluck("id")->toArray();
+                    } else {
+                        $exams = $request->exam_id;
+                    }
+
+                    QuestionExam::where("question_id", $question->id)->delete();
+                    foreach ($exams as $exam) {
+                        $questionExam = new QuestionExam();
+                        $questionExam->question_id = $question->id;
+                        $questionExam->exam_id = $exam;
+                        $questionExam->save();
+                    }
+
                     if ($request->correct_answer == "opt1") {
                         Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 1]);
                         Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
@@ -160,12 +172,22 @@ class QuestionController extends Controller {
             $subjects = Subject::get();
             $exams1 = Exam::get();
             $answers = Answer::where('question_id', $question->id)->get();
-
+            $questionExam = QuestionExam::where('question_id', $question->id)->pluck("exam_id")->toArray();
+//            dd($questionExam);
+            $css = [
+                'bower_components/select2/dist/css/select2.min.css'
+            ];
+            $js = [
+                'bower_components/select2/dist/js/select2.min.js'
+            ];
             return view('admin.question.edit', [
                 'question' => $question,
                 'subjects' => $subjects,
                 'exams1' => $exams1,
                 'answers' => $answers,
+                'questionExam' => $questionExam,
+                'js' => $js,
+                'css' => $css
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.question.index')->with('error', $ex->getMessage());
@@ -189,123 +211,73 @@ class QuestionController extends Controller {
                     return redirect()->route('admin.question.add')->withErrors($validator)->withInput();
                 }
                 if (!$request->exam_id) {
-                    $exams = Exam::all();
-                    foreach ($exams as $exam) {
-                        $question = new Question();
-                        $question->ques_time = $request->time;
-                        $question->user_id = 1;
-                        $question->is_approve = 2;
-                        $question->description = $request->description;
-                        $question->exam_id = $exam->id;
-                        $question->year = $request->year;
-                        $question->lang = $request->lang_type;
-                        $question->subject_id = $request->subject_id;
-                        if ($request->hasFile('ques_image')) {
-                            $ques_image = $request->file("ques_image");
-                            $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
-                            $ques_file_name = basename($quesImage);
-                            $question->ques_image = $ques_file_name;
-                        }
-                        if ($question->save()) {
-                            $answer = new Answer();
-                            $answer->question_id = $question->id;
-                            $answer->description = $request->ans1;
-                            if ($request->correct_answer == "opt1") {
-                                $answer->is_answer = 1;
-                            } else {
-                                $answer->is_answer = 0;
-                            }
-                            $answer->save();
-                            $answer = new Answer();
-                            $answer->question_id = $question->id;
-                            $answer->description = $request->ans2;
-                            if ($request->correct_answer == "opt2") {
-                                $answer->is_answer = 1;
-                            } else {
-                                $answer->is_answer = 0;
-                            }
-                            $answer->save();
-                            $answer = new Answer();
-                            $answer->question_id = $question->id;
-                            $answer->description = $request->ans3;
-                            if ($request->correct_answer == "opt3") {
-                                $answer->is_answer = 1;
-                            } else {
-                                $answer->is_answer = 0;
-                            }
-                            $answer->save();
-                            $answer = new Answer();
-                            $answer->question_id = $question->id;
-                            $answer->description = $request->ans4;
-                            if ($request->correct_answer == "opt4") {
-                                $answer->is_answer = 1;
-                            } else {
-                                $answer->is_answer = 0;
-                            }
-                            $answer->save();
-                        }
-                    }
-
-                    return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
+                    $exams = Exam::pluck("id")->toArray();
                 } else {
-                    $question = new Question();
-                    $question->ques_time = $request->time;
-                    $question->user_id = 1;
-                    $question->is_approve = 2;
-                    $question->description = $request->description;
-                    $question->exam_id = $request->exam_id;
-                    $question->year = $request->year;
-                    $question->lang = $request->lang_type;
-                    $question->subject_id = $request->subject_id;
-                    if ($request->hasFile('ques_image')) {
-                        $ques_image = $request->file("ques_image");
-                        $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
-                        $ques_file_name = basename($quesImage);
-                        $question->ques_image = $ques_file_name;
-                    }
-                    if ($question->save()) {
-                        $answer = new Answer();
-                        $answer->question_id = $question->id;
-                        $answer->description = $request->ans1;
-                        if ($request->correct_answer == "opt1") {
-                            $answer->is_answer = 1;
-                        } else {
-                            $answer->is_answer = 0;
-                        }
-                        $answer->save();
-                        $answer = new Answer();
-                        $answer->question_id = $question->id;
-                        $answer->description = $request->ans2;
-                        if ($request->correct_answer == "opt2") {
-                            $answer->is_answer = 1;
-                        } else {
-                            $answer->is_answer = 0;
-                        }
-                        $answer->save();
-                        $answer = new Answer();
-                        $answer->question_id = $question->id;
-                        $answer->description = $request->ans3;
-                        if ($request->correct_answer == "opt3") {
-                            $answer->is_answer = 1;
-                        } else {
-                            $answer->is_answer = 0;
-                        }
-                        $answer->save();
-                        $answer = new Answer();
-                        $answer->question_id = $question->id;
-                        $answer->description = $request->ans4;
-                        if ($request->correct_answer == "opt4") {
-                            $answer->is_answer = 1;
-                        } else {
-                            $answer->is_answer = 0;
-                        }
-                        $answer->save();
-
-                        return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
-                    } else {
-                        return redirect()->route('admin.question.index')->with('error', 'Something went be wrong.');
-                    }
+                    $exams = $request->exam_id;
                 }
+
+                $question = new Question();
+                $question->ques_time = $request->time;
+                $question->user_id = 1;
+                $question->is_approve = 2;
+                $question->description = $request->description;
+                $question->exam_id = 0;
+                $question->year = $request->year;
+                $question->lang = $request->lang_type;
+                $question->subject_id = $request->subject_id;
+                if ($request->hasFile('ques_image')) {
+                    $ques_image = $request->file("ques_image");
+                    $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
+                    $ques_file_name = basename($quesImage);
+                    $question->ques_image = $ques_file_name;
+                }
+                if ($question->save()) {
+
+                    foreach ($exams as $exam) {
+                        $questionExam = new QuestionExam();
+                        $questionExam->question_id = $question->id;
+                        $questionExam->exam_id = $exam;
+                        $questionExam->save();
+                    }
+                    $answer = new Answer();
+                    $answer->question_id = $question->id;
+                    $answer->description = $request->ans1;
+                    if ($request->correct_answer == "opt1") {
+                        $answer->is_answer = 1;
+                    } else {
+                        $answer->is_answer = 0;
+                    }
+                    $answer->save();
+                    $answer = new Answer();
+                    $answer->question_id = $question->id;
+                    $answer->description = $request->ans2;
+                    if ($request->correct_answer == "opt2") {
+                        $answer->is_answer = 1;
+                    } else {
+                        $answer->is_answer = 0;
+                    }
+                    $answer->save();
+                    $answer = new Answer();
+                    $answer->question_id = $question->id;
+                    $answer->description = $request->ans3;
+                    if ($request->correct_answer == "opt3") {
+                        $answer->is_answer = 1;
+                    } else {
+                        $answer->is_answer = 0;
+                    }
+                    $answer->save();
+                    $answer = new Answer();
+                    $answer->question_id = $question->id;
+                    $answer->description = $request->ans4;
+                    if ($request->correct_answer == "opt4") {
+                        $answer->is_answer = 1;
+                    } else {
+                        $answer->is_answer = 0;
+                    }
+                    $answer->save();
+                }
+
+                return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
             }
             $css = [
                 'bower_components/select2/dist/css/select2.min.css'
@@ -381,7 +353,7 @@ class QuestionController extends Controller {
         ]);
     }
 
-    public function commentAdd(Request $request, Question $question)  {
+    public function commentAdd(Request $request, Question $question) {
         try {
 
             if ($request->isMethod("post")) {
@@ -389,11 +361,10 @@ class QuestionController extends Controller {
                             'message' => [
                                 'bail',
                                 'required',
-
                             ],
-                    ]);
+                ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.question.comment-list',$question)->withErrors($validator)->withInput();
+                    return redirect()->route('admin.question.comment-list', $question)->withErrors($validator)->withInput();
                 }
                 $quescom = new QuestionComment();
 
@@ -402,17 +373,17 @@ class QuestionController extends Controller {
                 $quescom->description = $request->message;
 
                 if ($quescom->save()) {
-                    return redirect()->route('admin.question.comment-list',$question)->with('status', 'Comment has been Added successfully.');
+                    return redirect()->route('admin.question.comment-list', $question)->with('status', 'Comment has been Added successfully.');
                 } else {
-                    return redirect()->route('admin.question.comment-list',$question)->with('error', 'Something went be wrong.');
+                    return redirect()->route('admin.question.comment-list', $question)->with('error', 'Something went be wrong.');
                 }
             }
 
-            return view('admin.question.comment-add',[
+            return view('admin.question.comment-add', [
                 'question' => $question
             ]);
         } catch (\Exception $ex) {
-            return redirect()->route('admin.question.comment-list',$question)->with('error', $ex->getMessage());
+            return redirect()->route('admin.question.comment-list', $question)->with('error', $ex->getMessage());
         }
     }
 
