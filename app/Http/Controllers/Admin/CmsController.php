@@ -70,8 +70,8 @@ class CmsController extends Controller {
                 }
 
                 $cms->description = $request->description;
-                $cms->mobile = $request->mobile;
-                $cms->email = $request->email;
+                $cms->title = $request->mobile;
+                // $cms->email = $request->email;
 
                 if ($cms->save()) {
                     return redirect()->route('admin.cms.index')->with('status', 'CMS has been updated successfully.');
