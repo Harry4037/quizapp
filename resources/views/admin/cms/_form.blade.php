@@ -21,15 +21,15 @@
     </div>
     @else
     <div class="form-group">
-        <label class="control-label col-md-4 col-sm-4 col-xs-12">Description <span class="error">*</span></label>
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Title <span class="error">*</span></label>
         <div class="col-md-6 col-sm-8 col-xs-8">
-            <textarea class="form-control" name="description" id="description">@if(isset($cms)){{$cms->title}}@endif</textarea>
+        <input type="text" class="form-control" name="mobile" id="mobile" value="@if(isset($cms)){{$cms->title}}@endif" >
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-md-4 col-sm-4 col-xs-12">Mobile <span class="error">*</span></label>
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Description <span class="error">*</span></label>
         <div class="col-md-6 col-sm-8 col-xs-8">
-        <input type="text" class="form-control" name="mobile" id="mobile" value="@if(isset($cms)){{$cms->description}}@endif" >
+            <textarea class="form-control" name="description" id="description">@if(isset($cms)){{$cms->description}}@endif</textarea>
         </div>
     </div>
     @endif
