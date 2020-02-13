@@ -29,7 +29,6 @@
                             <thead>
                                 <tr>
                                     <th style="width: 4%;">Sr. No.</th>
-                                    <th style="width: 8%;">Exam</th>
                                     <th style="width: 10%;">Subject</th>
                                     <th style="width: 44%;">Question</th>
                                     <th style="width: 14%;">Status</th>
@@ -72,7 +71,6 @@
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
-            {"data": "exam", sortable: false},
             {"data": "subject", sortable: false},
             {"data": "description", sortable: false},
             {"data": "status", sortable: false},
