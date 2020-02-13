@@ -541,6 +541,12 @@ class QuestionController extends Controller {
         $userQuesLike->user_id = $request->user_id;
         $userQuesLike->question_id = $request->question_id;
         $userQuesLike->save();
+        $question = Question::where('id',$request->question_id)->first();
+        $user = User::where('id',$question->user_id)->first();
+        if ($user && $user->device_token) {
+            $this->generateNotification($user->id, 1, "Quizz Application", "Your Question Is Liked.");
+            $this->androidPushNotification(2, "Quizz Application", "Your Question Is Liked.", $user->device_token, 0, $this->notificationCount($user->id), $question->id);
+        }
 
         return $this->successResponse("Question Liked.", (object) []);
     }
