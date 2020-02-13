@@ -123,4 +123,12 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::get('/list', 'LeadershipController@leadershipList')->name('admin.leadership.list');
     });
 
+    // Cms Routes
+    Route::prefix('cms')->group(function() {
+        Route::get('/', 'CmsController@index')->name('admin.cms.index');
+        Route::get('/list', 'CmsController@cmsList')->name('admin.cms.list');
+        Route::match(['get', 'post'], '/edit/{cms}', 'CmsController@cmsEdit')->name('admin.cms.edit');
+    });
+
+
 });
