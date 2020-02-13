@@ -33,8 +33,8 @@
                                     <th style="width: 10%">Mobile No.</th>
                                     <th style="width: 19%">Name</th>
                                     <th style="width: 15%">Email</th>
-                                    <th style="width: 15%">Status</th>
-                                    <th style="width: 10%">Approval</th>
+                                    <th style="width: 15%">Approval</th>
+                                    <th style="width: 10%">Status</th>
                                     <th style="width: 15%">Action</th>
                                 </tr>
                             </thead>
