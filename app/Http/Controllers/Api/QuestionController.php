@@ -158,10 +158,12 @@ class QuestionController extends Controller {
         if (!$request->flag) {
             return $this->errorResponse("Flag is missing.");
         }
-//        if (!$request->user_id) {
-//            return $this->errorResponse("User ID is missing.");
-//        }
+
         $user = User::find($request->user_id);
+        $lang = 1;
+        if ($user) {
+            $lang = $user->lang;
+        }
         $userAnswerCount = UserAnswer::where("user_id", $request->user_id)->count();
         $userTestSeriesAnswerCount = UserTestSeriesQuestionAnswer::where("user_id", $request->user_id)->count();
         $userAnswerArray = [];
@@ -174,19 +176,23 @@ class QuestionController extends Controller {
         }
 
         $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
-        $page = $request->page == 0 ? 1 : (($request->page * 10) + 1);
+        $page = $request->page == 0 ? 0 : $request->page * 10;
+        $limit = $request->page == 0 ? 9 : ($page + 9);
+
         if ($request->flag == 1) {
-            $questions = Question::where("lang", $user ? $user->lang : 1)
-                    ->where(function($query) use($userQuestionIds) {
-                        $query->where("is_approve", 2)
-                        ->whereNotIn("id", $userQuestionIds);
+            $questions = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+                    ->join('question_exams', function ($join) use($userQuestionIds) {
+                        $join->on('questions.id', '=', 'question_exams.question_id')
+                        ->whereNotIn("question_exams.question_id", $userQuestionIds);
                     })
-                    ->take($page)
-                    ->limit(10)
+                    ->where(function($query)use($lang, $request) {
+                        $query->where('questions.lang', $lang)
+                        ->where('questions.is_approve', 2);
+                    })
+                    ->offset($page)
+                    ->limit($limit)
                     ->get();
-//            if (count($questions) > 10) {
-//                $questions = $questions->random(10);
-//            }
+
             $dataArray = [];
             $totatlTime = 0;
             foreach ($questions as $k => $question) {
@@ -230,19 +236,21 @@ class QuestionController extends Controller {
                 return $this->errorResponse("Invalid language Id.");
             }
 
-            $query = Question::Query();
-            $query->where(function($query) use($request) {
-                $query->where("lang", $request->lang)
-                        ->where("is_approve", 2)
-//                        ->whereIn('exam_id', $request->exam_id)
-                        ->whereIn('subject_id', $request->subject_id);
-            })->whereNotIn("id", $userQuestionIds);
-            $query->limit($request->total_questions);
-            if (!$request->year) {
-                $questions = $query->get();
-            } else {
-                $questions = $query->where('year', $request->year)->get();
+            $query = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+                    ->join('question_exams', function ($join) use($userQuestionIds) {
+                        $join->on('questions.id', '=', 'question_exams.question_id')
+                        ->whereNotIn("question_exams.question_id", $userQuestionIds);
+                    })
+                    ->where(function($query)use($lang, $request) {
+                $query->where('questions.lang', $request->lang)
+                ->where('questions.is_approve', 2)
+                ->where('subject_id', $request->subject_id);
+            });
+            if ($request->year) {
+                $query->where('year', $request->year);
             }
+            $query->limit($request->total_questions);
+            $questions = $query->get();
 
             if ($questions->count() <= 0) {
                 return $this->errorResponse("Question not found.");
@@ -541,8 +549,8 @@ class QuestionController extends Controller {
         $userQuesLike->user_id = $request->user_id;
         $userQuesLike->question_id = $request->question_id;
         $userQuesLike->save();
-        $question = Question::where('id',$request->question_id)->first();
-        $user = User::where('id',$question->user_id)->first();
+        $question = Question::where('id', $request->question_id)->first();
+        $user = User::where('id', $question->user_id)->first();
         if ($user && $user->device_token) {
             $this->generateNotification($user->id, 1, "Quizz Application", "Your Question Is Liked.");
             $this->androidPushNotification(2, "Quizz Application", "Your Question Is Liked.", $user->device_token, 0, $this->notificationCount($user->id), $question->id);
