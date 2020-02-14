@@ -40,6 +40,9 @@ class QuestionController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = Question::query()->with('subject');
+            $query->where(function($query) {
+                $query->where(["quiz_id" => 0, "test_series_id" => 0]);
+            });
             if ($searchKeyword) {
                 $query->whereHas("subject", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
@@ -52,11 +55,7 @@ class QuestionController extends Controller {
             $questionsArray = [];
             foreach ($questions as $k => $question) {
                 $questionsArray[$k]['description'] = $question->description;
-                if ($question->exam_id) {
-                    $questionsArray[$k]['subject'] = $question->subject->name;
-                } else {
-                    $questionsArray[$k]['subject'] = "Quiz";
-                }
+                $questionsArray[$k]['subject'] = $question->subject ? $question->subject->name : '';
                 if ($question->is_approve == 2) {
                     $questionsArray[$k]['status'] = '<label class="btn btn-success btn-xs disabled">Approved</label>';
                 } elseif ($question->is_approve == 3) {
