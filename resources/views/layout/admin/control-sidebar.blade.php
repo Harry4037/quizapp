@@ -69,6 +69,16 @@
                     <i class="fa fa-question-circle"></i> <span>Leadership Board</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.cms.index')}}">
+                    <i class="fa fa-question-circle"></i> <span>Cms Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.feedback.index')}}">
+                    <i class="fa fa-question-circle"></i> <span>Feedback Management</span>
+                </a>
+            </li>
         </ul>
     </section>
     <!-- /.sidebar -->

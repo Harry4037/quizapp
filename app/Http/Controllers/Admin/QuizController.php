@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Quiz;
 use App\Models\Question;
 use App\Models\Answer;
+use App\Models\UserQuizQuestionAnswer;
+use App\Models\UserQuiz;
 
 class QuizController extends Controller {
 
@@ -52,6 +54,7 @@ class QuizController extends Controller {
                 $questionsArray[$k]['end_at'] = date('d-M-Y, h:i A', strtotime($question->end_date_time));
                 $questionsArray[$k]['action'] = '<a href="' . route('admin.quiz.edit', $question) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
                         . '<a href="' . route('admin.quiz.question-list', $question) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> View Questions </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                        . '<a href="' . route('admin.quiz.ranking-list', $question->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> Ranking </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $question->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
@@ -398,6 +401,49 @@ class QuizController extends Controller {
             }
         } catch (\Exception $ex) {
             return ['status' => false, "message" => $ex->getMessage()];
+        }
+    }
+
+    public function ranking(Request $request, Quiz $quiz) {
+
+        try {
+            $offset = $request->get('start') ? $request->get('start') : 0;
+            $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
+
+        $datee = date('Y-m-d');
+        $quizzz = Quiz::find($quiz->id);
+        $query = UserQuiz::query();
+        if ($searchKeyword) {
+            $query->where('name', 'LIKE', "%$searchKeyword%");
+        }
+        $data['recordsTotal'] = 10;
+        $data['recordsFiltered'] = 10;
+        $dataArray = [];
+        $AllUser = $query->where('quiz_id',$quizzz->id)->with('user_quiz')->take(10000)->offset($offset)->latest()->get();
+        $myRankingNo = 0;
+        if ($AllUser) {
+            foreach ($AllUser as $k => $user) {
+                $Details = User::where('id', $user->user_id)->first();
+                $points = UserQuizQuestionAnswer::where('user_quiz_id',$user->user_quiz->id)->where('is_correct',1)->count();
+                $dataArray['users_leadership'][$k]['mob'] = $Details->mobile_number;
+                $dataArray['users_leadership'][$k]['name'] = $Details ? $Details->name : 'User';
+                $dataArray['users_leadership'][$k]['image'] = $Details->profile_pic ;
+                $dataArray['users_leadership'][$k]['points'] = $points;
+
+            }
+        }
+        usort($dataArray['users_leadership'], function($a, $b) {
+            return $a['points'] <=> $b['points'];
+        });
+        $dadt = array_reverse($dataArray['users_leadership']);
+        $rr = array_slice($dadt,0,10);
+        $rae['data'] = $rr;
+        return view('admin.quiz.ranking-list', [
+            'comments' => $rr
+        ]);
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 

@@ -504,7 +504,7 @@ class QuestionController extends Controller {
                 $dataArray['test_series']['questions'] = $questions;
 
 
-                return $this->successResponse("Answer's submitted succeffully.", $dataArray);
+                return $this->successResponse("Answer's submitted successfully.", $dataArray);
             } else {
                 return $this->errorResponse("Something went wrong.");
             }

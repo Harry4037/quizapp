@@ -93,6 +93,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::match(['get', 'post'], '/question/edit/{question}', 'QuizController@quizQuestionEdit')->name('admin.quiz.edit-question');
         Route::post('/delete', 'QuizController@quizDelete')->name('admin.quiz.delete');
         Route::post('/delete-quiz-question', 'QuizController@deleteQuizQuestion')->name('admin.quiz.delete-question');
+        Route::get('/{quiz}/ranking-list', 'QuizController@ranking')->name('admin.quiz.ranking-list');
     });
 
     // Test Series Routes
@@ -123,4 +124,17 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
         Route::get('/list', 'LeadershipController@leadershipList')->name('admin.leadership.list');
     });
 
+    // Cms Routes
+    Route::prefix('cms')->group(function() {
+        Route::get('/', 'CmsController@index')->name('admin.cms.index');
+        Route::get('/list', 'CmsController@cmsList')->name('admin.cms.list');
+        Route::match(['get', 'post'], '/edit/{cms}', 'CmsController@cmsEdit')->name('admin.cms.edit');
+    });
+
+    // Feedback Routes
+    Route::prefix('feedback')->group(function() {
+        Route::get('/', 'FeedbackController@index')->name('admin.feedback.index');
+        Route::get('/list', 'FeedbackController@feedList')->name('admin.feedback.list');
+        //   Route::match(['get', 'post'], '/edit/{cms}', 'CmsController@cmsEdit')->name('admin.feed.edit');
+    });
 });
