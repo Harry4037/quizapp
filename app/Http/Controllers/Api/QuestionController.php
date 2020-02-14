@@ -237,8 +237,9 @@ class QuestionController extends Controller {
             }
 
             $query = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
-                    ->join('question_exams', function ($join) use($userQuestionIds) {
+                    ->join('question_exams', function ($join) use($request, $userQuestionIds) {
                         $join->on('questions.id', '=', 'question_exams.question_id')
+                        ->whereIn("question_exams.exam_id", $request->exam_id)
                         ->whereNotIn("question_exams.question_id", $userQuestionIds);
                     })
                     ->where(function($query)use($lang, $request) {
