@@ -30,7 +30,6 @@
                                 <tr>
                                     <th style="width: 4%;">Sr. No.</th>
                                     <th style="width: 8%;">User_name</th>
-                                    <th style="width: 8%;">Exam</th>
                                     <th style="width: 7%;">Subject</th>
                                     <th style="width: 26%;">Name</th>
                                     <th style="width: 8%;">Total_ques</th>
@@ -76,7 +75,6 @@
                 }
             },
             {"data": "user_name", sortable: false},
-            {"data": "exam", sortable: false},
             {"data": "subject", sortable: false},
             {"data": "name", sortable: false},
             {"data": "total_ques", sortable: false},
