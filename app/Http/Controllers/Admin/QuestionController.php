@@ -41,7 +41,7 @@ class QuestionController extends Controller {
 
             $query = Question::query()->with('subject');
             $query->where(function($query) {
-                $query->where(["quiz_id" => 0, "test_series_id" => 0]);
+                $query->where(["quiz_id" => 0]);
             });
             if ($searchKeyword) {
                 $query->whereHas("subject", function($query) use($searchKeyword) {
