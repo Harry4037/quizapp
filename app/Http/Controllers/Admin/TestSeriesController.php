@@ -57,7 +57,7 @@ class TestSeriesController extends Controller {
                 foreach ($times as $time) {
                     $count_time = $count_time + $time->ques_time;
                 }
-                $testseriesArray[$k]['user_name'] = $testseries->user->name;
+                $testseriesArray[$k]['user_name'] = $testseries->user ? $testseries->user->name : '';
                 $testseriesArray[$k]['subject'] = $testseries->subject->name;
                 $testseriesArray[$k]['name'] = $testseries->name;
                 $testseriesArray[$k]['total_ques'] = $testseries->total_question;
