@@ -16,6 +16,7 @@ use App\Models\Invite;
 use Carbon\Carbon;
 use Validator;
 use Illuminate\Validation\Rule;
+use App\Models\QuestionExam;
 
 class TestSeriesController extends Controller {
 
@@ -39,14 +40,11 @@ class TestSeriesController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = TestSeries::query()->with('subject')->with('exam');
+            $query = TestSeries::query()->with('subject');
             if ($searchKeyword) {
                 $query->whereHas("subject", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
-                 });
-                 $query->orWhereHas("exam", function($query) use($searchKeyword) {
-                    $query->where("name", "LIKE", "%$searchKeyword%");
-              });
+                });
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
@@ -54,29 +52,28 @@ class TestSeriesController extends Controller {
 
             $testseriesArray = [];
             foreach ($testseriess as $k => $testseries) {
-                $times = Question::where('test_series_id',$testseries->id)->get();
+                $times = Question::where('test_series_id', $testseries->id)->get();
                 $count_time = 0;
                 foreach ($times as $time) {
                     $count_time = $count_time + $time->ques_time;
                 }
                 $testseriesArray[$k]['user_name'] = $testseries->user->name;
-                $testseriesArray[$k]['exam'] = $testseries->exam->name;
                 $testseriesArray[$k]['subject'] = $testseries->subject->name;
                 $testseriesArray[$k]['name'] = $testseries->name;
                 $testseriesArray[$k]['total_ques'] = $testseries->total_question;
                 // $testseriesArray[$k]['lang'] = $testseries->lang;
-                if($testseries->is_approve == 2){
+                if ($testseries->is_approve == 2) {
                     $testseriesArray[$k]['status'] = '<label class="btn btn-success btn-xs disabled">Approved</label>';
-                }elseif($testseries->is_approve == 3){
+                } elseif ($testseries->is_approve == 3) {
                     $testseriesArray[$k]['status'] = '<label class="btn btn-danger btn-xs disabled">Rejected</label>';
-                }else{
-                    $testseriesArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve .'"><i class="fa fa-check"></i> Accept </a>&nbsp;&nbsp;'
-                    . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve .'"><i class="fa fa-times"></i> Reject </a>';
+                } else {
+                    $testseriesArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve . '"><i class="fa fa-check"></i> Accept </a>&nbsp;&nbsp;'
+                            . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve . '"><i class="fa fa-times"></i> Reject </a>';
                 }
                 $testseriesArray[$k]['action'] = '<a href="' . route('admin.test-series.edit', $testseries) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;'
-                . '<a href="' . route('admin.test-series.question-list', $testseries) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> View Questions </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                        . '<a href="' . route('admin.test-series.question-list', $testseries) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> View Questions </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $testseries->id . '" ><i class="fa fa-trash"></i> Delete </a>';
-                $testseriesArray[$k]['series_time'] = $count_time ." Sec";
+                $testseriesArray[$k]['series_time'] = $count_time . " Sec";
             }
 
             $data['data'] = $testseriesArray;
@@ -105,11 +102,11 @@ class TestSeriesController extends Controller {
             $testseries = TestSeries::find($request->id);
             if ($testseries) {
                 $testseries->delete();
-                $ques = Question::where('test_series_id',$testseries->id)->get();
-                Question::where('test_series_id',$testseries->id)->delete();
-                Invite::where('test_series_id',$testseries->id)->delete();
-                foreach($ques as $que){
-                    Answer::where('question_id',$que->id)->delete();
+                $ques = Question::where('test_series_id', $testseries->id)->get();
+                Question::where('test_series_id', $testseries->id)->delete();
+                Invite::where('test_series_id', $testseries->id)->delete();
+                foreach ($ques as $que) {
+                    Answer::where('question_id', $que->id)->delete();
                 }
                 return ['status' => true, "message" => "Question deleted."];
             } else {
@@ -129,7 +126,6 @@ class TestSeriesController extends Controller {
                                 'bail',
                                 'required',
                             ],
-
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.test-series.edit', $testseries->id)->withErrors($validator)->withInput();
@@ -147,7 +143,6 @@ class TestSeriesController extends Controller {
 
             return view('admin.test-series.edit', [
                 'series' => $testseries
-
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.test-series.index')->with('error', $ex->getMessage());
@@ -170,7 +165,7 @@ class TestSeriesController extends Controller {
                 $testseries->user_id = auth()->user()->id;
                 $testseries->is_approve = 2;
                 $testseries->name = $request->testseries_name;
-                $testseries->exam_id = $request->exam_id;
+                $testseries->exam_id = 0;
                 $testseries->subject_id = $request->subject_id;
                 $testseries->lang = $request->lang_type;
                 $testseries->total_question = $request->total_question;
@@ -199,6 +194,13 @@ class TestSeriesController extends Controller {
                         $question->ques_time = $request->time[$k];
 
                         if ($question->save()) {
+
+                            $questionExam = new QuestionExam();
+                            $questionExam->exam_id = $request->exam_id;
+                            $questionExam->question_id = $question->id;
+                            $questionExam->save();
+
+
                             $answer = new Answer();
                             $answer->question_id = $question->id;
                             $answer->description = $request->ans1[$k];
@@ -272,13 +274,13 @@ class TestSeriesController extends Controller {
                 $question = TestSeries::findOrFail($request->record_id);
                 $question->is_approve = $request->status;
                 if ($question->save()) {
-                    $ques = Question::where('test_series_id',$question->id)->get();
-                    foreach($ques as $que){
+                    $ques = Question::where('test_series_id', $question->id)->get();
+                    foreach ($ques as $que) {
                         $upte = Question::find($que->id);
                         $upte->is_approve = 2;
                         $upte->save();
                     }
-                    $user = User::where('id',$question->user_id)->first();
+                    $user = User::where('id', $question->user_id)->first();
                     if ($user && $user->device_token) {
                         $this->generateNotification($user->id, 1, "Quizz Application", "Test Series Approve successfully.");
                         $this->androidPushNotification(2, "Quizz Application", "Test Series Approve successfully.", $user->device_token, 4, $this->notificationCount($user->id), $question->id);
@@ -294,19 +296,20 @@ class TestSeriesController extends Controller {
             return ['status' => false, "message" => $e->getMessage()];
         }
     }
+
     public function rejectTestSeries(Request $request) {
         try {
             if ($request->isMethod('post')) {
                 $question = TestSeries::findOrFail($request->record_id);
                 $question->is_approve = $request->status;
                 if ($question->save()) {
-                    $ques = Question::where('test_series_id',$request->record_id)->get();
-                    foreach($ques as $que){
+                    $ques = Question::where('test_series_id', $request->record_id)->get();
+                    foreach ($ques as $que) {
                         $upte = Question::findOrFail($que->id);
                         $upte->is_approve = 3;
                         $upte->save();
                     }
-                    $user = User::where('id',$question->user_id)->first();
+                    $user = User::where('id', $question->user_id)->first();
                     if ($user && $user->device_token) {
                         $this->generateNotification($user->id, 1, "Quizz Application", "Test Series Rejected.");
                         $this->androidPushNotification(2, "Quizz Application", "Test Series Rejected.", $user->device_token, 4, $this->notificationCount($user->id), $question->id);
