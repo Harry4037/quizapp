@@ -178,13 +178,14 @@ class TestSeriesController extends Controller {
                 foreach ($request->input("questions") as $question) {
                     $testSeriesQuestion = new Question();
                     $testSeriesQuestion->user_id = $request->input("user_id");
-                    $testSeriesQuestion->exam_id = $request->input("exam_id");
+                    $testSeriesQuestion->exam_id = 0;
                     $testSeriesQuestion->subject_id = $request->input("subject_id");
                     $testSeriesQuestion->description = $question["question_discription"];
                     $testSeriesQuestion->ques_image = '';
                     $testSeriesQuestion->ques_time = $question["time_per_question"];
                     $testSeriesQuestion->test_series_id = $testSeries->id;
                     if ($testSeriesQuestion->save()) {
+
                         $questionExam = new QuestionExam();
                         $questionExam->question_id = $testSeriesQuestion->id;
                         $questionExam->exam_id = $request->input("exam_id");
@@ -893,7 +894,7 @@ class TestSeriesController extends Controller {
         $dataArray = [];
 
         $inviteArray = [];
-        $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at','is_approve')->get();
+        $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at', 'is_approve')->get();
         foreach ($result as $k => $test) {
             $dataArray[$k]['id'] = $test->id;
             $dataArray[$k]['name'] = $test->name;
