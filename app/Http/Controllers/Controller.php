@@ -49,7 +49,22 @@ class Controller extends BaseController {
     public function androidPushNotification($user_type, $title, $message, $token, $notificationType, $count = 0, $record_id = 0) {
             config(['fcm.http.server_key' => 'AAAAL6SPjhI:APA91bEWevQCGFbJDxtt0o2mVwDkVo20ZWHEnGGFwW8ER42_4lEfr-FOL7xTtERhqBndBcztbW7bjOTyyuPDke3VfgyT905KHgFVhTPJsSnRgp3bBgj39nd4PzOg8rZ__UtswTc8OwQJ']);
             config(['fcm.http.sender_id' => '204624334354']);
-            $clkAction = 'com.example.quizz.DashBoard.MainActivity';
+           // $clkAction = 'com.example.quizz.DashBoard.MainActivity';
+            if ($notificationType == 0) {
+                $clkAction = 'android.intent.action.QUIZ_MAIN_ACTIVITY';
+            } elseif ($notificationType == 1) {
+                $clkAction = 'android.intent.action.QUIZ_MAIN_ACTIVITY';
+            } elseif ($notificationType == 2){
+                $clkAction = 'android.intent.action.QUIZ_MAIN_ACTIVITY';
+            }elseif ($notificationType == 3) {
+                $clkAction = 'android.intent.action.QUIZ_MAIN_ACTIVITY';
+            } elseif ($notificationType == 4){
+                $clkAction = 'QUIZ_CREATER_TEST_SERIES_LISTING';
+            } elseif ($notificationType == 5) {
+                $clkAction = 'android.intent.action.QUIZ_QUESTION_DETAILS';
+            } else {
+                $clkAction = 'android.intent.action.QUIZ_MAIN_ACTIVITY';
+            }
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60 * 20)
                 ->setPriority('high');
