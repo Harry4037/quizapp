@@ -71,13 +71,13 @@ class AuthController extends Controller {
         $otp = 1234;
 //        $otp = rand(1000, 9999);
         if (($request->user_type == 2) || ($request->user_type == 3)) {
-
-            if ($request->user_type == 2) {
-                $existingUser = User::where(['is_active' => 1, 'mobile_number' => $request->mobile_number])->first();
-                if ($existingUser) {
+            $existingUser = User::where(['mobile_number' => $request->mobile_number])->first();
+            if ($existingUser) {
+                if ($existingUser->user_type_id == 2) {
                     if ($existingUser->is_approve != 2) {
                         return $this->errorResponse("Your accout is not approved. Please contact to admin", (object) []);
                     }
+
                     $existingUser->otp = $otp;
 
                     if ($existingUser->save()) {
@@ -85,28 +85,21 @@ class AuthController extends Controller {
                     } else {
                         return $this->errorResponse("Something went wrong.", (object) []);
                     }
-                } else {
-                    return $this->errorResponse("Your are Blocked by us.", (object) []);
                 }
-            }
-            if ($request->user_type == 3) {
-                $existingUser = User::where(['mobile_number' => $request->mobile_number])->first();
-                if ($existingUser) {
+
+                if ($existingUser->user_type_id == 3) {
                     $existingUser->otp = $otp;
-                    // if ($request->user_type == 3) {
-                    //     $existingUser->is_active = 0;
-                    // } else {
-                    //     $existingUser->is_active = 1;
-                    // }
 
                     if ($existingUser->save()) {
                         return $this->successResponse("OTP sent successfully.", (object) []);
                     } else {
                         return $this->errorResponse("Something went wrong.", (object) []);
                     }
-                } else {
-                    return $this->errorResponse("Your are not registered with us.", (object) []);
                 }
+
+                return $this->errorResponse("Your account is naot a valid type.");
+            } else {
+                return $this->errorResponse("Your are not registered with us.", (object) []);
             }
         }
 
