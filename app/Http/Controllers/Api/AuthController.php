@@ -72,45 +72,42 @@ class AuthController extends Controller {
 //        $otp = rand(1000, 9999);
         if (($request->user_type == 2) || ($request->user_type == 3)) {
 
-            if($request->user_type == 2){
-                $existingUser = User::where(['is_active' => 1 ,'mobile_number' => $request->mobile_number])->first();
-            if ($existingUser) {
-                $existingUser->otp = $otp;
-                // if ($request->user_type == 3) {
-                //     $existingUser->is_active = 0;
-                // } else {
-                //     $existingUser->is_active = 1;
-                // }
+            if ($request->user_type == 2) {
+                $existingUser = User::where(['is_active' => 1, 'mobile_number' => $request->mobile_number])->first();
+                if ($existingUser) {
+                    if ($existingUser->is_approve != 2) {
+                        return $this->errorResponse("Your are is not approved. Please contact to admin", (object) []);
+                    }
+                    $existingUser->otp = $otp;
 
-                if ($existingUser->save()) {
-                    return $this->successResponse("OTP sent successfully.", (object) []);
+                    if ($existingUser->save()) {
+                        return $this->successResponse("OTP sent successfully.", (object) []);
+                    } else {
+                        return $this->errorResponse("Something went wrong.", (object) []);
+                    }
                 } else {
-                    return $this->errorResponse("Something went wrong.", (object) []);
+                    return $this->errorResponse("Your are Blocked by us.", (object) []);
                 }
-            } else {
-                return $this->errorResponse("Your are Blocked by us.", (object) []);
-
-            }}
-            if($request->user_type == 3){
+            }
+            if ($request->user_type == 3) {
                 $existingUser = User::where(['mobile_number' => $request->mobile_number])->first();
-            if ($existingUser) {
-                $existingUser->otp = $otp;
-                // if ($request->user_type == 3) {
-                //     $existingUser->is_active = 0;
-                // } else {
-                //     $existingUser->is_active = 1;
-                // }
+                if ($existingUser) {
+                    $existingUser->otp = $otp;
+                    // if ($request->user_type == 3) {
+                    //     $existingUser->is_active = 0;
+                    // } else {
+                    //     $existingUser->is_active = 1;
+                    // }
 
-                if ($existingUser->save()) {
-                    return $this->successResponse("OTP sent successfully.", (object) []);
+                    if ($existingUser->save()) {
+                        return $this->successResponse("OTP sent successfully.", (object) []);
+                    } else {
+                        return $this->errorResponse("Something went wrong.", (object) []);
+                    }
                 } else {
-                    return $this->errorResponse("Something went wrong.", (object) []);
+                    return $this->errorResponse("Your are not registered with us.", (object) []);
                 }
-            } else {
-                return $this->errorResponse("Your are not registered with us.", (object) []);
-
-            }}
-
+            }
         }
 
         return $this->errorResponse("Incorrect user type.");
