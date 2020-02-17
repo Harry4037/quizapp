@@ -185,7 +185,7 @@ class QuestionController extends Controller {
 //                        $join->on('questions.id', '=', 'question_exams.question_id')
 //                        ->whereNotIn("question_exams.question_id", $userQuestionIds);
 //                    })
-                    ->where(function($query)use($lang, $request) {
+                    ->where(function($query)use($lang, $request, $userQuestionIds) {
                         $query->where('questions.lang', $lang)
                         ->where('questions.is_approve', 2)
                         ->whereNotIn("questions.id", $userQuestionIds);
