@@ -158,7 +158,7 @@ class QuizController extends Controller {
                 return $this->errorResponse("You have already participated in this quiz.");
             }
             $startDateTime = Carbon::parse($quiz->start_date_time);
-            $endDateTime = Carbon::parse($quiz->start_date_time)->addMinutes(5);
+            $endDateTime = Carbon::parse($quiz->start_date_time)->addMinutes(15);
             $currentDateTime = Carbon::now();
             if ($currentDateTime->between($startDateTime, $endDateTime)) {
                 $dataArray = [];

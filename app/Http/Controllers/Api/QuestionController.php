@@ -190,7 +190,7 @@ class QuestionController extends Controller {
                         ->where('questions.is_approve', 2)
                         ->whereNotIn("questions.id", $userQuestionIds);
                     })
-                    ->offset($page)
+//                    ->offset($page)
                     ->limit($limit)
                     ->get();
 
