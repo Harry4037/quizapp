@@ -181,10 +181,10 @@ class QuestionController extends Controller {
 
         if ($request->flag == 1) {
             $questions = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
-                    // ->join('question_exams', function ($join) use($userQuestionIds) {
-                    //     $join->on('questions.id', '=', 'question_exams.question_id')
-                    //     ->whereNotIn("question_exams.question_id", $userQuestionIds);
-                    // })
+                    ->join('question_exams', function ($join) use($userQuestionIds) {
+                        $join->on('questions.id', '=', 'question_exams.question_id')
+                        ->whereNotIn("question_exams.question_id", $userQuestionIds);
+                    })
                     ->where(function($query)use($lang, $request) {
                         $query->where('questions.lang', $lang)
                         ->where('questions.is_approve', 2);
