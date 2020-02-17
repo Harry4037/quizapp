@@ -68,7 +68,7 @@ Route::namespace("Api")->group(function() {
     //QuestionController
 //    Route::post('/create-question', 'QuestionController@createQuestion');
     Route::post('/create-single-question', 'QuestionController@createSingleQuestion');
-
+    Route::get('/question-detail', 'QuestionController@quesDetail');
     Route::get('/year-list', 'QuestionController@yearList');
 
     Route::post('/submit-random-answer', 'QuestionController@submitRandomQuestion');
