@@ -899,4 +899,106 @@ class QuestionController extends Controller {
         return $this->successResponse("Result Submmitted Successfully.", (object) []);
     }
 
+    /**
+     * @api {get} /api/question-detail  Question Detail
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetQuestionDetail
+     * @apiGroup Question/Answer
+     *
+     * @apiParam {String} user_id User ID.
+     * @apiParam {String} ques_id Question ID.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Question Detail.
+     * @apiSuccess {JSON} data blank object.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Question Detail.",
+     *       "data": {
+     *          "questions": {
+     *               "id": 8,
+     *               "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+     *               "ques_image": " ",
+     *               "ques_time": 20,
+     *               "is_like" : true,
+     *                "user": {
+     *                   "id": 2,
+     *                   "name": "manish",
+     *                   "profile_pic": ""
+     *                },
+     *               "answers": [
+     *                   {
+     *                       "id": 29,
+     *                       "question_id": 8,
+     *                       "description": "Lorem Ipsum.",
+     *                       "is_answer": 0,
+     *                       "created_at": null,
+     *                       "updated_at": null,
+     *                       "deleted_at": null
+     *                   },
+     *                   {
+     *                       "id": 30,
+     *                       "question_id": 8,
+     *                       "description": "Lorem Ipsum.",
+     *                       "is_answer": 0,
+     *                       "created_at": null,
+     *                       "updated_at": null,
+     *                       "deleted_at": null
+     *                   },
+     *                   {
+     *                       "id": 31,
+     *                       "question_id": 8,
+     *                       "description": "Lorem Ipsum.",
+     *                       "is_answer": 0,
+     *                       "created_at": null,
+     *                       "updated_at": null,
+     *                       "deleted_at": null
+     *                   },
+     *                   {
+     *                       "id": 32,
+     *                       "question_id": 8,
+     *                       "description": "Lorem Ipsum.",
+     *                       "is_answer": 1,
+     *                       "created_at": null,
+     *                       "updated_at": null,
+     *                       "deleted_at": null
+     *                   }
+     *               ]
+     *           }
+     *       }
+     *   }
+     *
+     */
+    public function quesDetail(Request $request) {
+        if (!$request->ques_id) {
+            return $this->errorResponse("Questions Id Missing.");
+        }
+        if (!$request->user_id) {
+            return $this->errorResponse("User Id Missing.");
+        }
+        $question = Question::find($request->ques_id);
+        if (!$question) {
+            return $this->errorResponse("Invalid Question ID");
+        }
+        $dataArray = [];
+        $answers = Answer::where("question_id", $request->ques_id)->get();
+        $isLike = UserQuestionLike::where(["question_id" => $request->ques_id, "user_id" => $request->user_id])->first();
+        $user = User::find($question->user_id);
+        $dataArray['Question']['id'] = $question->id;
+        $dataArray['Question']['user']['id'] = $user ? $user->id : 1;
+        $dataArray['Question']['user']['name'] = $user ? $user->name : '';
+        $dataArray['Question']['user']['profile_pic'] = $user ? $user->profile_pic : '';
+        $dataArray['Question']['description'] = $question->description;
+        $dataArray['Question']['ques_image'] = $question->ques_image;
+        $dataArray['Question']['ques_time'] = $question->ques_time;
+        $dataArray['Question']['is_like'] = $isLike ? true : false;
+        $dataArray['Question']['answers'] = $answers;
+        return $this->successResponse("Question Detail.", $dataArray);
+    }
+
 }
