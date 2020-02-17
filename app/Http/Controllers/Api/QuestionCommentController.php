@@ -185,6 +185,8 @@ class QuestionCommentController extends Controller {
         foreach ($comments as $k => $comment) {
             $dataArray[$k]['id'] = $comment->id;
             $dataArray[$k]['user_id'] = $comment->user_id;
+            $nam = User::find($comment->user_id);
+            $dataArray[$k]['user_name'] = $nam?$nam->name : '';
             $dataArray[$k]['question_id'] = $comment->question_id;
             $dataArray[$k]['description'] = $comment->description;
             $dataArray[$k]['created_at'] = $comment->created_at;
