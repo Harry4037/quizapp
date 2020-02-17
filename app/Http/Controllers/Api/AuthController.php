@@ -73,7 +73,7 @@ class AuthController extends Controller {
         if (($request->user_type == 2) || ($request->user_type == 3)) {
 
             if($request->user_type == 2){
-                $existingUser = User::where(['is_active' => 0 ,'mobile_number' => $request->mobile_number])->first();
+                $existingUser = User::where(['is_active' => 1 ,'mobile_number' => $request->mobile_number])->first();
             if ($existingUser) {
                 $existingUser->otp = $otp;
                 // if ($request->user_type == 3) {
