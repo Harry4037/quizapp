@@ -241,7 +241,7 @@ class CreatorController extends Controller {
             if ($request->isMethod('post')) {
                 $user = User::findOrFail($request->record_id);
                 $user->is_approve = $request->status;
-                $user->user_type_id = 2;
+                $user->user_type_id = 3;
                 if ($user->save()) {
                     if ($user && $user->device_token) {
                         $this->generateNotification($user->id, 1, "Quizz Application", "You are Rejected");
