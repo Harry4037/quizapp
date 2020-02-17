@@ -74,6 +74,8 @@ class QuizController extends Controller {
      * @apiName GetQuizQuestion
      * @apiGroup Quiz
      *
+     * @apiParam {String} user_id User ID.
+     * 
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Daily Quiz Found.
@@ -144,9 +146,17 @@ class QuizController extends Controller {
      *
      */
     public function startQuiz(Request $request) {
+        if (!$request->user_id) {
+            return $this->errorResponse("User ID missing.");
+        }
         $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
-        //       $quiz = Quiz::where('id', 1)->first();
+
         if ($quiz) {
+
+            $userExist = UserQuiz::where(["quiz_id" => $quiz->id, "user_id" => $request->user_id])->first();
+            if ($userExist) {
+                return $this->errorResponse("You have already participated in this quiz.");
+            }
 //            $startDateTime = Carbon::parse($quiz->start_date_time);
 //            $endDateTime = Carbon::parse($quiz->start_date_time)->addMinutes(5);
 //            $currentDateTime = Carbon::now();
