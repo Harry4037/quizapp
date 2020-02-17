@@ -48,7 +48,7 @@ class QuizController extends Controller {
      */
     public function quizDetail(Request $request) {
         $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
- //       $quiz = Quiz::where('id', 1)->first();
+        //       $quiz = Quiz::where('id', 1)->first();
         if ($quiz) {
             $dataArray = [];
             $dataArray['quiz']['id'] = $quiz->id;
@@ -144,38 +144,38 @@ class QuizController extends Controller {
      *
      */
     public function startQuiz(Request $request) {
-       $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
- //       $quiz = Quiz::where('id', 1)->first();
+        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
+        //       $quiz = Quiz::where('id', 1)->first();
         if ($quiz) {
 //            $startDateTime = Carbon::parse($quiz->start_date_time);
 //            $endDateTime = Carbon::parse($quiz->start_date_time)->addMinutes(5);
 //            $currentDateTime = Carbon::now();
 //            if ($currentDateTime->between($startDateTime, $endDateTime)) {
-                $dataArray = [];
-                $dataArray['quiz']['id'] = $quiz->id;
-                $dataArray['quiz']['name'] = $quiz->name;
-                $dataArray['quiz']['total_question'] = $quiz->total_questions;
-                $dataArray['quiz']['lang'] = $quiz->lang == 1 ? 'English' : 'Hindi';
-                $dataArray['quiz']['start_date_time'] = $quiz->start_date_time;
-                $dataArray['quiz']['end_date_time'] = $quiz->end_date_time;
-                $dateTime = Carbon::parse($quiz->end_date_time);
-                $dateTime1 = Carbon::parse($quiz->start_date_time);
-                $min = $dateTime->diffInMinutes($dateTime1);
-                $dataArray['quiz']['question_time'] = $min * 60;
+            $dataArray = [];
+            $dataArray['quiz']['id'] = $quiz->id;
+            $dataArray['quiz']['name'] = $quiz->name;
+            $dataArray['quiz']['total_question'] = $quiz->total_questions;
+            $dataArray['quiz']['lang'] = $quiz->lang == 1 ? 'English' : 'Hindi';
+            $dataArray['quiz']['start_date_time'] = $quiz->start_date_time;
+            $dataArray['quiz']['end_date_time'] = $quiz->end_date_time;
+            $dateTime = Carbon::parse($quiz->end_date_time);
+            $dateTime1 = Carbon::parse($quiz->start_date_time);
+            $min = $dateTime->diffInMinutes($dateTime1);
+            $dataArray['quiz']['question_time'] = $min * 60;
 
-                $questions = Question::where('quiz_id', $quiz->id)->get();
-                if ($questions) {
-                    foreach ($questions as $k => $question) {
-                        $answers = Answer::where('question_id', $question->id)->get();
-                        $dataArray['quiz']['questions'][$k]['id'] = $question->id;
-                        $dataArray['quiz']['questions'][$k]['description'] = $question->description;
-                        $dataArray['quiz']['questions'][$k]['ques_image'] = $question->ques_image;
-                        $dataArray['quiz']['questions'][$k]['answers'] = $answers;
-                    }
-                } else {
-                    $dataArray['quiz']['questions'] = [];
+            $questions = Question::where('quiz_id', $quiz->id)->get();
+            if ($questions) {
+                foreach ($questions as $k => $question) {
+                    $answers = Answer::where('question_id', $question->id)->get();
+                    $dataArray['quiz']['questions'][$k]['id'] = $question->id;
+                    $dataArray['quiz']['questions'][$k]['description'] = $question->description;
+                    $dataArray['quiz']['questions'][$k]['ques_image'] = $question->ques_image;
+                    $dataArray['quiz']['questions'][$k]['answers'] = $answers;
                 }
-                return $this->successResponse("Daily Quiz Found.", $dataArray);
+            } else {
+                $dataArray['quiz']['questions'] = [];
+            }
+            return $this->successResponse("Daily Quiz Found.", $dataArray);
 //            } else {
 //                return $this->errorResponse("You can not participate in this quiz.");
 //            }
@@ -244,6 +244,10 @@ class QuizController extends Controller {
             return $this->errorResponse("Questions missing.");
         }
         try {
+            $userExist = UserQuiz::where(["quiz_id" => $request->input("quiz_id"), "user_id" => $request->input("user_id")])->first();
+            if ($userExist) {
+                return $this->errorResponse("You have already participated in this quiz.");
+            }
             $userQuiz = new UserQuiz();
             $userQuiz->user_id = $request->input("user_id");
             $userQuiz->quiz_id = $request->input("quiz_id");
