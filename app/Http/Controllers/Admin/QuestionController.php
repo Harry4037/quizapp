@@ -376,7 +376,7 @@ class QuestionController extends Controller {
                     $user = User::where('id',$comm->user_id)->first();
                     if ($user && $user->device_token) {
                         $this->generateNotification($user->id, 1, "Quizz Application", "Admin Has Comment On Your Question.");
-                        $this->androidPushNotification(2, "Quizz Application", "Admin Has Comment On Your Question.", $user->device_token, 5, $this->notificationCount($user->id), $request->question->id);
+                        $this->androidPushNotification(2, "Quizz Application", "Admin Has Comment On Your Question.", $user->device_token, 0, $this->notificationCount($user->id), $request->question->id);
                     }
                     return redirect()->route('admin.question.comment-list', $question)->with('status', 'Comment has been Added successfully.');
 
