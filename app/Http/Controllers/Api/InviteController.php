@@ -9,9 +9,7 @@ use App\Models\User;
 use App\Models\TestSeries;
 use App\Models\UserTestSeries;
 
-
-class InviteController extends Controller
-{
+class InviteController extends Controller {
 
     /**
      * @api {post} /api/invite  Invite
@@ -88,11 +86,11 @@ class InviteController extends Controller
         }
         $invite = new Invite();
         $invite->user_id = $request->user_id;
-        if($request->flag == 1 ){
+        if ($request->flag == 1) {
             $invite->test_series_id = $request->test_series_id;
             $testseries = TestSeries::find($request->test_series_id);
         }
-        if($request->flag == 2){
+        if ($request->flag == 2) {
             $invite->user_test_series_id = $request->test_series_id;
             $testseries = UserTestSeries::find($request->test_series_id);
         }
@@ -104,7 +102,6 @@ class InviteController extends Controller
             return $this->errorResponse("Something went wrong.");
         }
     }
-
 
     /**
      * @api {get} /api/invite-status  Invite Status
@@ -182,7 +179,6 @@ class InviteController extends Controller
      *   }
      *
      */
-
     public function inviteStatus(Request $request) {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing");
@@ -204,27 +200,26 @@ class InviteController extends Controller
         if (!$testseries) {
             return $this->errorResponse("Test Series not found.");
         }
-        if($request->flag == 1){
-            if($request->status == 1){
-                $invite = Invite::where('user_id',$request->user_id)->where('test_series_id',$request->test_series_id)->update(['status' => 1]);
+        if ($request->flag == 1) {
+            if ($request->status == 1) {
+                $invite = Invite::where('user_id', $request->user_id)->where('test_series_id', $request->test_series_id)->update(['status' => 1]);
                 return $this->successResponse("Accepted", (object) []);
             }
-            if($request->status == 2){
-                $invite = Invite::where('user_id',$request->user_id)->where('test_series_id',$request->test_series_id)->update(['status' => 2]);
+            if ($request->status == 2) {
+                $invite = Invite::where('user_id', $request->user_id)->where('test_series_id', $request->test_series_id)->update(['status' => 2]);
                 return $this->successResponse("Rejected", (object) []);
             }
         }
-        if($request->flag == 2){
-            if($request->status == 1){
-                $invite = Invite::where('user_id',$request->user_id)->where('user_test_series_id',$request->test_series_id)->update(['status' => 1]);
+        if ($request->flag == 2) {
+            if ($request->status == 1) {
+                $invite = Invite::where('user_id', $request->user_id)->where('user_test_series_id', $request->test_series_id)->update(['status' => 1]);
                 return $this->successResponse("Accepted", (object) []);
             }
-            if($request->status == 2){
-                $invite = Invite::where('user_id',$request->user_id)->where('user_test_series_id',$request->test_series_id)->update(['status' => 2]);
+            if ($request->status == 2) {
+                $invite = Invite::where('user_id', $request->user_id)->where('user_test_series_id', $request->test_series_id)->update(['status' => 2]);
                 return $this->successResponse("Rejected", (object) []);
             }
-
         }
-
     }
+
 }
