@@ -76,7 +76,7 @@ class AuthController extends Controller {
                 $existingUser = User::where(['is_active' => 1, 'mobile_number' => $request->mobile_number])->first();
                 if ($existingUser) {
                     if ($existingUser->is_approve != 2) {
-                        return $this->errorResponse("Your are is not approved. Please contact to admin", (object) []);
+                        return $this->errorResponse("Your accout is not approved. Please contact to admin", (object) []);
                     }
                     $existingUser->otp = $otp;
 
