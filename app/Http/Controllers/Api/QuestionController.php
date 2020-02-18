@@ -192,7 +192,7 @@ class QuestionController extends Controller {
                     ->limit($limit)
                     ->get();
             $requestPage = $request->page + 1;
-            if (!$questions) {
+            if ($questions->count() == 0) {
                 $page = 0;
                 $questions = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
                         ->where(function($query)use($lang, $request, $userQuestionIds) {
