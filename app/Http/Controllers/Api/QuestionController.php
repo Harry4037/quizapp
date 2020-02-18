@@ -179,8 +179,9 @@ class QuestionController extends Controller {
         $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
         $page = $request->page == 0 ? 0 : $request->page * 10;
         $limit = 10;
-
+        $pageNo = 0;
         if ($request->flag == 1) {
+
             $questions = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
                     ->where(function($query)use($lang, $request, $userQuestionIds) {
                         $query->where('questions.lang', $lang)
@@ -191,6 +192,19 @@ class QuestionController extends Controller {
                     ->limit($limit)
                     ->get();
 
+            if (!$questions) {
+                $page = 0;
+                $questions = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+                        ->where(function($query)use($lang, $request, $userQuestionIds) {
+                            $query->where('questions.lang', $lang)
+                            ->where('questions.is_approve', 2)
+                            ->whereNotIn("questions.id", $userQuestionIds);
+                        })
+                        ->offset($page)
+                        ->limit($limit)
+                        ->get();
+            }
+            $pageNo = $page + 1;
             $dataArray = [];
             $totatlTime = 0;
             foreach ($questions as $k => $question) {
@@ -210,7 +224,7 @@ class QuestionController extends Controller {
             }
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
-            $data['page'] = $page;
+            $data['page'] = $pageNo;
             return $this->successResponse("Question list.", $data);
         } elseif ($request->flag == 2) {
             if (!$request->exam_id) {
