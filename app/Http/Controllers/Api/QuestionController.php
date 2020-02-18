@@ -177,9 +177,9 @@ class QuestionController extends Controller {
         }
 
         $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
-        $page = $request->page == 0 ? 0 : $request->page * 10;
+        $page = $request->page * 10;
         $limit = 10;
-        $pageNo = 0;
+        $requestPage = 0;
         if ($request->flag == 1) {
 
             $questions = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
@@ -191,7 +191,7 @@ class QuestionController extends Controller {
                     ->offset($page)
                     ->limit($limit)
                     ->get();
-
+            $requestPage = $request->page + 1;
             if (!$questions) {
                 $page = 0;
                 $questions = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
@@ -203,8 +203,9 @@ class QuestionController extends Controller {
                         ->offset($page)
                         ->limit($limit)
                         ->get();
+                $requestPage = 1;
             }
-            $pageNo = $page + 1;
+
             $dataArray = [];
             $totatlTime = 0;
             foreach ($questions as $k => $question) {
@@ -224,7 +225,7 @@ class QuestionController extends Controller {
             }
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
-            $data['page'] = $pageNo;
+            $data['page'] = $requestPage;
             return $this->successResponse("Question list.", $data);
         } elseif ($request->flag == 2) {
             if (!$request->exam_id) {
