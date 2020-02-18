@@ -21,7 +21,7 @@ class CreateTestSeriesTable extends Migration
             $table->string('name');
             $table->integer('total_question');
             $table->tinyInteger('lang');
-            $table->bigInteger("is_approve")->default(0);
+            $table->bigInteger("is_approve")->nullable()->comment("Null=>idle, 0=>publish, 2=>approve, 3=>reject");;
             $table->timestamps();
             $table->softDeletes();
         });
