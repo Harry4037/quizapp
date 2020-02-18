@@ -38,7 +38,7 @@ class DashboardController extends Controller {
             $rankingArray = [];
         }
 
-        $totalQuestionCount = Question::count();
+        $totalQuestionCount = Question::where('deleted_at','=' ,NULL)->count();
         $usersCount = User::where('user_type_id', 3)->count();
         $creatorCount = User::where('user_type_id', 2)->count();
         return view('admin.dashboard.index', [

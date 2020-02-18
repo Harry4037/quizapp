@@ -179,6 +179,7 @@ class TestSeriesController extends Controller {
                     $testSeriesQuestion = new Question();
                     $testSeriesQuestion->user_id = $request->input("user_id");
                     $testSeriesQuestion->exam_id = 0;
+                    $testSeriesQuestion->lang = $request->input("lang");
                     $testSeriesQuestion->subject_id = $request->input("subject_id");
                     $testSeriesQuestion->description = $question["question_discription"];
                     $testSeriesQuestion->ques_image = '';

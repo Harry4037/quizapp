@@ -34,7 +34,6 @@ class NotificationController extends Controller {
         $validator = Validator::make($request->all(), [
                     'title' => 'required',
                     'message' => 'required',
-                    'notify_user' => 'required_if:user_type,2',
                     'user_type' => 'required',
         ]);
 
