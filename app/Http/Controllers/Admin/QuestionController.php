@@ -39,7 +39,7 @@ class QuestionController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = Question::query()->with('subject');
+            $query = Question::query()->with('subject')->where('is_approve', '!=', NULL);
             $query->where(function($query) {
                 $query->where(["quiz_id" => 0]);
             });
