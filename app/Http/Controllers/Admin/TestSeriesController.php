@@ -41,6 +41,7 @@ class TestSeriesController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = TestSeries::query()->with('subject');
+            $query->whereNotNull("is_approve");
             if ($searchKeyword) {
                 $query->whereHas("subject", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
@@ -135,7 +136,7 @@ class TestSeriesController extends Controller {
                 $testseries->subject_id = $request->subject_id;
 
                 if ($testseries->save()) {
-                    $ques = Question::where('test_series_id',$testseries->id)->update(['subject_id' => $request->subject_id]);
+                    $ques = Question::where('test_series_id', $testseries->id)->update(['subject_id' => $request->subject_id]);
                     return redirect()->route('admin.test-series.index')->with('status', 'Test Series has been updated successfully.');
                 } else {
                     return redirect()->route('admin.test-series.index')->with('error', 'Something went be wrong.');
@@ -145,8 +146,7 @@ class TestSeriesController extends Controller {
             $exams = Exam::get();
             return view('admin.test-series.edit', [
                 'series' => $testseries,
-                 'subjects' => $subjects
-
+                'subjects' => $subjects
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.test-series.index')->with('error', $ex->getMessage());
