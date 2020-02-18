@@ -539,6 +539,7 @@ class TestSeriesController extends Controller {
         foreach ($questions as $k => $question) {
             Question::where('id', $question->id)->where('test_series_id', $question->test_series_id)->update(['is_approve' => 0]);
         }
+        TestSeries::where('id', $question->test_series_id)->update(['is_approve' => 0]);
         return $this->successResponse("Publish Successfully", (object) []);
     }
 
@@ -829,6 +830,7 @@ class TestSeriesController extends Controller {
         $data['recent_search'] = $dataArrayRecent;
         return $this->successResponse("Search History", $data);
     }
+
 
     /**
      * @api {get} /api/my-test-series My Test Series List
