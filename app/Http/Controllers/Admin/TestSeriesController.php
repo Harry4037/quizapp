@@ -132,17 +132,21 @@ class TestSeriesController extends Controller {
                 }
 
                 $testseries->name = $request->testseries_name;
-
+                $testseries->subject_id = $request->subject_id;
 
                 if ($testseries->save()) {
+                    $ques = Question::where('test_series_id',$testseries->id)->update(['subject_id' => $request->subject_id]);
                     return redirect()->route('admin.test-series.index')->with('status', 'Test Series has been updated successfully.');
                 } else {
                     return redirect()->route('admin.test-series.index')->with('error', 'Something went be wrong.');
                 }
             }
-
+            $subjects = Subject::get();
+            $exams = Exam::get();
             return view('admin.test-series.edit', [
-                'series' => $testseries
+                'series' => $testseries,
+                 'subjects' => $subjects
+
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.test-series.index')->with('error', $ex->getMessage());
