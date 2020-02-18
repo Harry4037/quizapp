@@ -424,11 +424,11 @@ class QuizController extends Controller {
         $myRankingNo = 0;
         if ($AllUser) {
             foreach ($AllUser as $k => $user) {
-                $Details = User::where('id', $user->user_id)->first();
+                $Details = User::where('id', $user->user_id)->withTrashed()->first();
                 $points = UserQuizQuestionAnswer::where('user_quiz_id',$user->user_quiz->id)->where('is_correct',1)->count();
-                $dataArray['users_leadership'][$k]['mob'] = $Details->mobile_number;
-                $dataArray['users_leadership'][$k]['name'] = $Details ? $Details->name : 'User';
-                $dataArray['users_leadership'][$k]['image'] = $Details->profile_pic ;
+                $dataArray['users_leadership'][$k]['mob'] = $Details['mobile_number'];
+                $dataArray['users_leadership'][$k]['name'] = $Details ? $Details['name'] : 'User';
+                $dataArray['users_leadership'][$k]['image'] = $Details['profile_pic'] ;
                 $dataArray['users_leadership'][$k]['points'] = $points?$points:0;
 
             }
