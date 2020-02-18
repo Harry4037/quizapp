@@ -48,6 +48,7 @@ class QuestionController extends Controller {
      *       "status_code": 200,
      *       "message": "Question list.",
      *       "data": [
+     *          "page":1,
      *          "question_time":50,
      *          "test_series_id":2,
      *          "questions": {
@@ -209,6 +210,7 @@ class QuestionController extends Controller {
             }
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
+            $data['page'] = $page;
             return $this->successResponse("Question list.", $data);
         } elseif ($request->flag == 2) {
             if (!$request->exam_id) {
@@ -272,6 +274,7 @@ class QuestionController extends Controller {
 
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
+            $data['page'] = 0;
 
 
             $testSeries = new UserTestSeries();
