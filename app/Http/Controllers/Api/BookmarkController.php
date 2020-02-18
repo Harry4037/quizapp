@@ -10,8 +10,7 @@ use App\Models\Bookmark;
 use App\Models\Subject;
 use App\Models\UserTestSeries;
 
-class BookmarkController extends Controller
-{
+class BookmarkController extends Controller {
 
     /**
      * @api {post} /api/add-bookmark  Bookmark
@@ -105,39 +104,39 @@ class BookmarkController extends Controller
             return $this->errorResponse("test_series Id missing.");
         }
         if ($request->flag == 1) {
-        $test_series = TestSeries::find($request->test_series_id);
-        if (!$test_series) {
-            return $this->errorResponse("test series not found.");
-        }
-        $user = User::find($request->user_id);
-        $remove = Bookmark::where("user_id", $request->user_id)->where("test_series_id", $request->test_series_id)->first();
-        if (!$user) {
-            return $this->errorResponse("user not found.");
-        } elseif ($remove) {
-            $r = Bookmark::where("user_id", $request->user_id)->where("test_series_id", $request->test_series_id)->delete();
-            $fav_count = Bookmark::where('test_series_id', $request->test_series_id)->count();
-            // $dataArray['fav_count'] = $fav_count;
-            $arr = array('favorite' => false, 'count' => $fav_count);
-            if ($user && $user->device_token) {
-                $this->generateNotification($user->id, 1, "Quizz Application", "Test Series bookmarked Removed.");
-                $this->androidPushNotification(2, "Quizz Application", "Test Series bookmarked Removed.", $user->device_token, 0, $this->notificationCount($user->id), $user->id);
+            $test_series = TestSeries::find($request->test_series_id);
+            if (!$test_series) {
+                return $this->errorResponse("test series not found.");
             }
-            return $this->successResponse("test_series bookmarked Removed.", $arr);
-        } else {
-            $bookmark = new Bookmark();
-            $bookmark->test_series_id = $request->test_series_id;
-            $bookmark->user_id = $request->user_id;
-            $bookmark->created_at = new \DateTime("now");
-            $bookmark->save();
-            $fav_count = Bookmark::where('test_series_id', $request->test_series_id)->count();
-            // $dataArray['fav_count'] = $fav_count;
-            $arr = array('favorite' => true, 'count' => $fav_count);
-            if ($user && $user->device_token) {
-                $this->generateNotification($user->id, 1, "Quizz Application", "Test Series bookmarked successfully.");
-                $this->androidPushNotification(2, "Quizz Application", "Test Series bookmarked successfully.", $user->device_token, 0, $this->notificationCount($user->id), $user->id);
+            $user = User::find($request->user_id);
+            $remove = Bookmark::where("user_id", $request->user_id)->where("test_series_id", $request->test_series_id)->first();
+            if (!$user) {
+                return $this->errorResponse("user not found.");
+            } elseif ($remove) {
+                $r = Bookmark::where("user_id", $request->user_id)->where("test_series_id", $request->test_series_id)->delete();
+                $fav_count = Bookmark::where('test_series_id', $request->test_series_id)->count();
+                // $dataArray['fav_count'] = $fav_count;
+                $arr = array('favorite' => false, 'count' => $fav_count);
+                if ($user && $user->device_token) {
+                    $this->generateNotification($user->id, 1, "Quizz Application", "Test Series bookmarked Removed.");
+                    $this->androidPushNotification(2, "Quizz Application", "Test Series bookmarked Removed.", $user->device_token, 0, $this->notificationCount($user->id), $user->id);
+                }
+                return $this->successResponse("test_series bookmarked Removed.", $arr);
+            } else {
+                $bookmark = new Bookmark();
+                $bookmark->test_series_id = $request->test_series_id;
+                $bookmark->user_id = $request->user_id;
+                $bookmark->created_at = new \DateTime("now");
+                $bookmark->save();
+                $fav_count = Bookmark::where('test_series_id', $request->test_series_id)->count();
+                // $dataArray['fav_count'] = $fav_count;
+                $arr = array('favorite' => true, 'count' => $fav_count);
+                if ($user && $user->device_token) {
+                    $this->generateNotification($user->id, 1, "Quizz Application", "Test Series bookmarked successfully.");
+                    $this->androidPushNotification(2, "Quizz Application", "Test Series bookmarked successfully.", $user->device_token, 0, $this->notificationCount($user->id), $user->id);
+                }
+                return $this->successResponse("test_series bookmarked successfully.", $arr);
             }
-            return $this->successResponse("test_series bookmarked successfully.", $arr);
-        }
         }
         if ($request->flag == 2) {
             $test_series = UserTestSeries::find($request->test_series_id);
@@ -165,7 +164,7 @@ class BookmarkController extends Controller
                 $arr = array('favorite' => true, 'count' => $fav_count);
                 return $this->successResponse("test_series bookmarked successfully.", $arr);
             }
-            }
+        }
     }
 
     /**
@@ -248,28 +247,28 @@ class BookmarkController extends Controller
                 $bookmarkArray[$key]['subject_name'] = $subject->name;
             }
 
-            $bookmarks1 = Bookmark::where("user_id", $request->user_id)->where('user_test_series_id', '!=', 0)->with(['usertestseriesDetail'])->get();
-            foreach ($bookmarks1 as $key => $bookmark) {
-                $bookmarkArray[$key]['id'] = $bookmark->id;
-                $bookmarkArray[$key]['test_series_id'] = $bookmark->usertestseriesDetail->id;
-                $bookmarkArray[$key]['created_at'] = $bookmark->created_at;
-                $bookmarkArray[$key]['subject_id'] = $bookmark->usertestseriesDetail->subject_id;
-                $bookmarkArray[$key]['name'] = $bookmark->usertestseriesDetail->name;
-                $bookmarkArray[$key]['flag'] = 2;
-                if($bookmark->usertestseriesDetail->is_attempted == 1)
-                {
-                    $bookmarkArray[$key]['is_attempted'] = TRUE;
-                }else{
+            $userbookmarks = Bookmark::where("user_id", $request->user_id)->where('user_test_series_id', '!=', 0)->with(['usertestseriesDetail'])->get();
+            foreach ($userbookmarks as $key => $bookmark) {
+                $bookmarkArray1[$key]['id'] = $bookmark->id;
+                $bookmarkArray1[$key]['test_series_id'] = $bookmark->usertestseriesDetail->id;
+                $bookmarkArray1[$key]['created_at'] = $bookmark->created_at;
+                $bookmarkArray1[$key]['subject_id'] = $bookmark->usertestseriesDetail->subject_id;
+                $bookmarkArray1[$key]['name'] = $bookmark->usertestseriesDetail->name;
+                $bookmarkArray1[$key]['flag'] = 2;
+                if ($bookmark->usertestseriesDetail->is_attempted == 1) {
+                    $bookmarkArray1[$key]['is_attempted'] = TRUE;
+                } else {
                     $bookmarkArray[$key]['is_attempted'] = FALSE;
                 }
-                $bookmarkArray[$key]['total_question'] = NULL;
-                $bookmarkArray[$key]['lang'] = $bookmark->usertestseriesDetail->lang;
+                $bookmarkArray1[$key]['total_question'] = NULL;
+                $bookmarkArray1[$key]['lang'] = $bookmark->usertestseriesDetail->lang;
                 $subject = Subject::where("id", $bookmark->usertestseriesDetail->subject_id)->first();
-                $bookmarkArray[$key]['subject_name'] = $subject->name;
+                $bookmarkArray1[$key]['subject_name'] = $subject->name;
             }
             $res = array_merge($bookmarkArray, $bookmarkArray1);
             $data['Bookmark_list'] = $res;
             return $this->successResponse("Bookmark List.", $data);
         }
     }
+
 }
