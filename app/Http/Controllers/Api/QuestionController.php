@@ -177,7 +177,7 @@ class QuestionController extends Controller {
 
         $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
         $page = $request->page == 0 ? 0 : $request->page * 10;
-        $limit = $request->page == 0 ? 10 : ($page + 10);
+        $limit = 10;
 
         if ($request->flag == 1) {
             $questions = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
