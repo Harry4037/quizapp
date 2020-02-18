@@ -50,28 +50,27 @@ class NotificationController extends Controller {
         // }
 
         $tokens = User::where('user_type_id', '=', 3)
-        ->orWhere("user_type_id", '=', 2)->where("device_token", '!=', null)
-                        ->when($request->user_type == 2, function($query) use($request) {
-                            return $query->whereIn('id', $request->notify_user);
-                        })
-                        ->when($request->user_type == 3, function($query) use($request) {
-                            return $query;
-                        })
-                        ->pluck("device_token")->toArray();
-        if (count($tokens)) {
-            $this->androidPushNotification(3, $request->title, $request->message, $tokens, 0);
-        }
+        ->where("device_token", '!=', null)
+        ->when($request->user_type == 2, function($query) use($request) {
+            return $query->whereIn('id', $request->notify_user);
+        })
+        ->when($request->user_type == 3, function($query) use($request) {
+            return $query->where('is_active', 1);
+        })
+        ->pluck("device_token")->toArray();
+if (count($tokens)) {
+$this->androidPushNotification(2, $request->title, $request->message, $tokens, 0);
+}
 
-        $userIds = User::where('user_type_id', '=', 3)
-                        ->orWhere("user_type_id", '=', 2)
-                        ->where("device_token", '!=', null)
-                        ->when($request->user_type == 2, function($query) use($request) {
-                            return $query->whereIn('id', $request->notify_user);
-                        })
-                        ->when($request->user_type == 3, function($query) use($request) {
-                            return $query;
-                        })
-                        ->pluck("id")->toArray();
+$userIds = User::where('user_type_id', '=', 3)
+        ->where("device_token", '!=', null)
+        ->when($request->user_type == 2, function($query) use($request) {
+            return $query->whereIn('id', $request->notify_user);
+        })
+        ->when($request->user_type == 3, function($query) use($request) {
+            return $query->where('is_active', 1);
+        })
+        ->pluck("id")->toArray();
         $adminNotification = new AdminNotification();
         $adminNotification->title = $request->title;
         $adminNotification->message = $request->message;
