@@ -214,7 +214,7 @@ class QuestionController extends Controller {
                 $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
                 $user = User::where('id',$question->user_id)->withTrashed()->first();
                 $dataArray[$k]['id'] = $question->id;
-                $dataArray[$k]['user']['id'] = $user ? $user->id : 0;
+                $dataArray[$k]['user']['id'] = $user ? $question->user_id : 0;
                 $dataArray[$k]['user']['name'] = $user ? $user->name : '';
                 $dataArray[$k]['user']['profile_pic'] = $user ? $user->profile_pic : '';
                 $dataArray[$k]['description'] = $question->description;
