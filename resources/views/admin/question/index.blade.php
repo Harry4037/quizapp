@@ -30,8 +30,7 @@
                                 <tr>
                                     <th style="width: 4%;">Sr. No.</th>
                                     <th style="width: 10%;">Subject</th>
-                                    <th style="width: 35%;">Question</th>
-                                    <th style="width: 9%;">Lang</th>
+                                    <th style="width: 44%;">Question</th>
                                     <th style="width: 14%;">Status</th>
                                     <th style="width: 20%;">Action</th>
                                 </tr>
@@ -74,7 +73,6 @@
             },
             {"data": "subject", sortable: false},
             {"data": "description", sortable: false},
-            {"data": "lang", sortable: false},
             {"data": "status", sortable: false},
             {"data": "action", sortable: false},
         ]
