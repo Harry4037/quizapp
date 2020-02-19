@@ -798,6 +798,7 @@ class QuestionController extends Controller {
         $question->description = $request->description;
         $question->ques_time = $request->ques_time;
         $question->subject_id = $subject->id;
+        $question->is_approve = 0;
         $question->test_series_id = $request->test_series_id;
         if ($question->save()) {
             $questionExam = new QuestionExam();
