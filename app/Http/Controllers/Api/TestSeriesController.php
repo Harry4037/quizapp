@@ -1106,7 +1106,10 @@ class TestSeriesController extends Controller {
                     $ques_image = $request->file("test_series_images." . $k);
                     $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
                     $ques_file_name = basename($quesImage);
-                    $question->ques_image = $ques_file_name;
+                    if(strpos($ques_file_name,".")){
+                        $question->ques_image = $ques_file_name;
+                    }
+                    $question->ques_image = NULL;
                     $question->save();
                 }
             }
