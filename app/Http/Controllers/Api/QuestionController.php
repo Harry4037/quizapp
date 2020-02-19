@@ -14,6 +14,7 @@ use App\Models\Answer;
 use App\Models\TestSeries;
 use App\Models\Subject;
 use App\Models\Exam;
+use Carbon\Carbon;
 use App\Models\UserTestSeries;
 use App\Models\UserTestSeriesQuestionAnswer;
 use App\Models\User;
@@ -220,6 +221,12 @@ class QuestionController extends Controller {
                 $dataArray[$k]['ques_image'] = $question->ques_image;
                 $dataArray[$k]['ques_time'] = $question->ques_time;
                 $dataArray[$k]['is_like'] = $isLike ? true : false;
+
+                $date = Carbon::parse($question->created_at);
+                $date1 = $date->format("d-M-Y");
+                $time1 = $date->format("h:i A");
+
+                $dataArray[$k]['ques_date_time'] = $date1 ." at " . $time1;
                 $dataArray[$k]['answers'] = $answers;
                 $totatlTime += $question->ques_time;
             }
