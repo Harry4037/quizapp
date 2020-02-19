@@ -28,7 +28,7 @@ class DashboardController extends Controller {
         $rankingArray = [];
         if ($userAnswers) {
             foreach ($userAnswers as $k => $userAnswer) {
-                $user = User::find($userAnswer->user_id);
+                $user = User::where('id',$userAnswer->user_id)->withTrashed()->first();
                 $rankingArray[$k]['user_id'] = $userAnswer->user_id;
                 $rankingArray[$k]['name'] = $user ? $user->name : 'User';
                 $rankingArray[$k]['profile_pic'] = $user ? $user->profile_pic : '';
