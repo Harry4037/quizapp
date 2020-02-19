@@ -183,13 +183,13 @@ class QuestionController extends Controller {
         $requestPage = 0;
         if ($request->flag == 1) {
 
-            $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+            $questions = Question::select('questions.id','questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
                     ->where(function($query)use($lang, $request, $userQuestionIds) {
                         $query->where('questions.lang', $lang)
                         ->where('questions.is_approve', 2)
                         ->whereNotIn("questions.id", $userQuestionIds);
                     })
-                    ->inRandomOrder()
+                    ->offset($page)
                     ->limit($limit)
                     ->get();
             $requestPage = $request->page + 1;
@@ -201,7 +201,7 @@ class QuestionController extends Controller {
                             ->where('questions.is_approve', 2)
                             ->whereNotIn("questions.id", $userQuestionIds);
                         })
-                        ->inRandomOrder()
+                        ->offset($page)
                         ->limit($limit)
                         ->get();
                 $requestPage = 1;
@@ -226,7 +226,7 @@ class QuestionController extends Controller {
                 $date1 = $date->format("d-M-Y");
                 $time1 = $date->format("h:i A");
 
-                $dataArray[$k]['ques_date_time'] = $date1 . " at " . $time1;
+                $dataArray[$k]['ques_date_time'] = $date1 ." at " . $time1;
                 $dataArray[$k]['answers'] = $answers;
                 $totatlTime += $question->ques_time;
             }
@@ -257,7 +257,7 @@ class QuestionController extends Controller {
                 return $this->errorResponse("Invalid language Id.");
             }
 
-            $query = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+            $query = Question::select('questions.id', 'questions.user_id','questions.description', 'questions.ques_image', 'questions.ques_time')
                     ->join('question_exams', function ($join) use($request, $userQuestionIds) {
                         $join->on('questions.id', '=', 'question_exams.question_id')
                         ->whereIn("question_exams.exam_id", $request->exam_id)
