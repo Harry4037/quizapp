@@ -413,7 +413,7 @@ class TestSeriesController extends Controller {
         $searchKeyword = $request->name;
         $dataArray = [];
         $dataArray1 = [];
-        $result = TestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'total_question', 'created_at')->get();
+        $result = TestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'total_question', 'created_at')->where('is_approve',2)->get();
         foreach ($result as $k => $test) {
             $dataArray[$k]['id'] = $test->id;
             $dataArray[$k]['name'] = $test->name;
