@@ -212,7 +212,7 @@ class QuestionController extends Controller {
             foreach ($questions as $k => $question) {
                 $answers = Answer::where("question_id", $question->id)->get();
                 $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
-                $user = User::find($question->user_id);
+                $user = User::where('id',$question->user_id)->withTrashed()->first();
                 $dataArray[$k]['id'] = $question->id;
                 $dataArray[$k]['user']['id'] = $user ? $user->id : 0;
                 $dataArray[$k]['user']['name'] = $user ? $user->name : '';
