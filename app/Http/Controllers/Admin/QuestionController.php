@@ -56,6 +56,14 @@ class QuestionController extends Controller {
             foreach ($questions as $k => $question) {
                 $questionsArray[$k]['description'] = $question->description;
                 $questionsArray[$k]['subject'] = $question->subject ? $question->subject->name : '';
+                if($question->lang == 1){
+                    $questionsArray[$k]['lang'] = "Eng";
+                }elseif($question->lang == 2){
+                    $questionsArray[$k]['lang'] = "Hindi";
+                }else{
+                    $questionsArray[$k]['lang'] = "None";
+                }
+
                 if ($question->is_approve == 2) {
                     $questionsArray[$k]['status'] = '<label class="btn btn-success btn-xs disabled">Approved</label>';
                 } elseif ($question->is_approve == 3) {
