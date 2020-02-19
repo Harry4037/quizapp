@@ -1108,8 +1108,10 @@ class TestSeriesController extends Controller {
                     $ques_file_name = basename($quesImage);
                     if(strpos($ques_file_name,".")){
                         $question->ques_image = $ques_file_name;
+                    }else{
+                        $question->ques_image = NULL;
                     }
-                    $question->ques_image = NULL;
+
                     $question->save();
                 }
             }
