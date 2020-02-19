@@ -217,7 +217,7 @@ class QuestionController extends Controller {
                 $dataArray[$k]['user']['name'] = $user ? $user->name : '';
                 $dataArray[$k]['user']['profile_pic'] = $user ? $user->profile_pic : '';
                 $dataArray[$k]['description'] = $question->description;
-                $dataArray[$k]['ques_image'] = $question->ques_image;
+                $dataArray[$k]['ques_image'] = $question->ques_image ?$question->ques_image:NULL;
                 $dataArray[$k]['ques_time'] = $question->ques_time;
                 $dataArray[$k]['is_like'] = $isLike ? true : false;
                 $dataArray[$k]['answers'] = $answers;
@@ -277,7 +277,7 @@ class QuestionController extends Controller {
                 $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
                 $dataArray[$k]['id'] = $question->id;
                 $dataArray[$k]['description'] = $question->description;
-                $dataArray[$k]['ques_image'] = $question->ques_image;
+                $dataArray[$k]['ques_image'] = $question->ques_image ?$question->ques_image:NULL;
                 $dataArray[$k]['ques_time'] = $question->ques_time;
                 if ($request->year) {
                     $dataArray[$k]['year'] = $question->year;

@@ -18,7 +18,7 @@ class Question extends Model {
     }
 
     public function getQuesImageAttribute($value) {
-        return $value ? asset('storage/ques_image/' . $value) : '';
+        return $value ? asset('storage/ques_image/' . $value) : NULL;
     }
 
 }
