@@ -1102,14 +1102,20 @@ class TestSeriesController extends Controller {
                     if (!$request->hasFile("test_series_images." . $k)) {
                         return $this->errorResponse("Question pic not valid file type.");
                     }
+
                     $ques_image = $request->file("test_series_images." . $k);
                     $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
                     $ques_file_name = basename($quesImage);
-                    $question->ques_image = $ques_file_name;
+                    if($request->file("test_series_images." . $k)){
+                        $question->ques_image = $ques_file_name;
+                    }else{
+                        $question->ques_image = NULL;
+                    }
+                   // $question->ques_image = $ques_file_name;
                     $question->save();
                 }
             }
-            return $this->successResponse("Image uploaded succefully.", (object) []);
+            return $this->successResponse("Image uploaded successfully.", (object) []);
         } else {
             return $this->errorResponse("questions not found.");
         }
