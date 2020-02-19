@@ -195,7 +195,7 @@ class QuestionController extends Controller {
             $requestPage = $request->page + 1;
             if ($questions->count() == 0) {
                 $page = 0;
-                $questions = Question::select('questions.id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+                $questions = Question::select('questions.id','questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
                         ->where(function($query)use($lang, $request, $userQuestionIds) {
                             $query->where('questions.lang', $lang)
                             ->where('questions.is_approve', 2)
@@ -214,7 +214,7 @@ class QuestionController extends Controller {
                 $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
                 $user = User::where('id',$question->user_id)->withTrashed()->first();
                 $dataArray[$k]['id'] = $question->id;
-                $dataArray[$k]['user']['id'] = $user ? $question->user_id : 0;
+                $dataArray[$k]['user']['id'] = $user ? $user->id : 0;
                 $dataArray[$k]['user']['name'] = $user ? $user->name : '';
                 $dataArray[$k]['user']['profile_pic'] = $user ? $user->profile_pic : '';
                 $dataArray[$k]['description'] = $question->description;
