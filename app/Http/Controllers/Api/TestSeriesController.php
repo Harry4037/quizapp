@@ -183,6 +183,7 @@ class TestSeriesController extends Controller {
                     $testSeriesQuestion->subject_id = $request->input("subject_id");
                     $testSeriesQuestion->description = $question["question_discription"];
                     $testSeriesQuestion->ques_image = '';
+                    $testSeriesQuestion->is_approve = NULL;
                     $testSeriesQuestion->ques_time = $question["time_per_question"];
                     $testSeriesQuestion->test_series_id = $testSeries->id;
                     if ($testSeriesQuestion->save()) {
