@@ -794,7 +794,8 @@ class TestSeriesController extends Controller {
         $recentSearchs = SearchHistory::limit(5)->orderBy("updated_at", "DESC")->get();
         $dataArrayTrending = [];
         if ($trendSearchs) {
-            foreach ($trendSearchs as $k => $trendSearch) {
+            $k=0;
+            foreach ($trendSearchs as $trendSearch) {
                 if ($trendSearch->flag == 1) {
                     $testSeries = TestSeries::find($trendSearch->test_series_id);
                 } else {
@@ -804,11 +805,13 @@ class TestSeriesController extends Controller {
                     $dataArrayTrending[$k]['id'] = $testSeries->id ? $testSeries->id : '';
                     $dataArrayTrending[$k]['name'] = $testSeries->name ? $testSeries->name : '';
                     $dataArrayTrending[$k]['flag'] = $trendSearch->flag;
+                    $k++;
                 }
             }
         }
         $dataArrayRecent = [];
         if ($recentSearchs) {
+            $i=0;
             foreach ($recentSearchs as $i => $recentSearch) {
                 if ($recentSearch->flag == 1) {
                     $testSeries = TestSeries::find($recentSearch->test_series_id);
@@ -824,6 +827,7 @@ class TestSeriesController extends Controller {
                     } else {
                         $dataArrayRecent[$i]['is_attempted'] = FALSE;
                     }
+                    $i++;
                 }
             }
         }
