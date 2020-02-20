@@ -810,10 +810,10 @@ class TestSeriesController extends Controller {
         $dataArrayRecent = [];
         if ($recentSearchs) {
             foreach ($recentSearchs as $k => $recentSearch) {
-                if ($trendSearch->flag == 1) {
-                    $testSeries = TestSeries::find($trendSearch->test_series_id);
+                if ($recentSearch->flag == 1) {
+                    $testSeries = TestSeries::find($recentSearch->test_series_id);
                 } else {
-                    $testSeries = UserTestSeries::find($trendSearch->test_series_id);
+                    $testSeries = UserTestSeries::find($recentSearch->test_series_id);
                 }
                 if ($testSeries) {
                     $dataArrayRecent[$k]['id'] = $testSeries->id ? $testSeries->id : '';
