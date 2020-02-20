@@ -727,7 +727,7 @@ class TestSeriesController extends Controller {
                 foreach ($result1 as $k => $result) {
                     $seriesQuestion = Question::withTrashed()->where("id", $result->question_id)->first();
 
-                    $answers = Answer::where("question_id", $seriesQuestion->id)->get();
+                    $answers = Answer::withTrashed()->where("question_id", $seriesQuestion->id)->get();
                     $dataArray['test_series']['questions'][$k]['id'] = $seriesQuestion->id;
                     $dataArray['test_series']['questions'][$k]['description'] = $seriesQuestion->description;
                     $dataArray['test_series']['questions'][$k]['ques_image'] = $seriesQuestion->ques_image;
