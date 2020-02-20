@@ -725,7 +725,7 @@ class TestSeriesController extends Controller {
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
                 $totalTime = 0;
                 foreach ($result1 as $k => $result) {
-                    $seriesQuestion = Question::find($result->question_id);
+                    $seriesQuestion = Question::withTrashed()->where("id", $result->question_id)->first();
 
                     $answers = Answer::where("question_id", $seriesQuestion->id)->get();
                     $dataArray['test_series']['questions'][$k]['id'] = $seriesQuestion->id;
