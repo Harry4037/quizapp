@@ -812,7 +812,7 @@ class TestSeriesController extends Controller {
         $dataArrayRecent = [];
         if ($recentSearchs) {
             $i=0;
-            foreach ($recentSearchs as $i => $recentSearch) {
+            foreach ($recentSearchs as $recentSearch) {
                 if ($recentSearch->flag == 1) {
                     $testSeries = TestSeries::find($recentSearch->test_series_id);
                 } else {
