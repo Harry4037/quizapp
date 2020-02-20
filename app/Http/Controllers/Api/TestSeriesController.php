@@ -414,7 +414,7 @@ class TestSeriesController extends Controller {
         $searchKeyword = $request->name;
         $dataArray = [];
         $dataArray1 = [];
-        $result = TestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'total_question', 'created_at')->where('is_approve',2)->get();
+        $result = TestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'total_question', 'created_at')->where('is_approve', 2)->get();
         foreach ($result as $k => $test) {
             $dataArray[$k]['id'] = $test->id;
             $dataArray[$k]['name'] = $test->name;
@@ -433,6 +433,7 @@ class TestSeriesController extends Controller {
         $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'is_attempted', 'created_at')->get();
 
         foreach ($result1 as $k => $test1) {
+            $totalQuestions = UserTestSeriesQuestionAnswer::where("user_test_series_id", $test1->id)->count();
             $dataArray1[$k]['id'] = $test1->id;
             $dataArray1[$k]['name'] = $test1->name;
             $dataArray1[$k]['created_at'] = $test1->created_at;
@@ -450,7 +451,7 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray1[$k]['is_attempted'] = FALSE;
             }
-            $dataArray1[$k]['total_ques_no'] = NULL;
+            $dataArray1[$k]['total_ques_no'] = $totalQuestions;
         }
         $res = array_merge($dataArray, $dataArray1);
         $data['search_list'] = $res;
@@ -794,7 +795,7 @@ class TestSeriesController extends Controller {
         $recentSearchs = SearchHistory::limit(5)->orderBy("updated_at", "DESC")->get();
         $dataArrayTrending = [];
         if ($trendSearchs) {
-            $k=0;
+            $k = 0;
             foreach ($trendSearchs as $trendSearch) {
                 if ($trendSearch->flag == 1) {
                     $testSeries = TestSeries::find($trendSearch->test_series_id);
@@ -811,7 +812,7 @@ class TestSeriesController extends Controller {
         }
         $dataArrayRecent = [];
         if ($recentSearchs) {
-            $i=0;
+            $i = 0;
             foreach ($recentSearchs as $recentSearch) {
                 if ($recentSearch->flag == 1) {
                     $testSeries = TestSeries::find($recentSearch->test_series_id);
@@ -835,7 +836,6 @@ class TestSeriesController extends Controller {
         $data['recent_search'] = $dataArrayRecent;
         return $this->successResponse("Search History", $data);
     }
-
 
     /**
      * @api {get} /api/my-test-series My Test Series List
@@ -1111,9 +1111,9 @@ class TestSeriesController extends Controller {
                     $ques_image = $request->file("test_series_images." . $k);
                     $quesImage = Storage::disk('public')->put('ques_image', $ques_image);
                     $ques_file_name = basename($quesImage);
-                    if(strpos($ques_file_name,".")){
+                    if (strpos($ques_file_name, ".")) {
                         $question->ques_image = $ques_file_name;
-                    }else{
+                    } else {
                         $question->ques_image = NULL;
                     }
 
