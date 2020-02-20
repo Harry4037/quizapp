@@ -446,7 +446,7 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray1[$k]['is_bookmark'] = false;
             }
-            if ($test1->is_attempted == 1) {
+            if (($totalQuestions->user_id == $request->user_id) && ($test1->is_attempted == 1)) {
                 $dataArray1[$k]['is_attempted'] = TRUE;
             } else {
                 $dataArray1[$k]['is_attempted'] = FALSE;
