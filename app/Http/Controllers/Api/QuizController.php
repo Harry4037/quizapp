@@ -47,7 +47,7 @@ class QuizController extends Controller {
      *
      */
     public function quizDetail(Request $request) {
-        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
+        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->orderBy('start_date_time','DESC')->first();
         //       $quiz = Quiz::where('id', 1)->first();
         if ($quiz) {
             $dataArray = [];
