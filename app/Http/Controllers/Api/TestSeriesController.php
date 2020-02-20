@@ -430,7 +430,7 @@ class TestSeriesController extends Controller {
             }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
-        $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'is_attempted', 'created_at')->get();
+        $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id','user_id', 'name', 'is_attempted', 'created_at')->get();
 
         foreach ($result1 as $k => $test1) {
             $totalQuestions = UserTestSeriesQuestionAnswer::where("user_test_series_id", $test1->id)->count();
@@ -446,7 +446,7 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray1[$k]['is_bookmark'] = false;
             }
-            if (($totalQuestions->user_id == $request->user_id) && ($test1->is_attempted == 1)) {
+            if (($test1->user_id == $request->user_id) && ($test1->is_attempted == 1)) {
                 $dataArray1[$k]['is_attempted'] = TRUE;
             } else {
                 $dataArray1[$k]['is_attempted'] = FALSE;
