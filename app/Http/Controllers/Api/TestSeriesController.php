@@ -809,20 +809,20 @@ class TestSeriesController extends Controller {
         }
         $dataArrayRecent = [];
         if ($recentSearchs) {
-            foreach ($recentSearchs as $k => $recentSearch) {
+            foreach ($recentSearchs as $i => $recentSearch) {
                 if ($recentSearch->flag == 1) {
                     $testSeries = TestSeries::find($recentSearch->test_series_id);
                 } else {
                     $testSeries = UserTestSeries::find($recentSearch->test_series_id);
                 }
                 if ($testSeries) {
-                    $dataArrayRecent[$k]['id'] = $testSeries->id ? $testSeries->id : '';
-                    $dataArrayRecent[$k]['name'] = $testSeries->name ? $testSeries->name : '';
-                    $dataArrayRecent[$k]['flag'] = $trendSearch->flag;
+                    $dataArrayRecent[$i]['id'] = $testSeries->id ? $testSeries->id : '';
+                    $dataArrayRecent[$i]['name'] = $testSeries->name ? $testSeries->name : '';
+                    $dataArrayRecent[$i]['flag'] = $trendSearch->flag;
                     if ($testSeries->is_attempted == 1) {
-                        $dataArrayRecent[$k]['is_attempted'] = TRUE;
+                        $dataArrayRecent[$i]['is_attempted'] = TRUE;
                     } else {
-                        $dataArrayRecent[$k]['is_attempted'] = FALSE;
+                        $dataArrayRecent[$i]['is_attempted'] = FALSE;
                     }
                 }
             }
