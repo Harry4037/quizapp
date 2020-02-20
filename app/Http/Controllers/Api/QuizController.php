@@ -149,7 +149,7 @@ class QuizController extends Controller {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing.");
         }
-        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->first();
+        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->orderBy('start_date_time','DESC')->first();
 
         if ($quiz) {
 
