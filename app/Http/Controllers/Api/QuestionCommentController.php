@@ -112,8 +112,8 @@ class QuestionCommentController extends Controller {
         if ($comment->save()) {
                 $user1 = User::where('id',$question->user_id)->first();
                 if ($user1 && $user1->device_token) {
-                    $this->generateNotification($user1->id, 1, "Quizz Application", $user1->name . "Commented On Your Question");
-                    $this->androidPushNotification(2, "Quizz Application", $user1->name ." Commented On Your Question" , $user1->device_token, 5, $this->notificationCount($user1->id), $question->id);
+                    $this->generateNotification($user1->id, 1, "Quizz Application", $user->name . " Commented On Your Question");
+                    $this->androidPushNotification(2, "Quizz Application", $user->name ." Commented On Your Question" , $user1->device_token, 5, $this->notificationCount($user1->id), $question->id);
                 }
             return $this->successResponse("Comment successfully", (object) []);
         } else {
