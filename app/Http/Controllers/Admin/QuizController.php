@@ -420,9 +420,10 @@ class QuizController extends Controller {
         $data['recordsTotal'] = 10;
         $data['recordsFiltered'] = 10;
         $dataArray = [];
+        $AllUser = [];
         $AllUser = $query->where('quiz_id',$quiz->id)->with('user_quiz')->get();
         $myRankingNo = 0;
-        if ($AllUser) {
+        if (empty($AllUser)) {
             foreach ($AllUser as $k => $user) {
                 $Details = User::where('id', $user->user_id)->withTrashed()->first();
                 $points = UserQuizQuestionAnswer::where('user_quiz_id',$user->user_quiz->id)->where('is_correct',1)->count();
