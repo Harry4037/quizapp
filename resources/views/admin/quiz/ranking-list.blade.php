@@ -49,7 +49,7 @@
                                 @else
                                 <tr>
                                     <td></td>
-                                    <td>No Comments Found</td>
+                                    <td>No User Found</td>
                                     <td></td>
                                 </tr>
                                 @endif
