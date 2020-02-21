@@ -421,8 +421,9 @@ class QuizController extends Controller {
         $data['recordsFiltered'] = 10;
         $dataArray = [];
         $AllUser = [];
-        $AllUser = $query->where('quiz_id',$quiz->id)->with('user_quiz')->get();
+        $AllUser = $query->where('quiz_id',$quiz->id)->get();
         $myRankingNo = 0;
+        $check = 0;
         if ($AllUser) {
             foreach ($AllUser as $k => $user) {
                 $Details = User::where('id', $user->user_id)->withTrashed()->first();
@@ -431,18 +432,22 @@ class QuizController extends Controller {
                 $dataArray['users_leadership'][$k]['name'] = $Details ? $Details['name'] : 'User';
                 $dataArray['users_leadership'][$k]['image'] = $Details['profile_pic'] ;
                 $dataArray['users_leadership'][$k]['points'] = $points?$points:0;
-
+                $check == 1;
             }
-            usort($dataArray['users_leadership'], function($a, $b) {
-                return $a['points'] <=> $b['points'];
-            });
-            $dadt = array_reverse($dataArray['users_leadership']);
-            $rr = array_slice($dadt,0,10);
+            if($check){
+                usort($dataArray['users_leadership'], function($a, $b) {
+                    return $a['points'] <=> $b['points'];
+                });
+                $dadt = array_reverse($dataArray['users_leadership']);
+                $rr = array_slice($dadt,0,10);
+            }else{
+                $rr = [];
+            }
+
         }else{
             $rr = [];
         }
         // $rae['data'] = $rr;
-
         return view('admin.quiz.ranking-list', [
             'comments' => $rr
         ]);
