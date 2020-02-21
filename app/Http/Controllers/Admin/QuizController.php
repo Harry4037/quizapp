@@ -414,9 +414,9 @@ class QuizController extends Controller {
         $datee = date('Y-m-d');
         $quizzz = Quiz::find($quiz->id);
         $query = UserQuiz::query();
-        if ($searchKeyword) {
-            $query->where('name', 'LIKE', "%$searchKeyword%");
-        }
+        // if ($searchKeyword) {
+        //     $query->where('name', 'LIKE', "%$searchKeyword%");
+        // }
         $data['recordsTotal'] = 10;
         $data['recordsFiltered'] = 10;
         $dataArray = [];
@@ -424,6 +424,7 @@ class QuizController extends Controller {
         $AllUser = $query->where('quiz_id',$quiz->id)->get();
         $myRankingNo = 0;
         $check = 0;
+
         if ($AllUser) {
             foreach ($AllUser as $k => $user) {
                 $Details = User::where('id', $user->user_id)->withTrashed()->first();
@@ -432,7 +433,7 @@ class QuizController extends Controller {
                 $dataArray['users_leadership'][$k]['name'] = $Details ? $Details['name'] : 'User';
                 $dataArray['users_leadership'][$k]['image'] = $Details['profile_pic'] ;
                 $dataArray['users_leadership'][$k]['points'] = $points?$points:0;
-                $check == 1;
+                $check = 1;
             }
             if($check){
                 usort($dataArray['users_leadership'], function($a, $b) {

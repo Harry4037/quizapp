@@ -48,9 +48,9 @@
                                 @endforeach
                                 @else
                                 <tr>
-                                    <td></td>
-                                    <td>No User Found</td>
-                                    <td></td>
+
+                                    <td colspan="5">No User Found</td>
+
                                 </tr>
                                 @endif
                             </tbody>
