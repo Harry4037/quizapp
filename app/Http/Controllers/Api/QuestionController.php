@@ -189,8 +189,7 @@ class QuestionController extends Controller {
                         ->where('questions.is_approve', 2)
                         ->whereNotIn("questions.id", $userQuestionIds);
                     })
-//                    ->offset($page)
-                    ->inRandomOrder()
+                    ->offset($page)
                     ->limit($limit)
                     ->get();
             $requestPage = $request->page + 1;
