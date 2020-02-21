@@ -182,8 +182,9 @@ class QuestionController extends Controller {
         $limit = 10;
         $requestPage = 0;
         if ($request->flag == 1) {
+            $page = $user->page_no * 10;
 
-            $questions = Question::select('questions.id','questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+            $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
                     ->where(function($query)use($lang, $request, $userQuestionIds) {
                         $query->where('questions.lang', $lang)
                         ->where('questions.is_approve', 2)
@@ -192,10 +193,10 @@ class QuestionController extends Controller {
                     ->offset($page)
                     ->limit($limit)
                     ->get();
-            $requestPage = $request->page + 1;
+
             if ($questions->count() == 0) {
-                $page = 0;
-                $questions = Question::select('questions.id','questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+                $page = $user->skip_page_no * 10;
+                $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
                         ->where(function($query)use($lang, $request, $userQuestionIds) {
                             $query->where('questions.lang', $lang)
                             ->where('questions.is_approve', 2)
@@ -204,7 +205,28 @@ class QuestionController extends Controller {
                         ->offset($page)
                         ->limit($limit)
                         ->get();
-                $requestPage = 1;
+                if ($questions->count() == 0) {
+                    $page = 0;
+                    $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+                            ->where(function($query)use($lang, $request, $userQuestionIds) {
+                                $query->where('questions.lang', $lang)
+                                ->where('questions.is_approve', 2)
+                                ->whereNotIn("questions.id", $userQuestionIds);
+                            })
+                            ->offset($page)
+                            ->limit($limit)
+                            ->get();
+                    $user->skip_page_no = $page + 1;
+                    $user->save();
+                } else {
+                    $requestPage = $user->skip_page_no + 1;
+                    $user->skip_page_no = $requestPage;
+                    $user->save();
+                }
+            } else {
+                $requestPage = $user->page_no + 1;
+                $user->page_no = $requestPage;
+                $user->save();
             }
 
             $dataArray = [];
@@ -212,11 +234,11 @@ class QuestionController extends Controller {
             foreach ($questions as $k => $question) {
                 $answers = Answer::where("question_id", $question->id)->get();
                 $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
-                $user = User::where('id',$question->user_id)->withTrashed()->first();
+                $user1 = User::where('id', $question->user_id)->withTrashed()->first();
                 $dataArray[$k]['id'] = $question->id;
-                $dataArray[$k]['user']['id'] = $user ? $user->id : 0;
-                $dataArray[$k]['user']['name'] = $user ? $user->name : '';
-                $dataArray[$k]['user']['profile_pic'] = $user ? $user->profile_pic : '';
+                $dataArray[$k]['user']['id'] = $user1 ? $user1->id : 0;
+                $dataArray[$k]['user']['name'] = $user1 ? $user1->name : '';
+                $dataArray[$k]['user']['profile_pic'] = $user1 ? $user1->profile_pic : '';
                 $dataArray[$k]['description'] = $question->description;
                 $dataArray[$k]['ques_image'] = $question->ques_image;
                 $dataArray[$k]['ques_time'] = $question->ques_time;
@@ -226,10 +248,12 @@ class QuestionController extends Controller {
                 $date1 = $date->format("d-M-Y");
                 $time1 = $date->format("h:i A");
 
-                $dataArray[$k]['ques_date_time'] = $date1 ." at " . $time1;
+                $dataArray[$k]['ques_date_time'] = $date1 . " at " . $time1;
                 $dataArray[$k]['answers'] = $answers;
                 $totatlTime += $question->ques_time;
             }
+            shuffle($dataArray);
+
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
             $data['page'] = $requestPage;
@@ -257,7 +281,7 @@ class QuestionController extends Controller {
                 return $this->errorResponse("Invalid language Id.");
             }
 
-            $query = Question::select('questions.id', 'questions.user_id','questions.description', 'questions.ques_image', 'questions.ques_time')
+            $query = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
                     ->join('question_exams', function ($join) use($request, $userQuestionIds) {
                         $join->on('questions.id', '=', 'question_exams.question_id')
                         ->whereIn("question_exams.exam_id", $request->exam_id)

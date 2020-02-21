@@ -33,6 +33,8 @@ class CreateUsersTable extends Migration {
             $table->string('longitude')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->tinyInteger('is_approve')->default(0)->comment("0=>idle, 2=>approve, 3=>reject");
+            $table->integer('page_no')->default(0)->comment("Random question page no.");
+            $table->integer('skip_page_no')->default(0)->comment("skipped question page no.");
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->string('created_by')->default(0);
