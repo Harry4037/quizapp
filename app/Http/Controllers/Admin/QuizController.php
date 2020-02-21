@@ -432,7 +432,6 @@ class QuizController extends Controller {
                 $dataArray['users_leadership'][$k]['points'] = $points?$points:0;
 
             }
-            dd($dataArray);
             usort($dataArray['users_leadership'], function($a, $b) {
                 return $a['points'] <=> $b['points'];
             });
