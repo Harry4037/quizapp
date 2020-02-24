@@ -275,7 +275,7 @@ class TestSeriesController extends Controller {
 
         $inviteArray = [];
         $inviteArray1 = [];
-        $result = TestSeries::where("user_id", $request->user_id)->orWhere("is_approve", 2)->select('id', 'name', 'total_question', 'created_at')->get();
+        $result = TestSeries::where("user_id", $request->user_id)->Where("is_approve", 2)->select('id', 'name', 'total_question', 'created_at')->get();
         foreach ($result as $k => $test) {
             $dataArray[$k]['id'] = $test->id;
             $dataArray[$k]['name'] = $test->name;
