@@ -9,6 +9,8 @@ use App\Models\TestSeries;
 use App\Models\Bookmark;
 use App\Models\Subject;
 use App\Models\UserTestSeries;
+use App\Models\Question;
+use App\Models\UserTestSeriesQuestionAnswer;
 
 class BookmarkController extends Controller {
 
@@ -194,7 +196,8 @@ class BookmarkController extends Controller {
      *            "created_at": null,
      *            "subject_id": 3,
      *            "name": "Lorem Ipsum is simply dummy text of the printing",
-     *            "total_question": 556,
+     *            "total_time": 60,
+     *             "total_question": 556,
      *            "lang": 1,
      *            "subject_name": "ssc"
      *           }
@@ -235,6 +238,7 @@ class BookmarkController extends Controller {
             $bookmarkArray1 = [];
             $bookmarks = Bookmark::where("user_id", $request->user_id)->where('test_series_id', '!=', 0)->with(['testseriesDetail'])->get();
             foreach ($bookmarks as $key => $bookmark) {
+                $totalTime = Question::where("test_series_id", $bookmark->testseriesDetail->id)->sum("ques_time");
                 $bookmarkArray[$key]['id'] = $bookmark->id;
                 $bookmarkArray[$key]['test_series_id'] = $bookmark->testseriesDetail->id;
                 $bookmarkArray[$key]['created_at'] = $bookmark->created_at;
@@ -242,6 +246,7 @@ class BookmarkController extends Controller {
                 $bookmarkArray[$key]['name'] = $bookmark->testseriesDetail->name;
                 $bookmarkArray[$key]['flag'] = 1;
                 $bookmarkArray[$key]['total_question'] = $bookmark->testseriesDetail->total_question;
+                $bookmarkArray[$key]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
                 $bookmarkArray[$key]['lang'] = $bookmark->testseriesDetail->lang;
                 $subject = Subject::where("id", $bookmark->testseriesDetail->subject_id)->first();
                 $bookmarkArray[$key]['subject_name'] = $subject->name;
@@ -249,6 +254,9 @@ class BookmarkController extends Controller {
 
             $userbookmarks = Bookmark::where("user_id", $request->user_id)->where('user_test_series_id', '!=', 0)->with(['usertestseriesDetail'])->get();
             foreach ($userbookmarks as $key => $bookmark) {
+                $totalQuestion = UserTestSeriesQuestionAnswer::where("user_test_series_id", $bookmark->usertestseriesDetail->id)->count();
+                $questionId = UserTestSeriesQuestionAnswer::where("user_test_series_id", $bookmark->usertestseriesDetail->id)->pluck("question_id", "question_id");
+                $totalTime = Question::whereIn("id", $questionId)->sum("ques_time");
                 $bookmarkArray1[$key]['id'] = $bookmark->id;
                 $bookmarkArray1[$key]['test_series_id'] = $bookmark->usertestseriesDetail->id;
                 $bookmarkArray1[$key]['created_at'] = $bookmark->created_at;
@@ -260,7 +268,8 @@ class BookmarkController extends Controller {
                 } else {
                     $bookmarkArray[$key]['is_attempted'] = FALSE;
                 }
-                $bookmarkArray1[$key]['total_question'] = NULL;
+                $bookmarkArray1[$key]['total_question'] = $totalQuestion;
+                $bookmarkArray1[$key]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
                 $bookmarkArray1[$key]['lang'] = $bookmark->usertestseriesDetail->lang;
                 $subject = Subject::where("id", $bookmark->usertestseriesDetail->subject_id)->first();
                 $bookmarkArray1[$key]['subject_name'] = $subject->name;

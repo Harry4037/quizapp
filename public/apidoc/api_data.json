@@ -445,7 +445,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n   {\n     \"status\": true,\n     \"status_code\": 200,\n     \"message\": \"Bookmark List.\",\n     \"data\": {\n       \"Bookmark_list\": [\n         {\n           \"id\": 2,\n           \"test_series_id\": 1,\n           \"created_at\": null,\n           \"subject_id\": 3,\n           \"name\": \"Lorem Ipsum is simply dummy text of the printing\",\n           \"total_question\": 556,\n           \"lang\": 1,\n           \"subject_name\": \"ssc\"\n          }\n        ]\n     }\n   }",
+          "content": "HTTP/1.1 200 OK\n   {\n     \"status\": true,\n     \"status_code\": 200,\n     \"message\": \"Bookmark List.\",\n     \"data\": {\n       \"Bookmark_list\": [\n         {\n           \"id\": 2,\n           \"test_series_id\": 1,\n           \"created_at\": null,\n           \"subject_id\": 3,\n           \"name\": \"Lorem Ipsum is simply dummy text of the printing\",\n           \"total_time\": 60,\n            \"total_question\": 556,\n           \"lang\": 1,\n           \"subject_name\": \"ssc\"\n          }\n        ]\n     }\n   }",
           "type": "json"
         }
       ]
@@ -2988,7 +2988,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Search Results\",\n   \"data\": {\n       \"search_list\": [\n       {\n           \"id\": 1,\n           \"name\": \"fdgfdg\",\n           \"created_at\": null,\n           \"flag\": 1,\n           \"total_ques_no\": 12\n       }\n     ]\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Search Results\",\n   \"data\": {\n       \"search_list\": [\n       {\n           \"id\": 1,\n           \"name\": \"fdgfdg\",\n           \"created_at\": null,\n           \"flag\": 1,\n           \"total_ques_no\": 12,\n           \"total_time\": 60,\n       }\n     ]\n  }\n}",
           "type": "json"
         }
       ]

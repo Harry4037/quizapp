@@ -386,7 +386,8 @@ class TestSeriesController extends Controller {
      *            "name": "fdgfdg",
      *            "created_at": null,
      *            "flag": 1,
-     *            "total_ques_no": 12
+     *            "total_ques_no": 12,
+     *            "total_time": 60,
      *        }
      *      ]
      *   }
@@ -416,6 +417,7 @@ class TestSeriesController extends Controller {
         $dataArray1 = [];
         $result = TestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'name', 'total_question', 'created_at')->where('is_approve', 2)->get();
         foreach ($result as $k => $test) {
+            $totalTime = Question::where("test_series_id", $test->id)->sum("ques_time");
             $dataArray[$k]['id'] = $test->id;
             $dataArray[$k]['name'] = $test->name;
             $dataArray[$k]['created_at'] = $test->created_at;
@@ -429,11 +431,14 @@ class TestSeriesController extends Controller {
                 $dataArray[$k]['is_bookmark'] = false;
             }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
+            $dataArray[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
         }
-        $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id','user_id', 'name', 'is_attempted', 'created_at')->get();
+        $result1 = UserTestSeries::where("name", "LIKE", "%$searchKeyword%")->select('id', 'user_id', 'name', 'is_attempted', 'created_at')->get();
 
         foreach ($result1 as $k => $test1) {
             $totalQuestions = UserTestSeriesQuestionAnswer::where("user_test_series_id", $test1->id)->count();
+            $QestionIds = UserTestSeriesQuestionAnswer::where("user_test_series_id", $test1->id)->pluck("question_id", "question_id");
+            $totalTime = Question::withTrashed()->whereIn("id", $QestionIds)->sum("ques_time");
             $dataArray1[$k]['id'] = $test1->id;
             $dataArray1[$k]['name'] = $test1->name;
             $dataArray1[$k]['created_at'] = $test1->created_at;
@@ -452,6 +457,7 @@ class TestSeriesController extends Controller {
                 $dataArray1[$k]['is_attempted'] = FALSE;
             }
             $dataArray1[$k]['total_ques_no'] = $totalQuestions;
+            $dataArray1[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
         }
         $res = array_merge($dataArray, $dataArray1);
         $data['search_list'] = $res;
