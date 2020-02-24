@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use App\Models\TestSeries;
 use App\Models\Bookmark;
 use App\Models\Subject;
@@ -242,6 +243,8 @@ class BookmarkController extends Controller {
                 $bookmarkArray[$key]['id'] = $bookmark->id;
                 $bookmarkArray[$key]['test_series_id'] = $bookmark->testseriesDetail->id;
                 $bookmarkArray[$key]['created_at'] = $bookmark->created_at;
+                $date1 = Carbon::parse($bookmark->created_at);
+                $bookmarkArray[$key]['date'] = $date1->format("d-M-Y");
                 $bookmarkArray[$key]['subject_id'] = $bookmark->testseriesDetail->subject_id;
                 $bookmarkArray[$key]['name'] = $bookmark->testseriesDetail->name;
                 $bookmarkArray[$key]['flag'] = 1;
@@ -260,6 +263,8 @@ class BookmarkController extends Controller {
                 $bookmarkArray1[$key]['id'] = $bookmark->id;
                 $bookmarkArray1[$key]['test_series_id'] = $bookmark->usertestseriesDetail->id;
                 $bookmarkArray1[$key]['created_at'] = $bookmark->created_at;
+                $date1 = Carbon::parse($bookmark->created_at);
+                $bookmarkArray1[$key]['date'] = $date1->format("d-M-Y");
                 $bookmarkArray1[$key]['subject_id'] = $bookmark->usertestseriesDetail->subject_id;
                 $bookmarkArray1[$key]['name'] = $bookmark->usertestseriesDetail->name;
                 $bookmarkArray1[$key]['flag'] = 2;

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use App\Models\User;
 use App\Models\TestSeries;
+use App\Models\Question;
 use App\Models\Bookmark;
 use App\Models\Follow;
 use Carbon\Carbon;
@@ -714,7 +715,7 @@ class UserController extends Controller {
         } else {
             $user = User::find($request->user_id);
             if (!$user) {
-                
+
             } else {
                 $userArray['device_token'] = $request->token;
                 $userArray['updated_at'] = new \DateTime("now");
