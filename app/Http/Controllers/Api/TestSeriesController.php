@@ -703,6 +703,16 @@ class TestSeriesController extends Controller {
                     $dataArray['test_series']['questions'] = [];
                 }
                 $dataArray['test_series']['question_time'] = $totalTime;
+                $attemp = new AttemptedTestSeries();
+                if ($request->flag == 1) {
+                    $attemp->test_series_id = $request->test_series_id;
+                    $attemp->user_test_series_id = 0;
+                }
+
+                $attemp->user_id = $request->user_id;
+                $attemp->flag = $request->flag;
+                $attemp->created_at = new \DateTime("now");
+                $attemp->save();
 
                 return $this->successResponse("Test Series.", $dataArray);
             } else {
@@ -767,10 +777,7 @@ class TestSeriesController extends Controller {
             $dataArray['test_series']['question_time'] = $totalTime;
 
                 $attemp = new AttemptedTestSeries();
-                if ($request->flag == 1) {
-                    $attemp->test_series_id = $request->test_series_id;
-                    $attemp->user_test_series_id = 0;
-                }
+
                 if ($request->flag == 2) {
                     $attemp->test_series_id = 0;
                     $attemp->user_test_series_id = $request->test_series_id;
