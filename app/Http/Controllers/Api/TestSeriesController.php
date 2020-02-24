@@ -770,7 +770,8 @@ class TestSeriesController extends Controller {
                 if ($request->flag == 1) {
                     $attemp->test_series_id = $request->test_series_id;
                     $attemp->user_test_series_id = 0;
-                }elseif ($request->flag == 2) {
+                }
+                if ($request->flag == 2) {
                     $attemp->test_series_id = 0;
                     $attemp->user_test_series_id = $request->test_series_id;
                 }
