@@ -120,11 +120,11 @@ class UserController extends Controller {
         }
         $user->name = $request->name;
         if ($request->email_id) {
-        $user->email = $request->email_id;
+            $user->email = $request->email_id;
         }
         $user->mobile_number = $request->mobile_number;
         if ($request->dob) {
-        $user->dob = $request->dob;
+            $user->dob = $request->dob;
         }
         if ($request->into_line) {
             $user->into_line = $request->into_line;
@@ -136,7 +136,7 @@ class UserController extends Controller {
             $user->designation = $request->designation;
         }
         if ($request->qualification) {
-        $user->qualification = $request->qualification;
+            $user->qualification = $request->qualification;
         }
         $user->lang = $request->lang;
         $user->user_type_id = $request->user_type;
@@ -501,7 +501,7 @@ class UserController extends Controller {
         }
         if ($request->user_type) {
             $userArray['user_type_id'] = $request->user_type;
-            if($userArray['user_type_id'] == 2){
+            if ($userArray['user_type_id'] == 2) {
                 $userArray['is_approve'] = 0;
             }
         }
@@ -568,13 +568,14 @@ class UserController extends Controller {
      *                      "created_at": null,
      *                      "flag": 1,
      *                      "total_ques_no": 12
+     *                      "total_time": 60
      *              },
      *              {
      *                      "id": 2,
      *                      "name": "grhfgh",
      *                      "created_at": null,
      *                      "flag": 1,
-     *                      "total_ques_no": 12
+     *                      "total_time": 60
      *              }
      *          ]
      *      }
@@ -603,6 +604,7 @@ class UserController extends Controller {
             $count = 0;
             $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
             foreach ($result as $k => $test) {
+                $totalTime = Question::where("test_series_id", $test->id)->sum("ques_time");
                 $dataArray[$k]['id'] = $test->id;
                 $dataArray[$k]['name'] = $test->name;
                 $dataArray[$k]['created_at'] = $test->created_at;
@@ -616,6 +618,7 @@ class UserController extends Controller {
                     $dataArray[$k]['is_bookmark'] = false;
                 }
                 $dataArray[$k]['total_ques_no'] = $test->total_question;
+                $dataArray[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
                 $count++;
             }
             $data['user_profile'] = $user;
@@ -711,7 +714,7 @@ class UserController extends Controller {
         } else {
             $user = User::find($request->user_id);
             if (!$user) {
-
+                
             } else {
                 $userArray['device_token'] = $request->token;
                 $userArray['updated_at'] = new \DateTime("now");
