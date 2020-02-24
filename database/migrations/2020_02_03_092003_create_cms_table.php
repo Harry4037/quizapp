@@ -16,8 +16,8 @@ class CreateCmsTable extends Migration
         Schema::create('cms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('page_name');
-            $table->text('title')->nullable();;
-            $table->text('description')->nullable();;
+            $table->text('title')->nullable();
+            $table->text('description')->nullable();
             $table->string('created_by')->default(0);
             $table->string('updated_by')->default(0);
             $table->timestamps();
