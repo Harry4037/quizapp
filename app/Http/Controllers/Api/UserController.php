@@ -11,6 +11,7 @@ use App\Models\TestSeries;
 use App\Models\Question;
 use App\Models\Bookmark;
 use App\Models\Follow;
+use App\Models\AttemptedTestSeries;
 use Carbon\Carbon;
 use App\Models\UserExam;
 use Illuminate\Support\Facades\Storage;
@@ -617,6 +618,12 @@ class UserController extends Controller {
                     $dataArray[$k]['is_bookmark'] = true;
                 } else {
                     $dataArray[$k]['is_bookmark'] = false;
+                }
+                $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
+                if($attem){
+                    $dataArray[$k]['is_attempted'] = TRUE;
+                }else{
+                    $dataArray[$k]['is_attempted'] = FALSE;
                 }
                 $dataArray[$k]['total_ques_no'] = $test->total_question;
                 $dataArray[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
