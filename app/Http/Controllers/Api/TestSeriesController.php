@@ -425,18 +425,19 @@ class TestSeriesController extends Controller {
             $date = Carbon::parse($test->created_at);
             $dataArray[$k]['date'] = $date->format("d-M-Y");
             $dataArray[$k]['flag'] = 1;
-            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
-            if ($fav) {
-                $dataArray[$k]['is_bookmark'] = true;
-            } else {
-                $dataArray[$k]['is_bookmark'] = false;
-            }
             $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
             if($attem){
                 $dataArray[$k]['is_attempted'] = TRUE;
             }else{
                 $dataArray[$k]['is_attempted'] = FALSE;
             }
+            $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
+            if ($fav) {
+                $dataArray[$k]['is_bookmark'] = true;
+            } else {
+                $dataArray[$k]['is_bookmark'] = false;
+            }
+
             $dataArray[$k]['total_ques_no'] = $test->total_question;
             $dataArray[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
         }
@@ -466,9 +467,9 @@ class TestSeriesController extends Controller {
             // }
             $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $test1->id)->first();
             if($attem){
-                $dataArray[$k]['is_attempted'] = TRUE;
+                $dataArray1[$k]['is_attempted'] = TRUE;
             }else{
-                $dataArray[$k]['is_attempted'] = FALSE;
+                $dataArray1[$k]['is_attempted'] = FALSE;
             }
             $dataArray1[$k]['total_ques_no'] = $totalQuestions;
             $dataArray1[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
