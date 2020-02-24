@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\AttemptedTestSeries;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Models\TestSeries;
@@ -253,6 +254,12 @@ class BookmarkController extends Controller {
                 $bookmarkArray[$key]['lang'] = $bookmark->testseriesDetail->lang;
                 $subject = Subject::where("id", $bookmark->testseriesDetail->subject_id)->first();
                 $bookmarkArray[$key]['subject_name'] = $subject->name;
+                $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $bookmark->testseriesDetail->id)->first();
+                if($attem){
+                    $bookmarkArray[$key]['is_attempted'] = TRUE;
+                }else{
+                    $bookmarkArray[$key]['is_attempted'] = FALSE;
+                }
             }
 
             $userbookmarks = Bookmark::where("user_id", $request->user_id)->where('user_test_series_id', '!=', 0)->with(['usertestseriesDetail'])->get();
@@ -268,10 +275,16 @@ class BookmarkController extends Controller {
                 $bookmarkArray1[$key]['subject_id'] = $bookmark->usertestseriesDetail->subject_id;
                 $bookmarkArray1[$key]['name'] = $bookmark->usertestseriesDetail->name;
                 $bookmarkArray1[$key]['flag'] = 2;
-                if ($bookmark->usertestseriesDetail->is_attempted == 1) {
+                // if ($bookmark->usertestseriesDetail->is_attempted == 1) {
+                //     $bookmarkArray1[$key]['is_attempted'] = TRUE;
+                // } else {
+                //     $bookmarkArray[$key]['is_attempted'] = FALSE;
+                // }
+                $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $bookmark->usertestseriesDetail->id)->first();
+                if($attem){
                     $bookmarkArray1[$key]['is_attempted'] = TRUE;
-                } else {
-                    $bookmarkArray[$key]['is_attempted'] = FALSE;
+                }else{
+                    $bookmarkArray1[$key]['is_attempted'] = FALSE;
                 }
                 $bookmarkArray1[$key]['total_question'] = $totalQuestion;
                 $bookmarkArray1[$key]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;

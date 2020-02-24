@@ -431,6 +431,12 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray[$k]['is_bookmark'] = false;
             }
+            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
+            if($attem){
+                $dataArray[$k]['is_attempted'] = TRUE;
+            }else{
+                $dataArray[$k]['is_attempted'] = FALSE;
+            }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
             $dataArray[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
         }
@@ -453,10 +459,16 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray1[$k]['is_bookmark'] = false;
             }
-            if (($test1->user_id == $request->user_id) && ($test1->is_attempted == 1)) {
-                $dataArray1[$k]['is_attempted'] = TRUE;
-            } else {
-                $dataArray1[$k]['is_attempted'] = FALSE;
+            // if (($test1->user_id == $request->user_id) && ($test1->is_attempted == 1)) {
+            //     $dataArray1[$k]['is_attempted'] = TRUE;
+            // } else {
+            //     $dataArray1[$k]['is_attempted'] = FALSE;
+            // }
+            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $test1->id)->first();
+            if($attem){
+                $dataArray[$k]['is_attempted'] = TRUE;
+            }else{
+                $dataArray[$k]['is_attempted'] = FALSE;
             }
             $dataArray1[$k]['total_ques_no'] = $totalQuestions;
             $dataArray1[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
