@@ -600,11 +600,14 @@ class UserController extends Controller {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing");
         }
+        if (!$request->follow_user_id) {
+            return $this->errorResponse("User ID missing");
+        }
         $user = User::where("id", $request->user_id)->first();
         if ($user) {
             $dataArray = [];
             $count = 0;
-            $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
+            $result = TestSeries::where("user_id", $request->follow_user_id)->select('id', 'name', 'total_question', 'created_at')->get();
             foreach ($result as $k => $test) {
                 $totalTime = Question::where("test_series_id", $test->id)->sum("ques_time");
                 $dataArray[$k]['id'] = $test->id;
@@ -613,13 +616,13 @@ class UserController extends Controller {
                 $date = Carbon::parse($test->created_at);
                 $dataArray[$k]['date'] = $date->format("d-M-Y");
                 $dataArray[$k]['flag'] = 1;
-                $fav = Bookmark::where('user_id', $request->user_id)->where('test_series_id', $test->id)->first();
+                $fav = Bookmark::where('user_id', $request->follow_user_id)->where('test_series_id', $test->id)->first();
                 if ($fav) {
                     $dataArray[$k]['is_bookmark'] = true;
                 } else {
                     $dataArray[$k]['is_bookmark'] = false;
                 }
-                $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
+                $attem = AttemptedTestSeries::where("user_id", $request->follow_user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
                 if($attem){
                     $dataArray[$k]['is_attempted'] = TRUE;
                 }else{
