@@ -678,7 +678,7 @@ class TestSeriesController extends Controller {
                 $dataArray['test_series']['date'] = $date->format("d-M-Y");
                 $dataArray['test_series']['total_question'] = $testSeries->total_question;
                 if ($request->user_id) {
-                    $fav = Bookmark::where('user_id', $request->user_id)->where('test_series_id', $testseries->id)->first();
+                    $fav = Bookmark::where('user_id', $request->user_id)->where('test_series_id', $testSeries->id)->first();
                     if ($fav) {
                         $dataArray['test_series']['is_bookmark'] = true;
                     } else {
