@@ -644,7 +644,7 @@ class UserController extends Controller {
                     return $this->errorResponse("Follow User not found.");
                 }
                 $user = User::find($request->user_id);
-                $remove = Follow::where("user_id", $request->user_id)->where("follow_user_id", $request->follow_user_id)->first();
+                $remove = Follow::where("user_id", $request->follow_user_id)->where("follow_user_id", $request->user_id)->first();
                 if (!$user) {
                     return $this->errorResponse("user not found.");
                 } elseif ($remove) {
