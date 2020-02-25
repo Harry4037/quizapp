@@ -371,9 +371,9 @@ class TestSeriesController extends Controller {
             // }
             $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $invite1->id)->first();
             if($attem){
-                $inviteArray[$k]['is_attempted'] = TRUE;
+                $inviteArray1[$k]['is_attempted'] = TRUE;
             }else{
-                $inviteArray[$k]['is_attempted'] = FALSE;
+                $inviteArray1[$k]['is_attempted'] = FALSE;
             }
         }
 //        $res = array_merge($dataArray, $dataArray1);
