@@ -386,8 +386,8 @@ class QuestionController extends Controller {
 
 $attemp = new AttemptedTestSeries();
 
-    $attemp->test_series_id = $testSeries->id;
-    $attemp->user_test_series_id = 0;
+    $attemp->test_series_id = 0;
+    $attemp->user_test_series_id = $testSeries->id;
 $attemp->user_id = $request->user_id;
 $attemp->flag = 2;
 $attemp->created_at = new \DateTime("now");
