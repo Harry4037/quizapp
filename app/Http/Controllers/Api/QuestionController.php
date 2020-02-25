@@ -164,11 +164,11 @@ class QuestionController extends Controller {
         if (!$request->user_id) {
 
             $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-            ->where(function($query)use($request) {
-                $query->where('questions.is_approve', 2);
-            })
-            ->limit(10)
-            ->get();
+                    ->where(function($query)use($request) {
+                        $query->where('questions.is_approve', 2);
+                    })
+                    ->limit(10)
+                    ->get();
             $dataArray = [];
             $totatlTime = 0;
             foreach ($questions as $k => $question) {
@@ -197,7 +197,6 @@ class QuestionController extends Controller {
             $data['questions'] = $dataArray;
             $data['page'] = 1;
             return $this->successResponse("Question list.", $data);
-
         }
 
         $user = User::find($request->user_id);
@@ -217,19 +216,20 @@ class QuestionController extends Controller {
         }
 
         $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
-        $page = $request->page * 10;
+        $page = 0;
         $limit = 10;
         $requestPage = 0;
         if ($request->flag == 1) {
-            $page = $user->page_no * 10;
+            $page = $user->page_no;
 
             $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-                    ->where(function($query)use($lang, $request, $userQuestionIds) {
+                    ->where(function($query)use($lang, $request, $userQuestionIds, $page) {
                         $query->where('questions.lang', $lang)
+                        ->where('questions.id','>', $page)
                         ->where('questions.is_approve', 2)
                         ->whereNotIn("questions.id", $userQuestionIds);
                     })
-                    ->offset($page)
+//                    ->offset($page)
                     ->limit($limit)
                     ->get();
 
@@ -263,7 +263,9 @@ class QuestionController extends Controller {
                     $user->save();
                 }
             } else {
-                $requestPage = $user->page_no + 1;
+                $maxId = max(array_column($questions->toArray(), 'id'));
+
+                $requestPage = $maxId;
                 $user->page_no = $requestPage;
                 $user->save();
             }
@@ -384,14 +386,14 @@ class QuestionController extends Controller {
             }
             $data['test_series_id'] = $testSeries->id;
             $data['test_series_name'] = $testSeries->name;
-$attemp = new AttemptedTestSeries();
+            $attemp = new AttemptedTestSeries();
 
-    $attemp->test_series_id = 0;
-    $attemp->user_test_series_id = $testSeries->id;
-$attemp->user_id = $request->user_id;
-$attemp->flag = 2;
-$attemp->created_at = new \DateTime("now");
-$attemp->save();
+            $attemp->test_series_id = 0;
+            $attemp->user_test_series_id = $testSeries->id;
+            $attemp->user_id = $request->user_id;
+            $attemp->flag = 2;
+            $attemp->created_at = new \DateTime("now");
+            $attemp->save();
             return $this->successResponse("Question list.", $data);
         } else {
             return $this->errorResponse("Invlaid flag type.");
