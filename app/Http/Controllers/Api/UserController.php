@@ -226,7 +226,8 @@ class UserController extends Controller {
             $data['user_profile'] = $user;
             $data['user']['following'] = 10;
             $data['user']['follower'] = 50;
-            $data['user']['post'] = 35;
+            $count = Question::where("user_id", $request->user_id)->count();
+            $data['user']['post'] = $count;
             return $this->successResponse("user Profile.", $data);
         } else {
             return $this->errorResponse("User not found.");
