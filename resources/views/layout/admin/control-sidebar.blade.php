@@ -46,12 +46,12 @@
             </li>
             <li>
                 <a href="{{ route('admin.quiz.index')}}">
-                    <i class="fa fa-gift"></i> <span>Daily Quiz Management</span>
+                    <i class="fa fa-cogs"></i> <span>Daily Quiz Management</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('admin.question.index')}}">
-                    <i class="fa fa-question-circle"></i> <span>Question Management</span>
+                    <i class="fa fa-quora"></i> <span>Question Management</span>
                 </a>
             </li>
             <li>
@@ -66,7 +66,7 @@
             </li>
             <li>
                 <a href="{{ route('admin.leadership.index')}}">
-                    <i class="fa fa-trophy"></i> <span>Leadership Board</span>
+                    <i class="fa fa-graduation-cap"></i> <span>Leadership Board</span>
                 </a>
             </li>
             <li>
@@ -76,7 +76,7 @@
             </li>
             <li>
                 <a href="{{ route('admin.feedback.index')}}">
-                    <i class="fa fa-question-circle"></i> <span>Feedback Management</span>
+                    <i class="fa fa-envelope-open-o"></i> <span>Feedback Management</span>
                 </a>
             </li>
         </ul>
