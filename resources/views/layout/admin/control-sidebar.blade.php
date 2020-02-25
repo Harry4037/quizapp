@@ -46,7 +46,7 @@
             </li>
             <li>
                 <a href="{{ route('admin.quiz.index')}}">
-                    <i class="fa fa-question"></i> <span>Daily Quiz Management</span>
+                    <i class="fa fa-gift"></i> <span>Daily Quiz Management</span>
                 </a>
             </li>
             <li>
@@ -56,22 +56,22 @@
             </li>
             <li>
                 <a href="{{ route('admin.test-series.index')}}">
-                    <i class="fa fa-question-circle"></i> <span>TestSeries Management</span>
+                    <i class="fa fa-university"></i> <span>TestSeries Management</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('admin.notification.index')}}">
-                    <i class="fa fa-question-circle"></i> <span>Notification Management</span>
+                    <i class="fa fa-bell"></i> <span>Notification Management</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('admin.leadership.index')}}">
-                    <i class="fa fa-question-circle"></i> <span>Leadership Board</span>
+                    <i class="fa fa-trophy"></i> <span>Leadership Board</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('admin.cms.index')}}">
-                    <i class="fa fa-question-circle"></i> <span>Cms Management</span>
+                    <i class="fa fa-cogs"></i> <span>Cms Management</span>
                 </a>
             </li>
             <li>
