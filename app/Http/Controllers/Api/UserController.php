@@ -606,8 +606,8 @@ class UserController extends Controller {
         $user = User::where("id", $request->user_id)->first();
         if ($user) {
             $dataArray = [];
-            $count = 0;
-            $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
+            $count = Question::where("user_id", $request->user_id)->count();
+            $result = TestSeries::where("user_id", $request->follow_user_id)->select('id', 'name', 'total_question', 'created_at')->get();
             foreach ($result as $k => $test) {
                 $totalTime = Question::where("test_series_id", $test->id)->sum("ques_time");
                 $dataArray[$k]['id'] = $test->id;
@@ -630,7 +630,7 @@ class UserController extends Controller {
                 }
                 $dataArray[$k]['total_ques_no'] = $test->total_question;
                 $dataArray[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
-                $count++;
+                // $count++;
             }
             $data['user_profile'] = $user;
             $data['user']['following'] = 10;
