@@ -163,7 +163,7 @@ class QuestionController extends Controller {
         }
         if (!$request->user_id) {
 
-            $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+            $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
             ->where(function($query)use($request) {
                 $query->where('questions.is_approve', 2);
             })
@@ -223,7 +223,7 @@ class QuestionController extends Controller {
         if ($request->flag == 1) {
             $page = $user->page_no * 10;
 
-            $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+            $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
                     ->where(function($query)use($lang, $request, $userQuestionIds) {
                         $query->where('questions.lang', $lang)
                         ->where('questions.is_approve', 2)
@@ -235,7 +235,7 @@ class QuestionController extends Controller {
 
             if ($questions->count() == 0) {
                 $page = $user->skip_page_no * 10;
-                $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+                $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
                         ->where(function($query)use($lang, $request, $userQuestionIds) {
                             $query->where('questions.lang', $lang)
                             ->where('questions.is_approve', 2)
@@ -246,7 +246,7 @@ class QuestionController extends Controller {
                         ->get();
                 if ($questions->count() == 0) {
                     $page = 0;
-                    $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+                    $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
                             ->where(function($query)use($lang, $request, $userQuestionIds) {
                                 $query->where('questions.lang', $lang)
                                 ->where('questions.is_approve', 2)
@@ -320,7 +320,7 @@ class QuestionController extends Controller {
                 return $this->errorResponse("Invalid language Id.");
             }
 
-            $query = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time')
+            $query = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
                     ->join('question_exams', function ($join) use($request, $userQuestionIds) {
                         $join->on('questions.id', '=', 'question_exams.question_id')
                         ->whereIn("question_exams.exam_id", $request->exam_id)
