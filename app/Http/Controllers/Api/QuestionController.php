@@ -383,7 +383,7 @@ class QuestionController extends Controller {
                 }
             }
             $data['test_series_id'] = $testSeries->id;
-
+            $data['test_series_name'] = $testSeries->name;
 $attemp = new AttemptedTestSeries();
 
     $attemp->test_series_id = 0;
