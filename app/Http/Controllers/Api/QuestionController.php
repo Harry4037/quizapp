@@ -15,6 +15,7 @@ use App\Models\TestSeries;
 use App\Models\Subject;
 use App\Models\Exam;
 use Carbon\Carbon;
+use App\Models\AttemptedTestSeries;
 use App\Models\UserTestSeries;
 use App\Models\UserTestSeriesQuestionAnswer;
 use App\Models\User;
@@ -383,6 +384,14 @@ class QuestionController extends Controller {
             }
             $data['test_series_id'] = $testSeries->id;
 
+$attemp = new AttemptedTestSeries();
+
+    $attemp->test_series_id = $testSeries->id;
+    $attemp->user_test_series_id = 0;
+$attemp->user_id = $request->user_id;
+$attemp->flag = 2;
+$attemp->created_at = new \DateTime("now");
+$attemp->save();
             return $this->successResponse("Question list.", $data);
         } else {
             return $this->errorResponse("Invlaid flag type.");
