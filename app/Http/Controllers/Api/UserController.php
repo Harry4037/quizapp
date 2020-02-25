@@ -597,10 +597,10 @@ class UserController extends Controller {
      *
      */
     public function CreatorUserProfile(Request $request) {
-        if (!$request->user_id) {    5
+        if (!$request->user_id) {
             return $this->errorResponse("User ID missing");
         }
-        if (!$request->follow_user_id) {    37
+        if (!$request->follow_user_id) {
             return $this->errorResponse("User ID missing");
         }
         $user = User::where("id", $request->user_id)->first();
