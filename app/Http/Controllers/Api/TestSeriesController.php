@@ -289,6 +289,12 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray[$k]['is_bookmark'] = false;
             }
+            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
+            if($attem){
+                $dataArray[$k]['is_attempted'] = TRUE;
+            }else{
+                $dataArray[$k]['is_attempted'] = FALSE;
+            }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
         $result1 = UserTestSeries::where("user_id", $request->user_id)->select('id', 'name', 'is_attempted', 'created_at')->get();
@@ -307,15 +313,21 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray1[$k]['is_bookmark'] = false;
             }
-            if ($test1->is_attempted == 1) {
+            // if ($test1->is_attempted == 1) {
+            //     $dataArray1[$k]['is_attempted'] = TRUE;
+            // } else {
+            //     $dataArray1[$k]['is_attempted'] = FALSE;
+            // }
+            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $test1->id)->first();
+            if($attem){
                 $dataArray1[$k]['is_attempted'] = TRUE;
-            } else {
+            }else{
                 $dataArray1[$k]['is_attempted'] = FALSE;
             }
             $result1 = UserTestSeriesQuestionAnswer::where("user_test_series_id", $test1->id)->get();
             $dataArray1[$k]['total_ques_no'] = count($result1);
         }
-        $invites = Invite::where("user_id", $request->user_id)->where("test_series_id", '!=', 0)->with('testseries')->get();
+        $invites = Invite::where("invite_user_id", $request->user_id)->where("test_series_id", '!=', 0)->with('testseries')->get();
         foreach ($invites as $k => $invite) {
             $inviteArray[$k]['id'] = $invite->id;
             $inviteArray[$k]['user_name'] = $user->name;
@@ -330,8 +342,14 @@ class TestSeriesController extends Controller {
             } else {
                 $inviteArray[$k]['is_bookmark'] = false;
             }
+            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $invite->id)->first();
+            if($attem){
+                $inviteArray[$k]['is_attempted'] = TRUE;
+            }else{
+                $inviteArray[$k]['is_attempted'] = FALSE;
+            }
         }
-        $invites1 = Invite::where("user_id", $request->user_id)->where("user_test_series_id", '!=', 0)->with('usertestseries')->get();
+        $invites1 = Invite::where("invite_user_id", $request->user_id)->where("user_test_series_id", '!=', 0)->with('usertestseries')->get();
         foreach ($invites1 as $k => $invite1) {
             $inviteArray1[$k]['id'] = $invite1->id;
             $inviteArray1[$k]['user_name'] = $user->name;
@@ -346,10 +364,16 @@ class TestSeriesController extends Controller {
             } else {
                 $inviteArray1[$k]['is_bookmark'] = false;
             }
-            if ($invite1->usertestseries->is_attempted == 1) {
-                $inviteArray1[$k]['is_attempted'] = TRUE;
-            } else {
-                $inviteArray1[$k]['is_attempted'] = FALSE;
+            // if ($invite1->usertestseries->is_attempted == 1) {
+            //     $inviteArray1[$k]['is_attempted'] = TRUE;
+            // } else {
+            //     $inviteArray1[$k]['is_attempted'] = FALSE;
+            // }
+            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $invite1->id)->first();
+            if($attem){
+                $inviteArray[$k]['is_attempted'] = TRUE;
+            }else{
+                $inviteArray[$k]['is_attempted'] = FALSE;
             }
         }
 //        $res = array_merge($dataArray, $dataArray1);
