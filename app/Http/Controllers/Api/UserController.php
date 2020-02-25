@@ -505,7 +505,7 @@ class UserController extends Controller {
         if ($request->user_type) {
             $userArray['user_type_id'] = $request->user_type;
             if ($userArray['user_type_id'] == 2) {
-                $userArray['is_approve'] = 0;
+//$userArray['is_approve'] = 0;
             }
         }
         $userArray['updated_at'] = new \DateTime("now");
