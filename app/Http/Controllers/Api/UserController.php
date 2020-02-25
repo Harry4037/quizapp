@@ -597,17 +597,17 @@ class UserController extends Controller {
      *
      */
     public function CreatorUserProfile(Request $request) {
-        if (!$request->user_id) {
+        if (!$request->user_id) {    5
             return $this->errorResponse("User ID missing");
         }
-        if (!$request->follow_user_id) {
+        if (!$request->follow_user_id) {    37
             return $this->errorResponse("User ID missing");
         }
         $user = User::where("id", $request->user_id)->first();
         if ($user) {
             $dataArray = [];
             $count = Question::where("user_id", $request->user_id)->count();
-            $result = TestSeries::where("user_id", $request->follow_user_id)->select('id', 'name', 'total_question', 'created_at')->get();
+            $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
             foreach ($result as $k => $test) {
                 $totalTime = Question::where("test_series_id", $test->id)->sum("ques_time");
                 $dataArray[$k]['id'] = $test->id;
@@ -644,7 +644,7 @@ class UserController extends Controller {
                     return $this->errorResponse("Follow User not found.");
                 }
                 $user = User::find($request->user_id);
-                $remove = Follow::where("user_id", $request->follow_user_id)->where("follow_user_id", $request->user_id)->first();
+                $remove = Follow::where("user_id", $request->user_id)->where("follow_user_id", $request->follow_user_id)->first();
                 if (!$user) {
                     return $this->errorResponse("user not found.");
                 } elseif ($remove) {
