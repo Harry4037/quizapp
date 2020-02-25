@@ -608,7 +608,7 @@ class UserController extends Controller {
         if ($user) {
             $dataArray = [];
             $count = Question::where("user_id", $request->user_id)->count();
-            $result = TestSeries::where("user_id", $request->user_id)->select('id', 'name', 'total_question', 'created_at')->get();
+            $result = TestSeries::where("user_id", $request->user_id)->where('is_approve',2)->select('id', 'name', 'total_question', 'created_at')->get();
             foreach ($result as $k => $test) {
                 $totalTime = Question::where("test_series_id", $test->id)->sum("ques_time");
                 $dataArray[$k]['id'] = $test->id;
