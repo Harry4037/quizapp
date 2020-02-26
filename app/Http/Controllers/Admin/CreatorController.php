@@ -221,8 +221,8 @@ class CreatorController extends Controller {
                 if ($user->save()) {
 
                     if ($user && $user->device_token) {
-                        $this->generateNotification($user->id, 1, "Quizz Application", "You are successfully Approved");
-                        $this->androidPushNotification(2, "Quizz Application", "You are successfully Approved", $user->device_token, 1, $this->notificationCount($user->id), $user->id);
+                        $this->generateNotification($user->id, 1, "Quizz Application", "You are successfully Approved By Admin");
+                        $this->androidPushNotification(2, "Quizz Application", "You are successfully Approved", $user->device_token, 1, $this->notificationCount($user->id), 2);
                     }
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Creator Approve successfully."]];
                 } else {
@@ -244,8 +244,8 @@ class CreatorController extends Controller {
                 $user->user_type_id = 3;
                 if ($user->save()) {
                     if ($user && $user->device_token) {
-                        $this->generateNotification($user->id, 1, "Quizz Application", "You are Rejected");
-                        $this->androidPushNotification(2, "Quizz Application", "You are Rejected", $user->device_token, 1, $this->notificationCount($user->id), $user->id);
+                        $this->generateNotification($user->id, 1, "Quizz Application", "You are Rejected By Admin");
+                        $this->androidPushNotification(2, "Quizz Application", "You are Rejected", $user->device_token, 1, $this->notificationCount($user->id), 3);
                     }
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Creator Rejected."]];
                 } else {
