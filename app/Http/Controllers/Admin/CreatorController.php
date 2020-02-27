@@ -127,9 +127,17 @@ class CreatorController extends Controller
                     return redirect()->route('admin.creator.index')->with('error', 'Something went be wrong.');
                 }
             }
-
+            $css = [
+                'bower_components/bootstrap-daterangepicker/daterangepicker.css',
+            ];
+            $js = [
+                'bower_components/moment/min/moment.min.js',
+                'bower_components/bootstrap-daterangepicker/daterangepicker.js',
+            ];
             return view('admin.creator.edit', [
                 'user' => $user,
+                'css' => $css,
+                'js' => $js,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.creator.index')->with('error', $ex->getMessage());
@@ -204,8 +212,17 @@ class CreatorController extends Controller
                     return redirect()->route('admin.creator.index')->with('error', 'Something went be wrong.');
                 }
             }
-
-            return view('admin.creator.add');
+            $css = [
+                'bower_components/bootstrap-daterangepicker/daterangepicker.css',
+            ];
+            $js = [
+                'bower_components/moment/min/moment.min.js',
+                'bower_components/bootstrap-daterangepicker/daterangepicker.js',
+            ];
+            return view('admin.creator.add', [
+                'css' => $css,
+                'js' => $js,
+            ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.creator.index')->with('error', $ex->getMessage());
         }

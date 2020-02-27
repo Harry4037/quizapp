@@ -64,8 +64,7 @@ class NotificationController extends Controller
             $this->androidPushNotification(2, $request->title, $request->message, $tokens, 0);
         }
 
-        $userIds = User::where('user_type_id', '=', 3)
-            ->where("device_token", '!=', null)
+        $userIds = User::where("device_token", '!=', null)
             ->when($request->user_type == 2, function ($query) use ($request) {
                 return $query->whereIn('id', $request->notify_user);
             })
