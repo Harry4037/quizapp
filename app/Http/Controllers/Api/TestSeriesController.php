@@ -1195,4 +1195,63 @@ class TestSeriesController extends Controller {
         }
     }
 
+        /**
+     * @api {get} /api/validate-test-series Validate Test Series
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetValidateTestSeries
+     * @apiGroup TestSeries
+     *
+     * @apiParam {String} user_id User ID.
+     * @apiParam {String} series_name Series Name.
+     * @apiParam {String} exam_id Exam ID.
+     * @apiParam {String} subject_id Subject ID.
+     *
+     * @apiSuccess {String} success true
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Name Available.
+     * @apiSuccess {JSON} data response.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Name Available.",
+     *       "data": {}
+     *   }
+     *
+     *
+     * @apiError NameAlreadyExist Name Alredy Exist.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "Name Already exist.",
+     *       "data": {}
+     *   }
+     */
+    public function validateTestseries(Request $request) {
+
+        if (!$request->user_id) {
+            return $this->errorResponse("User Id not found.");
+        }
+        if (!$request->series_name) {
+            return $this->errorResponse("TestSeries name not found.");
+        }
+        if (!$request->exam_id) {
+            return $this->errorResponse("Exam Id not found.");
+        }
+        if (!$request->subject_id) {
+            return $this->errorResponse("Subject id not found.");
+        }
+        $validate = TestSeries::where('name',$request->series_name)->first();
+        if($validate){
+            return $this->errorResponse("Name Already exist.");
+        }else{
+            return $this->successResponse("Name Available.", (object) []);
+        }
+
+    }
+
 }
