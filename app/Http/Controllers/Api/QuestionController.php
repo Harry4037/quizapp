@@ -209,7 +209,8 @@ class QuestionController extends Controller {
         $limit = 10;
         $requestPage = 0;
         if ($request->flag == 1) {
-
+            $data['page'] = 1;
+            
             //Questions for new user
             $page = $user->page_no * 10;
             $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
