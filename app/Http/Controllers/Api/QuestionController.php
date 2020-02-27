@@ -164,11 +164,11 @@ class QuestionController extends Controller {
         if (!$request->user_id) {
 
             $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-            ->where(function($query)use($request) {
-                $query->where('questions.is_approve', 2);
-            })
-            ->limit(10)
-            ->get();
+                    ->where(function($query)use($request) {
+                        $query->where('questions.is_approve', 2);
+                    })
+                    ->limit(10)
+                    ->get();
             $dataArray = [];
             $totatlTime = 0;
             foreach ($questions as $k => $question) {
@@ -197,7 +197,6 @@ class QuestionController extends Controller {
             $data['questions'] = $dataArray;
             $data['page'] = 1;
             return $this->successResponse("Question list.", $data);
-
         }
 
         $user = User::find($request->user_id);
@@ -205,26 +204,16 @@ class QuestionController extends Controller {
         if ($user) {
             $lang = $user->lang;
         }
-        $userAnswerCount = UserAnswer::where("user_id", $request->user_id)->count();
-        $userTestSeriesAnswerCount = UserTestSeriesQuestionAnswer::where("user_id", $request->user_id)->count();
-        $userAnswerArray = [];
-        $userTestSeriesAnswerCountArray = [];
-        if ($userAnswerCount > 0) {
-            $userAnswerArray = UserAnswer::where("user_id", $request->user_id)->pluck("question_id")->toArray();
-        }
-        if ($userTestSeriesAnswerCount > 0) {
-            $userTestSeriesAnswerCountArray = UserTestSeriesQuestionAnswer::where("user_id", $request->user_id)->pluck("question_id")->toArray();
-        }
 
-        $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
-        $page = $request->page * 10;
+        $appPage = 0;
         $limit = 10;
         $requestPage = 0;
         if ($request->flag == 1) {
-            $page = $user->page_no * 10;
 
+            //Questions for new user
+            $page = $user->page_no * 10;
             $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-                    ->where(function($query)use($lang, $request, $userQuestionIds) {
+                    ->where(function($query)use($lang, $request) {
                         $query->where('questions.lang', $lang)
                         ->where('questions.is_approve', 2);
 //                        ->whereNotIn("questions.id", $userQuestionIds);
@@ -234,7 +223,22 @@ class QuestionController extends Controller {
                     ->get();
 
             if ($questions->count() == 0) {
+                $userAnswerCount = UserAnswer::where("user_id", $request->user_id)->count();
+                $userTestSeriesAnswerCount = UserTestSeriesQuestionAnswer::where("user_id", $request->user_id)->count();
+                $userAnswerArray = [];
+                $userTestSeriesAnswerCountArray = [];
+                if ($userAnswerCount > 0) {
+                    $userAnswerArray = UserAnswer::where("user_id", $request->user_id)->pluck("question_id")->toArray();
+                }
+                if ($userTestSeriesAnswerCount > 0) {
+                    $userTestSeriesAnswerCountArray = UserTestSeriesQuestionAnswer::where("user_id", $request->user_id)->pluck("question_id")->toArray();
+                }
+
+                $userQuestionIds = array_unique(array_merge($userAnswerArray, $userTestSeriesAnswerCountArray));
+
                 $page = $user->skip_page_no * 10;
+
+                //if all the questions are finished then show skipped questions
                 $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
                         ->where(function($query)use($lang, $request, $userQuestionIds) {
                             $query->where('questions.lang', $lang)
@@ -244,8 +248,11 @@ class QuestionController extends Controller {
                         ->offset($page)
                         ->limit($limit)
                         ->get();
+
                 if ($questions->count() == 0) {
                     $page = 0;
+
+                    //if skipped Question finished then reset skipped question page to zero and show skipped questions
                     $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
                             ->where(function($query)use($lang, $request, $userQuestionIds) {
                                 $query->where('questions.lang', $lang)
@@ -255,8 +262,39 @@ class QuestionController extends Controller {
                             ->offset($page)
                             ->limit($limit)
                             ->get();
-                    $user->skip_page_no = $page + 1;
-                    $user->save();
+
+                    //Repeat all questions Again
+                    if ($questions->count() == 0) {
+                        $appPage = $request->page * 10;
+
+                        $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
+                                ->where(function($query)use($lang, $request) {
+                                    $query->where('questions.lang', $lang)
+                                    ->where('questions.is_approve', 2);
+                                })
+                                ->offset($appPage)
+                                ->limit($limit)
+                                ->get();
+
+                        $data['page'] = $request->page + 1;
+                        if ($questions->count() == 0) {
+                            $appPage = 0;
+
+                            $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
+                                    ->where(function($query)use($lang, $request) {
+                                        $query->where('questions.lang', $lang)
+                                        ->where('questions.is_approve', 2);
+                                    })
+                                    ->offset($appPage)
+                                    ->limit($limit)
+                                    ->get();
+
+                            $data['page'] = 1;
+                        }
+                    } else {
+                        $user->skip_page_no = $page + 1;
+                        $user->save();
+                    }
                 } else {
                     $requestPage = $user->skip_page_no + 1;
                     $user->skip_page_no = $requestPage;
@@ -295,7 +333,7 @@ class QuestionController extends Controller {
 
             $data['question_time'] = $totatlTime;
             $data['questions'] = $dataArray;
-            $data['page'] = $requestPage;
+
             return $this->successResponse("Question list.", $data);
         } elseif ($request->flag == 2) {
             if (!$request->exam_id) {
@@ -384,14 +422,14 @@ class QuestionController extends Controller {
             }
             $data['test_series_id'] = $testSeries->id;
             $data['test_series_name'] = $testSeries->name;
-$attemp = new AttemptedTestSeries();
+            $attemp = new AttemptedTestSeries();
 
-    $attemp->test_series_id = 0;
-    $attemp->user_test_series_id = $testSeries->id;
-$attemp->user_id = $request->user_id;
-$attemp->flag = 2;
-$attemp->created_at = new \DateTime("now");
-$attemp->save();
+            $attemp->test_series_id = 0;
+            $attemp->user_test_series_id = $testSeries->id;
+            $attemp->user_id = $request->user_id;
+            $attemp->flag = 2;
+            $attemp->created_at = new \DateTime("now");
+            $attemp->save();
             return $this->successResponse("Question list.", $data);
         } else {
             return $this->errorResponse("Invlaid flag type.");
@@ -982,12 +1020,19 @@ $attemp->save();
             return $this->errorResponse("Questions missing.");
         }
         foreach ($request->input("questions") as $k => $question) {
-            $UserAnswer = new UserAnswer();
-            $UserAnswer->user_id = $request->user_id;
-            $UserAnswer->question_id = $question['question_id'];
-            $UserAnswer->answer_id = $question['answer_id'];
-            $UserAnswer->is_correct = $question['is_correct'];
-            $UserAnswer->save();
+            $existingAnswer = UserAnswer::where(["user_id" => $request->user_id, "question_id" => $question['question_id']])->first();
+            if ($existingAnswer) {
+                $existingAnswer->answer_id = $question['answer_id'];
+                $existingAnswer->is_correct = $question['is_correct'];
+                $existingAnswer->save();
+            } else {
+                $UserAnswer = new UserAnswer();
+                $UserAnswer->user_id = $request->user_id;
+                $UserAnswer->question_id = $question['question_id'];
+                $UserAnswer->answer_id = $question['answer_id'];
+                $UserAnswer->is_correct = $question['is_correct'];
+                $UserAnswer->save();
+            }
         }
 
         return $this->successResponse("Result Submmitted Successfully.", (object) []);
