@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Exception;
-use Carbon\Carbon;
+use App\Models\Question;
 use App\Models\QuestionComment;
 use App\Models\User;
-use App\Models\Question;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
-class QuestionCommentController extends Controller {
+class QuestionCommentController extends Controller
+{
 
     /**
      * @api {post} /api/comment  Comment
@@ -87,7 +86,8 @@ class QuestionCommentController extends Controller {
      *   }
      *
      */
-    public function comment(Request $request) {
+    public function comment(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("user id missing");
         }
@@ -110,11 +110,11 @@ class QuestionCommentController extends Controller {
         $comment->question_id = $request->question_id;
         $comment->description = $request->comment;
         if ($comment->save()) {
-                $user1 = User::where('id',$question->user_id)->first();
-                if ($user1 && $user1->device_token) {
-                    $this->generateNotification($user1->id, 1, "Quizz Application", $user->name . " Commented On Your Question");
-                    $this->androidPushNotification(2, "Quizz Application", $user->name ." Commented On Your Question" , $user1->device_token, 5, $this->notificationCount($user1->id), $question->id);
-                }
+            $user1 = User::where('id', $question->user_id)->first();
+            if ($user1 && $user1->device_token) {
+                $this->generateNotification($user1->id, 1, "Quizz Application", $user->name . " Commented On Your Question");
+                $this->androidPushNotification(2, "Quizz Application", $user->name . " Commented On Your Question", $user1->device_token, 5, $this->notificationCount($user1->id), $question->id);
+            }
             return $this->successResponse("Comment successfully", (object) []);
         } else {
             return $this->errorResponse("Something went wrong.");
@@ -172,7 +172,8 @@ class QuestionCommentController extends Controller {
      *   }
      *
      */
-    public function commentList(Request $request) {
+    public function commentList(Request $request)
+    {
         if (!$request->question_id) {
             return $this->errorResponse("Question ID missing");
         }
@@ -181,12 +182,12 @@ class QuestionCommentController extends Controller {
             return $this->errorResponse("Question not found.");
         }
         $dataArray = [];
-        $comments = QuestionComment::where('question_id',$request->question_id)->get();
+        $comments = QuestionComment::where('question_id', $request->question_id)->get();
         foreach ($comments as $k => $comment) {
             $dataArray[$k]['id'] = $comment->id;
             $dataArray[$k]['user_id'] = $comment->user_id;
             $nam = User::find($comment->user_id);
-            $dataArray[$k]['user_name'] = $nam?$nam->name : '';
+            $dataArray[$k]['user_name'] = $nam ? $nam->name : '';
             $dataArray[$k]['question_id'] = $comment->question_id;
             $dataArray[$k]['description'] = $comment->description;
             $dataArray[$k]['created_at'] = $comment->created_at;

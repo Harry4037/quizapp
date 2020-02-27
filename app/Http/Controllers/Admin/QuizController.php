@@ -3,28 +3,27 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Validator;
-use App\Models\User;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Quiz;
-use App\Models\Question;
 use App\Models\Answer;
-use App\Models\UserQuizQuestionAnswer;
+use App\Models\Question;
+use App\Models\Quiz;
+use App\Models\User;
 use App\Models\UserQuiz;
+use App\Models\UserQuizQuestionAnswer;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
-class QuizController extends Controller {
+class QuizController extends Controller
+{
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
         return view('admin.quiz.index', [
             'js' => $js,
@@ -32,7 +31,8 @@ class QuizController extends Controller {
         ]);
     }
 
-    public function quizList(Request $request) {
+    public function quizList(Request $request)
+    {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
@@ -53,9 +53,9 @@ class QuizController extends Controller {
                 $questionsArray[$k]['start_at'] = date('d-M-Y, h:i A', strtotime($question->start_date_time));
                 $questionsArray[$k]['end_at'] = date('d-M-Y, h:i A', strtotime($question->end_date_time));
                 $questionsArray[$k]['action'] = '<a href="' . route('admin.quiz.edit', $question) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                        . '<a href="' . route('admin.quiz.question-list', $question) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> View Questions </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                        . '<a href="' . route('admin.quiz.ranking-list', $question->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> Ranking </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $question->id . '" ><i class="fa fa-trash"></i> Delete </a>';
+                . '<a href="' . route('admin.quiz.question-list', $question) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> View Questions </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                . '<a href="' . route('admin.quiz.ranking-list', $question->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> Ranking </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $question->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
             $data['data'] = $questionsArray;
@@ -65,23 +65,24 @@ class QuizController extends Controller {
         }
     }
 
-    public function quizAdd(Request $request) {
+    public function quizAdd(Request $request)
+    {
         try {
 
             if ($request->isMethod("post")) {
 //
-//                $validator = Validator::make($request->all(), [
-//                            'quiz_name' => [
-//                                'required',
-//                                Rule::unique('questions', 'description')->where(function ($query) use($request) {
-//                                            return $query->where(['description' => $request->description])
-//                                                            ->whereNull('deleted_at');
-//                                        }),
-//                            ],
-//                ]);
-//                if ($validator->fails()) {
-//                    return redirect()->route('admin.question.add')->withErrors($validator)->withInput();
-//                }
+                //                $validator = Validator::make($request->all(), [
+                //                            'quiz_name' => [
+                //                                'required',
+                //                                Rule::unique('questions', 'description')->where(function ($query) use($request) {
+                //                                            return $query->where(['description' => $request->description])
+                //                                                            ->whereNull('deleted_at');
+                //                                        }),
+                //                            ],
+                //                ]);
+                //                if ($validator->fails()) {
+                //                    return redirect()->route('admin.question.add')->withErrors($validator)->withInput();
+                //                }
 
                 $quiz = new Quiz();
                 $quiz->user_id = auth()->user()->id;
@@ -156,7 +157,7 @@ class QuizController extends Controller {
                         }
                     }
                     $users = User::whereNull("deleted_at")->get();
-                    foreach($users as $user){
+                    foreach ($users as $user) {
                         if ($user && $user->device_token) {
                             $this->generateNotification($user->id, 1, "Quizz Application", "Daily Quiz Is Published Now");
                             $this->androidPushNotification(2, "Quizz Application", "Daily Quiz Is Published Now", $user->device_token, 3, $this->notificationCount($user->id), $quiz->id);
@@ -186,7 +187,8 @@ class QuizController extends Controller {
         }
     }
 
-    public function quizDelete(Request $request) {
+    public function quizDelete(Request $request)
+    {
         try {
             $quiz = Quiz::find($request->id);
             $questions = Question::where("quiz_id", $quiz->id)->get();
@@ -207,7 +209,8 @@ class QuizController extends Controller {
         }
     }
 
-    public function quizEdit(Request $request, Quiz $quiz) {
+    public function quizEdit(Request $request, Quiz $quiz)
+    {
         try {
             $css = [
                 'bower_components/bootstrap-daterangepicker/daterangepicker.css',
@@ -232,20 +235,21 @@ class QuizController extends Controller {
             return view('admin.quiz.edit', [
                 'quiz' => $quiz,
                 'css' => $css,
-                'js' => $js
+                'js' => $js,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.quiz.index')->with('error', $ex->getMessage());
         }
     }
 
-    public function quizQuestionList(Request $request, Quiz $quiz) {
+    public function quizQuestionList(Request $request, Quiz $quiz)
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
 
         $questions = Question::where("quiz_id", $quiz->id)->get();
@@ -253,11 +257,12 @@ class QuizController extends Controller {
             'questions' => $questions,
             'quiz' => $quiz,
             'css' => $css,
-            'js' => $js
+            'js' => $js,
         ]);
     }
 
-    public function quizQuestionAdd(Request $request, Quiz $quiz) {
+    public function quizQuestionAdd(Request $request, Quiz $quiz)
+    {
 
         if ($request->isMethod("post")) {
 
@@ -336,7 +341,8 @@ class QuizController extends Controller {
         ]);
     }
 
-    public function quizQuestionEdit(Request $request, Question $question) {
+    public function quizQuestionEdit(Request $request, Question $question)
+    {
 
         if ($request->isMethod('post')) {
             if ($request->hasFile('ques_image')) {
@@ -385,7 +391,8 @@ class QuizController extends Controller {
         ]);
     }
 
-    public function deleteQuizQuestion(Request $request) {
+    public function deleteQuizQuestion(Request $request)
+    {
         try {
             $question = Question::find($request->id);
             if ($question) {
@@ -404,54 +411,55 @@ class QuizController extends Controller {
         }
     }
 
-    public function ranking(Request $request, Quiz $quiz) {
+    public function ranking(Request $request, Quiz $quiz)
+    {
 
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-        $datee = date('Y-m-d');
-        $quizzz = Quiz::find($quiz->id);
-        $query = UserQuiz::query();
-        // if ($searchKeyword) {
-        //     $query->where('name', 'LIKE', "%$searchKeyword%");
-        // }
-        $data['recordsTotal'] = 10;
-        $data['recordsFiltered'] = 10;
-        $dataArray = [];
-        $AllUser = [];
-        $AllUser = $query->where('quiz_id',$quiz->id)->get();
-        $myRankingNo = 0;
-        $check = 0;
+            $datee = date('Y-m-d');
+            $quizzz = Quiz::find($quiz->id);
+            $query = UserQuiz::query();
+            // if ($searchKeyword) {
+            //     $query->where('name', 'LIKE', "%$searchKeyword%");
+            // }
+            $data['recordsTotal'] = 10;
+            $data['recordsFiltered'] = 10;
+            $dataArray = [];
+            $AllUser = [];
+            $AllUser = $query->where('quiz_id', $quiz->id)->get();
+            $myRankingNo = 0;
+            $check = 0;
 
-        if ($AllUser) {
-            foreach ($AllUser as $k => $user) {
-                $Details = User::where('id', $user->user_id)->withTrashed()->first();
-                $points = UserQuizQuestionAnswer::where('user_quiz_id',$user->id)->where('is_correct',1)->count();
-                $dataArray['users_leadership'][$k]['mob'] = $Details['mobile_number'];
-                $dataArray['users_leadership'][$k]['name'] = $Details ? $Details['name'] : 'User';
-                $dataArray['users_leadership'][$k]['image'] = $Details['profile_pic'] ;
-                $dataArray['users_leadership'][$k]['points'] = $points?$points:0;
-                $check = 1;
-            }
-            if($check){
-                usort($dataArray['users_leadership'], function($a, $b) {
-                    return $a['points'] <=> $b['points'];
-                });
-                $dadt = array_reverse($dataArray['users_leadership']);
-                $rr = array_slice($dadt,0,10);
-            }else{
+            if ($AllUser) {
+                foreach ($AllUser as $k => $user) {
+                    $Details = User::where('id', $user->user_id)->withTrashed()->first();
+                    $points = UserQuizQuestionAnswer::where('user_quiz_id', $user->id)->where('is_correct', 1)->count();
+                    $dataArray['users_leadership'][$k]['mob'] = $Details['mobile_number'];
+                    $dataArray['users_leadership'][$k]['name'] = $Details ? $Details['name'] : 'User';
+                    $dataArray['users_leadership'][$k]['image'] = $Details['profile_pic'];
+                    $dataArray['users_leadership'][$k]['points'] = $points ? $points : 0;
+                    $check = 1;
+                }
+                if ($check) {
+                    usort($dataArray['users_leadership'], function ($a, $b) {
+                        return $a['points'] <=> $b['points'];
+                    });
+                    $dadt = array_reverse($dataArray['users_leadership']);
+                    $rr = array_slice($dadt, 0, 10);
+                } else {
+                    $rr = [];
+                }
+
+            } else {
                 $rr = [];
             }
-
-        }else{
-            $rr = [];
-        }
-        // $rae['data'] = $rr;
-        return view('admin.quiz.ranking-list', [
-            'comments' => $rr
-        ]);
+            // $rae['data'] = $rr;
+            return view('admin.quiz.ranking-list', [
+                'comments' => $rr,
+            ]);
         } catch (\Exception $e) {
             dd($e);
         }

@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
-use App\Models\Question;
 use App\Models\Follow;
-use App\Models\UserQuizQuestionAnswer;
+use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\User;
 use App\Models\UserQuiz;
-use App\Models\UserAnswer;
-use Illuminate\Support\Arr;
-use App\Models\UserTestSeriesQuestionAnswer;
+use App\Models\UserQuizQuestionAnswer;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class RankingController extends Controller {
+class RankingController extends Controller
+{
 
     /**
      * @api {get} /api/user-ranking  User Raking
@@ -63,7 +61,8 @@ class RankingController extends Controller {
      *   }
      *
      */
-    public function userRanking(Request $request) {
+    public function userRanking(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
@@ -73,6 +72,7 @@ class RankingController extends Controller {
             SELECT SUM(is_correct) as correct_answer, user_id FROM `user_test_series_question_answers` WHERE is_correct = 1 GROUP BY user_id)
             as user_correct_ans GROUP BY user_id ORDER BY total_correct_answer DESC'));
         $dataArray = [];
+        $dataArray1 = [];
         $myRanking = 0;
         $myRankingNo = 0;
         if ($userAnswers) {
@@ -90,14 +90,14 @@ class RankingController extends Controller {
         } else {
             $dataArray['users_ranking'] = [];
         }
-
         $userDetail = User::find($request->user_id);
-        $dataArray['user']['id'] = $userDetail ? $userDetail->id : '';
-        $dataArray['user']['name'] = $userDetail ? $userDetail->name : 'User';
-        $dataArray['user']['profile_pic'] = $userDetail ? $userDetail->profile_pic : '';
-        $dataArray['user']['total_correct_answer'] = $myRanking;
-        $dataArray['user']['rank_number'] = $myRankingNo;
-        return $this->successResponse("Ranking list", $dataArray);
+        $dataArray1['users_ranking'] = array_slice($dataArray['users_ranking'], 0, 10);
+        $dataArray1['user']['id'] = $userDetail ? $userDetail->id : '';
+        $dataArray1['user']['name'] = $userDetail ? $userDetail->name : 'User';
+        $dataArray1['user']['profile_pic'] = $userDetail ? $userDetail->profile_pic : '';
+        $dataArray1['user']['total_correct_answer'] = $myRanking;
+        $dataArray1['user']['rank_number'] = $myRankingNo;
+        return $this->successResponse("Ranking list", $dataArray1);
     }
     /**
      * @api {get} /api/leadership Leadership
@@ -147,7 +147,8 @@ class RankingController extends Controller {
      *   }
      *
      */
-    public function leadership(Request $request) {
+    public function leadership(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
@@ -155,20 +156,20 @@ class RankingController extends Controller {
         if (!$user1) {
             return $this->errorResponse("User not found.");
         }
-        $creatorUser = User::where('user_type_id',2)->get();
+        $creatorUser = User::where('user_type_id', 2)->get();
         $dataArray = [];
         $dataArray1 = [];
         $myRankingNo = 0;
         if ($creatorUser) {
             foreach ($creatorUser as $k => $user) {
                 $question = Question::where('user_id', $user->id)->where('is_approve', 2)->count();
-                $followers = Follow::where('follow_user_id',$user->id)->count();
+                $followers = Follow::where('follow_user_id', $user->id)->count();
                 $total = $question + $followers;
                 $dataArray['users_leadership'][$k]['user_id'] = $user->id;
                 $dataArray['users_leadership'][$k]['name'] = $user ? $user->name : 'User';
                 $dataArray['users_leadership'][$k]['profile_pic'] = $user ? $user->profile_pic : '';
                 $dataArray['users_leadership'][$k]['points'] = $total;
-                if($user->id == $request->user_id){
+                if ($user->id == $request->user_id) {
                     $dataArray1['user']['id'] = $user ? $user->id : '';
                     $dataArray1['user']['name'] = $user ? $user->name : 'User';
                     $dataArray1['user']['profile_pic'] = $user ? $user->profile_pic : '';
@@ -178,18 +179,18 @@ class RankingController extends Controller {
         } else {
             $dataArray['users_leadership'] = [];
         }
-        usort($dataArray['users_leadership'], function($a, $b) {
+        usort($dataArray['users_leadership'], function ($a, $b) {
             return $a['points'] <=> $b['points'];
         });
         $dadt = array_reverse($dataArray['users_leadership']);
 
-         $rr['users_leadership'] = array_slice($dadt,0,10);
-        foreach($dadt as $y => $xyz){
-            if($xyz['user_id'] == $request->user_id){
-                $dataArray1['user']['rank_number'] =  $y +1;
+        $rr['users_leadership'] = array_slice($dadt, 0, 10);
+        foreach ($dadt as $y => $xyz) {
+            if ($xyz['user_id'] == $request->user_id) {
+                $dataArray1['user']['rank_number'] = $y + 1;
             }
         }
-         $fdf = array_merge($rr, $dataArray1);
+        $fdf = array_merge($rr, $dataArray1);
         return $this->successResponse("Leadership list", $fdf);
     }
 
@@ -239,7 +240,8 @@ class RankingController extends Controller {
      *
      */
 
-    public function quizRanking(Request $request) {
+    public function quizRanking(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
@@ -248,20 +250,20 @@ class RankingController extends Controller {
             return $this->errorResponse("User not found.");
         }
         $datee = date('Y-m-d');
-        $quizzz = Quiz::where('start_date_time', 'LIKE', $datee.'%')->first();
-        $AllUser = UserQuiz::where('quiz_id',$quizzz->id)->with('user_quiz')->get();
+        $quizzz = Quiz::where('start_date_time', 'LIKE', $datee . '%')->first();
+        $AllUser = UserQuiz::where('quiz_id', $quizzz->id)->with('user_quiz')->get();
         $dataArray = [];
         $dataArray1 = [];
         $myRankingNo = 0;
         if ($AllUser) {
             foreach ($AllUser as $k => $user) {
                 $Details = User::where('id', $user->user_id)->first();
-                $points = UserQuizQuestionAnswer::where('user_quiz_id',$user->user_quiz->id)->where('is_correct',1)->count();
+                $points = UserQuizQuestionAnswer::where('user_quiz_id', $user->user_quiz->id)->where('is_correct', 1)->count();
                 $dataArray['users_leadership'][$k]['user_id'] = $Details->id;
                 $dataArray['users_leadership'][$k]['name'] = $Details ? $Details->name : 'User';
                 $dataArray['users_leadership'][$k]['profile_pic'] = $Details ? $Details->profile_pic : '';
                 $dataArray['users_leadership'][$k]['points'] = $points;
-                if($Details->id == $request->user_id){
+                if ($Details->id == $request->user_id) {
                     $dataArray1['user']['id'] = $Details ? $Details->id : '';
                     $dataArray1['user']['name'] = $Details ? $Details->name : 'User';
                     $dataArray1['user']['profile_pic'] = $Details ? $Details->profile_pic : '';
@@ -271,18 +273,18 @@ class RankingController extends Controller {
         } else {
             $dataArray['users_leadership'] = [];
         }
-        usort($dataArray['users_leadership'], function($a, $b) {
+        usort($dataArray['users_leadership'], function ($a, $b) {
             return $a['points'] <=> $b['points'];
         });
         $dadt = array_reverse($dataArray['users_leadership']);
 
-         $rr['users_leadership'] = array_slice($dadt,0,10);
-        foreach($dadt as $y => $xyz){
-            if($xyz['user_id'] == $request->user_id){
-                $dataArray1['user']['rank_number'] =  $y +1;
+        $rr['users_leadership'] = array_slice($dadt, 0, 10);
+        foreach ($dadt as $y => $xyz) {
+            if ($xyz['user_id'] == $request->user_id) {
+                $dataArray1['user']['rank_number'] = $y + 1;
             }
         }
-         $fdf = array_merge($rr, $dataArray1);
+        $fdf = array_merge($rr, $dataArray1);
         return $this->successResponse("Quiz Ranking  list", $fdf);
     }
 }

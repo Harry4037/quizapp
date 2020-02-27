@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Exception;
-use App\Models\User;
-use App\Models\TestSeries;
-use App\Models\Question;
+use App\Models\AttemptedTestSeries;
 use App\Models\Bookmark;
 use App\Models\Follow;
-use App\Models\AttemptedTestSeries;
-use Carbon\Carbon;
+use App\Models\Question;
+use App\Models\TestSeries;
+use App\Models\User;
 use App\Models\UserExam;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
 
     /**
      * @api {post} /api/register  Register User
@@ -72,7 +72,8 @@ class UserController extends Controller {
      *
      *
      */
-    public function userRegister(Request $request) {
+    public function userRegister(Request $request)
+    {
         if (!$request->name) {
             return $this->errorResponse("Name missing");
         }
@@ -101,11 +102,11 @@ class UserController extends Controller {
             return $this->errorResponse("Select valid user type");
         }
         $existingUser = User::where(['mobile_number' => $request->mobile_number])
-                ->where(function($query) {
-                    $query->where("user_type_id", 2)
+            ->where(function ($query) {
+                $query->where("user_type_id", 2)
                     ->orWhere("user_type_id", 3);
-                })
-                ->first();
+            })
+            ->first();
         if ($existingUser) {
             return $this->errorResponse("User already registered with us", (object) []);
         }
@@ -216,7 +217,8 @@ class UserController extends Controller {
      *
      *
      */
-    public function userProfile(Request $request) {
+    public function userProfile(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing");
         }
@@ -303,7 +305,8 @@ class UserController extends Controller {
      *
      *
      */
-    public function updateLanguage(Request $request) {
+    public function updateLanguage(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
@@ -368,7 +371,8 @@ class UserController extends Controller {
      *
      *
      */
-    public function updateExamSelection(Request $request) {
+    public function updateExamSelection(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
@@ -454,7 +458,8 @@ class UserController extends Controller {
      *
      *
      */
-    public function userUpdate(Request $request) {
+    public function userUpdate(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
@@ -597,7 +602,8 @@ class UserController extends Controller {
      *   }
      *
      */
-    public function CreatorUserProfile(Request $request) {
+    public function CreatorUserProfile(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing");
         }
@@ -608,7 +614,7 @@ class UserController extends Controller {
         if ($user) {
             $dataArray = [];
             $count = Question::where("user_id", $request->user_id)->count();
-            $result = TestSeries::where("user_id", $request->user_id)->where('is_approve',2)->select('id', 'name', 'total_question', 'created_at')->get();
+            $result = TestSeries::where("user_id", $request->user_id)->where('is_approve', 2)->select('id', 'name', 'total_question', 'created_at')->get();
             foreach ($result as $k => $test) {
                 $totalTime = Question::where("test_series_id", $test->id)->sum("ques_time");
                 $dataArray[$k]['id'] = $test->id;
@@ -624,10 +630,10 @@ class UserController extends Controller {
                     $dataArray[$k]['is_bookmark'] = false;
                 }
                 $attem = AttemptedTestSeries::where("user_id", $request->follow_user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
-                if($attem){
-                    $dataArray[$k]['is_attempted'] = TRUE;
-                }else{
-                    $dataArray[$k]['is_attempted'] = FALSE;
+                if ($attem) {
+                    $dataArray[$k]['is_attempted'] = true;
+                } else {
+                    $dataArray[$k]['is_attempted'] = false;
                 }
                 $dataArray[$k]['total_ques_no'] = $test->total_question;
                 $dataArray[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
@@ -649,9 +655,9 @@ class UserController extends Controller {
                 if (!$user) {
                     return $this->errorResponse("user not found.");
                 } elseif ($remove) {
-                    $data['user_follow']['is_follow'] = TRUE;
+                    $data['user_follow']['is_follow'] = true;
                 } else {
-                    $data['user_follow']['is_follow'] = FALSE;
+                    $data['user_follow']['is_follow'] = false;
                 }
             }
 
@@ -716,7 +722,8 @@ class UserController extends Controller {
      *  }
      *
      */
-    public function tokenUpdate(Request $request) {
+    public function tokenUpdate(Request $request)
+    {
 
         if ($request->user_id == '') {
             return $this->errorResponse("User Id missing");

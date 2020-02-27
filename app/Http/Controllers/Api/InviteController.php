@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Invite;
-use App\Models\User;
 use App\Models\TestSeries;
+use App\Models\User;
 use App\Models\UserTestSeries;
+use Illuminate\Http\Request;
 
-class InviteController extends Controller {
+class InviteController extends Controller
+{
 
     /**
      * @api {post} /api/invite  Invite
@@ -70,7 +71,8 @@ class InviteController extends Controller {
      *   }
      *
      */
-    public function invite(Request $request) {
+    public function invite(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing");
         }
@@ -180,7 +182,8 @@ class InviteController extends Controller {
      *   }
      *
      */
-    public function inviteStatus(Request $request) {
+    public function inviteStatus(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing");
         }
@@ -206,11 +209,11 @@ class InviteController extends Controller {
                 return $this->errorResponse("Test Series not found.");
             }
             if ($request->status == 1) {
-                $invite = Invite::where('user_id', $request->pref_id)->where('test_series_id', $request->test_series_id)->update(['status' => 1 , 'invite_user_id' => $request->user_id]);
+                $invite = Invite::where('user_id', $request->pref_id)->where('test_series_id', $request->test_series_id)->update(['status' => 1, 'invite_user_id' => $request->user_id]);
                 return $this->successResponse("Accepted", (object) []);
             }
             if ($request->status == 2) {
-                $invite = Invite::where('user_id', $request->pref_id)->where('test_series_id', $request->test_series_id)->update(['status' => 2 , 'invite_user_id' => $request->user_id]);
+                $invite = Invite::where('user_id', $request->pref_id)->where('test_series_id', $request->test_series_id)->update(['status' => 2, 'invite_user_id' => $request->user_id]);
                 return $this->successResponse("Rejected", (object) []);
             }
         }
@@ -220,7 +223,7 @@ class InviteController extends Controller {
                 return $this->errorResponse("Test Series not found.");
             }
             if ($request->status == 1) {
-                $invite = Invite::where('user_id', $request->pref_id)->where('user_test_series_id', $request->test_series_id)->update(['status' => 1 , 'invite_user_id' => $request->user_id]);
+                $invite = Invite::where('user_id', $request->pref_id)->where('user_test_series_id', $request->test_series_id)->update(['status' => 1, 'invite_user_id' => $request->user_id]);
                 return $this->successResponse("Accepted", (object) []);
             }
             if ($request->status == 2) {

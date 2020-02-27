@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Exception;
 use App\Models\Exam;
+use Illuminate\Http\Request;
 
-class ExamController extends Controller {
+class ExamController extends Controller
+{
 
     /**
      * @api {get} /api/exam-list  Exam List
@@ -48,7 +47,8 @@ class ExamController extends Controller {
      *
      *
      */
-    public function examList(Request $request) {
+    public function examList(Request $request)
+    {
         $exams = Exam::get();
         return $this->successResponse("List of Exams", $exams);
     }

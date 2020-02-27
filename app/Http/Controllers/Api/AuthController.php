@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Exception;
 use App\Models\User;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller {
+class AuthController extends Controller
+{
 
     /**
      * @api {post} /api/send-otp  Send OTP
@@ -56,7 +57,8 @@ class AuthController extends Controller {
      *
      *
      */
-    public function sendOTP(Request $request) {
+    public function sendOTP(Request $request)
+    {
         if (!$request->mobile_number) {
             return $this->errorResponse("Mobile number missing");
         }
@@ -66,7 +68,6 @@ class AuthController extends Controller {
         if (!$request->lang) {
             return $this->errorResponse("Language missing");
         }
-
 
         $otp = 1234;
 //        $otp = rand(1000, 9999);
@@ -194,7 +195,8 @@ class AuthController extends Controller {
      *
      *
      */
-    public function verifyOTP(Request $request) {
+    public function verifyOTP(Request $request)
+    {
         if (!$request->mobile_number) {
             return $this->errorResponse("Mobile number missing");
         }
@@ -216,7 +218,8 @@ class AuthController extends Controller {
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
         try {
             auth('api')->logout();
             return $this->successResponse("Logout successfully.", (object) []);

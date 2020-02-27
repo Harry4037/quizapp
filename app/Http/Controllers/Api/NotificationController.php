@@ -1,11 +1,14 @@
 <?php
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
-use Carbon\Carbon;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-class NotificationController extends Controller {
+
+class NotificationController extends Controller
+{
     /**
      * @api {get} /api/notification  Notification
      * @apiHeader {String} Accept application/json.
@@ -58,7 +61,8 @@ class NotificationController extends Controller {
      *   }
      *
      */
-    public function notificationlist(Request $request) {
+    public function notificationlist(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User Id missing.");
         }
@@ -84,7 +88,7 @@ class NotificationController extends Controller {
                     $dataArray[$k]['time'] = $date->format("h:i A");
                 }
             }
-            $data['notification_list']=$dataArray;
+            $data['notification_list'] = $dataArray;
             return $this->successResponse("Notification List", $data);
         }
     }

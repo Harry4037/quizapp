@@ -3,30 +3,30 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
-use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Exam;
-use App\Models\User;
-use App\Models\TestSeries;
-use App\Models\Subject;
 use App\Models\Invite;
-use Carbon\Carbon;
-use Validator;
-use Illuminate\Validation\Rule;
+use App\Models\Question;
 use App\Models\QuestionExam;
+use App\Models\Subject;
+use App\Models\TestSeries;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Validator;
 
-class TestSeriesController extends Controller {
+class TestSeriesController extends Controller
+{
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
         return view('admin.test-series.index', [
             'js' => $js,
@@ -34,7 +34,8 @@ class TestSeriesController extends Controller {
         ]);
     }
 
-    public function testSeriesList(Request $request) {
+    public function testSeriesList(Request $request)
+    {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
@@ -43,7 +44,7 @@ class TestSeriesController extends Controller {
             $query = TestSeries::query()->with('subject');
             $query->whereNotNull("is_approve");
             if ($searchKeyword) {
-                $query->whereHas("subject", function($query) use($searchKeyword) {
+                $query->whereHas("subject", function ($query) use ($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
                 });
             }
@@ -69,11 +70,11 @@ class TestSeriesController extends Controller {
                     $testseriesArray[$k]['status'] = '<label class="btn btn-danger btn-xs disabled">Rejected</label>';
                 } else {
                     $testseriesArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve . '"><i class="fa fa-check"></i> Accept </a>&nbsp;&nbsp;'
-                            . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve . '"><i class="fa fa-times"></i> Reject </a>';
+                    . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve . '"><i class="fa fa-times"></i> Reject </a>';
                 }
                 $testseriesArray[$k]['action'] = '<a href="' . route('admin.test-series.edit', $testseries) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;'
-                        . '<a href="' . route('admin.test-series.question-list', $testseries) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> View Questions </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $testseries->id . '" ><i class="fa fa-trash"></i> Delete </a>';
+                . '<a href="' . route('admin.test-series.question-list', $testseries) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> View Questions </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $testseries->id . '" ><i class="fa fa-trash"></i> Delete </a>';
                 $testseriesArray[$k]['series_time'] = $count_time . " Sec";
             }
 
@@ -84,7 +85,8 @@ class TestSeriesController extends Controller {
         }
     }
 
-    public function questionDelete(Request $request) {
+    public function questionDelete(Request $request)
+    {
         try {
             $question = Question::find($request->id);
             if ($question) {
@@ -98,7 +100,8 @@ class TestSeriesController extends Controller {
         }
     }
 
-    public function testSeriesDelete(Request $request) {
+    public function testSeriesDelete(Request $request)
+    {
         try {
             $testseries = TestSeries::find($request->id);
             if ($testseries) {
@@ -118,15 +121,16 @@ class TestSeriesController extends Controller {
         }
     }
 
-    public function testSeriesEdit(Request $request, Testseries $testseries) {
+    public function testSeriesEdit(Request $request, Testseries $testseries)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'testseries_name' => [
-                                'bail',
-                                'required',
-                            ],
+                    'testseries_name' => [
+                        'bail',
+                        'required',
+                    ],
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.test-series.edit', $testseries->id)->withErrors($validator)->withInput();
@@ -146,14 +150,15 @@ class TestSeriesController extends Controller {
             $exams = Exam::get();
             return view('admin.test-series.edit', [
                 'series' => $testseries,
-                'subjects' => $subjects
+                'subjects' => $subjects,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.test-series.index')->with('error', $ex->getMessage());
         }
     }
 
-    public function testSeriesAdd(Request $request) {
+    public function testSeriesAdd(Request $request)
+    {
         try {
 
             if ($request->isMethod("post")) {
@@ -203,7 +208,6 @@ class TestSeriesController extends Controller {
                             $questionExam->exam_id = $request->exam_id;
                             $questionExam->question_id = $question->id;
                             $questionExam->save();
-
 
                             $answer = new Answer();
                             $answer->question_id = $question->id;
@@ -265,14 +269,15 @@ class TestSeriesController extends Controller {
                 'subjects' => $subjects,
                 'exams' => $exams,
                 'css' => $css,
-                'js' => $js
+                'js' => $js,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.test-series.index')->with('error', $ex->getMessage());
         }
     }
 
-    public function acceptTestSeries(Request $request) {
+    public function acceptTestSeries(Request $request)
+    {
         try {
             if ($request->isMethod('post')) {
                 $question = TestSeries::findOrFail($request->record_id);
@@ -301,7 +306,8 @@ class TestSeriesController extends Controller {
         }
     }
 
-    public function rejectTestSeries(Request $request) {
+    public function rejectTestSeries(Request $request)
+    {
         try {
             if ($request->isMethod('post')) {
                 $question = TestSeries::findOrFail($request->record_id);
@@ -330,13 +336,14 @@ class TestSeriesController extends Controller {
         }
     }
 
-    public function testSeriesQuestionList(Request $request, Testseries $testseries) {
+    public function testSeriesQuestionList(Request $request, Testseries $testseries)
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
 
         $questions = Question::where("test_series_id", $testseries->id)->get();
@@ -344,11 +351,12 @@ class TestSeriesController extends Controller {
             'questions' => $questions,
             'testseries' => $testseries,
             'css' => $css,
-            'js' => $js
+            'js' => $js,
         ]);
     }
 
-    public function testSeriesQuestionAdd(Request $request, Testseries $testseries) {
+    public function testSeriesQuestionAdd(Request $request, Testseries $testseries)
+    {
 
         if ($request->isMethod("post")) {
 
@@ -422,7 +430,8 @@ class TestSeriesController extends Controller {
         ]);
     }
 
-    public function testSeriesQuestionEdit(Request $request, Question $question) {
+    public function testSeriesQuestionEdit(Request $request, Question $question)
+    {
 
         if ($request->isMethod('post')) {
             if ($request->hasFile('ques_image')) {

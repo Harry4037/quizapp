@@ -3,23 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use App\Models\Subject;
-use App\Models\Question;
-use Carbon\Carbon;
-use Validator;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Validator;
 
-class SubjectController extends Controller {
+class SubjectController extends Controller
+{
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
         return view('admin.subject.index', [
             'js' => $js,
@@ -27,7 +26,8 @@ class SubjectController extends Controller {
         ]);
     }
 
-    public function subjectList(Request $request) {
+    public function subjectList(Request $request)
+    {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
@@ -45,7 +45,7 @@ class SubjectController extends Controller {
             foreach ($subjects as $k => $subject) {
                 $subjectsArray[$k]['name'] = $subject->name;
                 $subjectsArray[$k]['action'] = '<a href="' . route('admin.subject.edit', $subject) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $subject->id . '" ><i class="fa fa-trash"></i> Delete </a>';
+                . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $subject->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
             $data['data'] = $subjectsArray;
@@ -55,7 +55,8 @@ class SubjectController extends Controller {
         }
     }
 
-    public function subjectDelete(Request $request) {
+    public function subjectDelete(Request $request)
+    {
         try {
             $subject = Subject::find($request->id);
             if ($subject) {
@@ -69,19 +70,20 @@ class SubjectController extends Controller {
         }
     }
 
-    public function subjectEdit(Request $request, Subject $subject) {
+    public function subjectEdit(Request $request, Subject $subject)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'subject_name' => [
-                                'bail',
-                                'required',
-                                Rule::unique('subjects', 'name')->ignore($subject->id)->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->subject_name])
-                                                            ->whereNull('deleted_at');
-                                        }),
-                            ],
+                    'subject_name' => [
+                        'bail',
+                        'required',
+                        Rule::unique('subjects', 'name')->ignore($subject->id)->where(function ($query) use ($request) {
+                            return $query->where(['name' => $request->subject_name])
+                                ->whereNull('deleted_at');
+                        }),
+                    ],
 
                 ]);
                 if ($validator->fails()) {
@@ -97,27 +99,28 @@ class SubjectController extends Controller {
             }
 
             return view('admin.subject.edit', [
-                'subject' => $subject
+                'subject' => $subject,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.subject.index')->with('error', $ex->getMessage());
         }
     }
 
-    public function subjectAdd(Request $request) {
+    public function subjectAdd(Request $request)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'subject_name' => [
-                                'bail',
-                                'required',
-                                Rule::unique('subjects', 'name')->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->subject_name])
-                                                            ->whereNull('deleted_at');
-                                        }),
-                            ],
-                    ]);
+                    'subject_name' => [
+                        'bail',
+                        'required',
+                        Rule::unique('subjects', 'name')->where(function ($query) use ($request) {
+                            return $query->where(['name' => $request->subject_name])
+                                ->whereNull('deleted_at');
+                        }),
+                    ],
+                ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.subject.add')->withErrors($validator)->withInput();
                 }
@@ -137,7 +140,5 @@ class SubjectController extends Controller {
             return redirect()->route('admin.subject.index')->with('error', $ex->getMessage());
         }
     }
-
-
 
 }

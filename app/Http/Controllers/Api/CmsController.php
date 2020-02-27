@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Cms;
+use Illuminate\Http\Request;
 
 class CmsController extends Controller
 {
@@ -35,7 +35,8 @@ class CmsController extends Controller
      *
      *
      */
-    public function termContidion(Request $request) {
+    public function termContidion(Request $request)
+    {
         // $data['title'] = "I UNDERSTAND THAT HOPE WILL NOT USE MY PERSONAL DATA IN ANY WAY.";
         // $data['content'] = "<ol>
         // <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</li>
@@ -51,8 +52,7 @@ class CmsController extends Controller
             $data['title'] = $cms->title;
             $data["content"] = $cms->description;
             return $this->successResponse("Terms Conditions", $data);
-        }
-        catch(\Exception $ex) {
+        } catch (\Exception $ex) {
             return $this->errorResponse("t&c not found.");
         }
     }
@@ -83,7 +83,8 @@ class CmsController extends Controller
      *
      *
      */
-    public function privacyPolicy(Request $request) {
+    public function privacyPolicy(Request $request)
+    {
         // $data['title'] = "Privacy Policy.";
         // $data['content'] = "<ol>
         // <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</li>
@@ -99,8 +100,7 @@ class CmsController extends Controller
             $data["content"] = $cms->description;
             // $data["last_updated"] = $cms->updated_at;
             return $this->successResponse("Privacy Policy", $data);
-        }
-        catch(\Exception $ex) {
+        } catch (\Exception $ex) {
             return $this->errorResponse("Privacy Policy not found.");
         }
     }
@@ -132,7 +132,8 @@ class CmsController extends Controller
      *
      *
      */
-    public function contactUs(Request $request) {
+    public function contactUs(Request $request)
+    {
         // $data['number'] = "+911234567890";
         // $data['email'] = "info@quizz.com";
         // return $this->successResponse("Contact Us", $data);
@@ -142,14 +143,9 @@ class CmsController extends Controller
             $data["number"] = $cms->description;
             $data["email"] = $cms->title;
             return $this->successResponse("Contact Us", $data);
-        }
-        catch(\Exception $ex) {
+        } catch (\Exception $ex) {
             return $this->errorResponse("Contact Us not found.");
         }
     }
-
-
-
-
 
 }

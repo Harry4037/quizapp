@@ -1,31 +1,31 @@
 <?php
 
 /*
-  |--------------------------------------------------------------------------
-  | Web Routes
-  |--------------------------------------------------------------------------
-  |
-  | Here is where you can register web routes for your application. These
-  | routes are loaded by the RouteServiceProvider within a group which
-  | contains the "web" middleware group. Now create something great!
-  |
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
  */
 
 Route::get('/', function () {
     return view('welcome');
 });
-Route::namespace('Admin')->prefix('admin')->group(function() {
+Route::namespace ('Admin')->prefix('admin')->group(function () {
     Route::match(['get', 'post'], '/', 'LoginController@showLoginForm')->name('admin.login-form');
     Route::match(['get', 'post'], '/login', 'LoginController@login')->name('admin.login');
     Route::get('/logout', 'LoginController@logout')->name('admin.logout');
 });
-Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->group(function() {
+Route::namespace ('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard');
     Route::match(['get', 'post'], '/profile', 'LoginController@profile')->name('admin.profile');
     Route::match(['get', 'post'], '/change-password', 'LoginController@changePassword')->name('admin.change-password');
 
     // User Routes
-    Route::prefix('user')->group(function() {
+    Route::prefix('user')->group(function () {
         Route::get('/', 'UserController@index')->name('admin.user.index');
         Route::get('/list', 'UserController@userList')->name('admin.user.list');
         Route::match(['get', 'post'], '/add', 'UserController@userAdd')->name('admin.user.add');
@@ -36,7 +36,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
     });
 
     //creator
-    Route::prefix('creator')->group(function() {
+    Route::prefix('creator')->group(function () {
         Route::get('/', 'CreatorController@index')->name('admin.creator.index');
         Route::get('/list', 'CreatorController@userList')->name('admin.creator.list');
         Route::match(['get', 'post'], '/add', 'CreatorController@userAdd')->name('admin.creator.add');
@@ -49,7 +49,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
     });
 
     // Subject Routes
-    Route::prefix('subject')->group(function() {
+    Route::prefix('subject')->group(function () {
         Route::get('/', 'SubjectController@index')->name('admin.subject.index');
         Route::get('/list', 'SubjectController@subjectList')->name('admin.subject.list');
         Route::match(['get', 'post'], '/add', 'SubjectController@subjectAdd')->name('admin.subject.add');
@@ -58,7 +58,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
     });
 
     // Exam Routes
-    Route::prefix('exam')->group(function() {
+    Route::prefix('exam')->group(function () {
         Route::get('/', 'ExamController@index')->name('admin.exam.index');
         Route::get('/list', 'ExamController@examList')->name('admin.exam.list');
         Route::match(['get', 'post'], '/add', 'ExamController@examAdd')->name('admin.exam.add');
@@ -67,7 +67,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
     });
 
     // Question Routes
-    Route::prefix('question')->group(function() {
+    Route::prefix('question')->group(function () {
         Route::get('/', 'QuestionController@index')->name('admin.question.index');
         Route::get('/list', 'QuestionController@questionList')->name('admin.question.list');
         Route::match(['get', 'post'], '/add', 'QuestionController@questionAdd')->name('admin.question.add');
@@ -83,7 +83,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
     });
 
     // Quiz Routes
-    Route::prefix('quiz')->group(function() {
+    Route::prefix('quiz')->group(function () {
         Route::get('/', 'QuizController@index')->name('admin.quiz.index');
         Route::get('/list', 'QuizController@quizList')->name('admin.quiz.list');
         Route::match(['get', 'post'], '/add', 'QuizController@quizAdd')->name('admin.quiz.add');
@@ -97,7 +97,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
     });
 
     // Test Series Routes
-    Route::prefix('test-series')->group(function() {
+    Route::prefix('test-series')->group(function () {
         Route::get('/', 'TestSeriesController@index')->name('admin.test-series.index');
         Route::get('/list', 'TestSeriesController@testSeriesList')->name('admin.test-series.list');
         Route::match(['get', 'post'], '/add', 'TestSeriesController@testSeriesAdd')->name('admin.test-series.add');
@@ -111,7 +111,7 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
     });
 
     // Notification Routes
-    Route::prefix('notification')->group(function() {
+    Route::prefix('notification')->group(function () {
         Route::get('/', 'NotificationController@index')->name('admin.notification.index');
         Route::get('/list', 'NotificationController@listNotification')->name('admin.notification.list');
         Route::post('/send-notification', 'NotificationController@sendNotification')->name('admin.notification.send');
@@ -119,20 +119,20 @@ Route::namespace('Admin')->middleware(['auth', 'role:Admin'])->prefix('admin')->
     });
 
     // Leadership Routes
-    Route::prefix('leadership')->group(function() {
+    Route::prefix('leadership')->group(function () {
         Route::get('/', 'LeadershipController@index')->name('admin.leadership.index');
         Route::get('/list', 'LeadershipController@leadershipList')->name('admin.leadership.list');
     });
 
     // Cms Routes
-    Route::prefix('cms')->group(function() {
+    Route::prefix('cms')->group(function () {
         Route::get('/', 'CmsController@index')->name('admin.cms.index');
         Route::get('/list', 'CmsController@cmsList')->name('admin.cms.list');
         Route::match(['get', 'post'], '/edit/{cms}', 'CmsController@cmsEdit')->name('admin.cms.edit');
     });
 
     // Feedback Routes
-    Route::prefix('feedback')->group(function() {
+    Route::prefix('feedback')->group(function () {
         Route::get('/', 'FeedbackController@index')->name('admin.feedback.index');
         Route::get('/list', 'FeedbackController@feedList')->name('admin.feedback.list');
         //   Route::match(['get', 'post'], '/edit/{cms}', 'CmsController@cmsEdit')->name('admin.feed.edit');

@@ -3,23 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminNotification;
+use App\Models\Notification;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Notification;
-use Carbon\Carbon;
-use App\Models\AdminNotification;
-use App\Models\UnregisterToken;
 
-class NotificationController extends Controller {
+class NotificationController extends Controller
+{
 
-    public function index() {
+    public function index()
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
 
         $users = User::where('user_type_id', 3)->orWhere('user_type_id', 2)->get();
@@ -30,11 +31,12 @@ class NotificationController extends Controller {
         ]);
     }
 
-    public function sendNotification(Request $request) {
+    public function sendNotification(Request $request)
+    {
         $validator = Validator::make($request->all(), [
-                    'title' => 'required',
-                    'message' => 'required',
-                    'user_type' => 'required',
+            'title' => 'required',
+            'message' => 'required',
+            'user_type' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -50,27 +52,26 @@ class NotificationController extends Controller {
         // }
 
         $tokens = User::where('user_type_id', '=', 3)
-        ->where("device_token", '!=', null)
-        ->when($request->user_type == 2, function($query) use($request) {
-            return $query->whereIn('id', $request->notify_user);
-        })
-        ->when($request->user_type == 3, function($query) use($request) {
-            return $query->where('is_active', 1);
-        })
-        ->pluck("device_token")->toArray();
-if (count($tokens)) {
-$this->androidPushNotification(2, $request->title, $request->message, $tokens, 0);
-}
+            ->where("device_token", '!=', null)
+            ->when($request->user_type == 2, function ($query) use ($request) {
+                return $query->whereIn('id', $request->notify_user);
+            })
+            ->when($request->user_type == 3, function ($query) use ($request) {
+                return $query->where('is_active', 1);
+            })
+            ->pluck("device_token")->toArray();
+        if (count($tokens)) {
+            $this->androidPushNotification(2, $request->title, $request->message, $tokens, 0);
+        }
 
-$userIds = User::where('user_type_id', '=', 3)
-        ->where("device_token", '!=', null)
-        ->when($request->user_type == 2, function($query) use($request) {
-            return $query->whereIn('id', $request->notify_user);
-        })
-        ->when($request->user_type == 3, function($query) use($request) {
-            return $query->where('is_active', 1);
-        })
-        ->pluck("id")->toArray();
+        $userIds = User::where("device_token", '!=', null)
+            ->when($request->user_type == 2, function ($query) use ($request) {
+                return $query->whereIn('id', $request->notify_user);
+            })
+            ->when($request->user_type == 3, function ($query) use ($request) {
+                return $query->where('is_active', 1);
+            })
+            ->pluck("id")->toArray();
         $adminNotification = new AdminNotification();
         $adminNotification->title = $request->title;
         $adminNotification->message = $request->message;
@@ -86,7 +87,8 @@ $userIds = User::where('user_type_id', '=', 3)
         return $this->successResponse("Notification send successfully", (object) []);
     }
 
-    public function listNotification(Request $request) {
+    public function listNotification(Request $request)
+    {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
@@ -95,7 +97,7 @@ $userIds = User::where('user_type_id', '=', 3)
             $query = AdminNotification::query();
             if ($searchKeyword) {
                 $query->where("title", "LIKE", "%$searchKeyword%")
-                        ->orWhere("message", "LIKE", "%$searchKeyword%");
+                    ->orWhere("message", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
@@ -116,20 +118,21 @@ $userIds = User::where('user_type_id', '=', 3)
         }
     }
 
-    public function searchUser(Request $request) {
+    public function searchUser(Request $request)
+    {
         $searchKeyword = $request->get('search_keyword');
         $query = User::query();
         $query->where('user_type_id', '!=', 1);
         if ($searchKeyword) {
-            $query->where(function($query) use($searchKeyword) {
+            $query->where(function ($query) use ($searchKeyword) {
                 $query->where('name', 'LIKE', "%$searchKeyword%")
-                        ->orWhere('mobile_number', 'LIKE', "%$searchKeyword%");
+                    ->orWhere('mobile_number', 'LIKE', "%$searchKeyword%");
             });
         }
         $users = $query->get();
 
-        return view('admin.notification.users',[
-            'users' => $users
+        return view('admin.notification.users', [
+            'users' => $users,
         ]);
     }
 
