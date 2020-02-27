@@ -163,10 +163,10 @@ class QuestionController extends Controller
             return $this->errorResponse("Flag is missing.");
         }
         if (!$request->user_id) {
-
+                $lang1 = $request->lang;
             $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-                ->where(function ($query) use ($lang, $request) {
-                    $query->where('questions.lang', $lang)
+                ->where(function ($query) use ($lang1, $request) {
+                    $query->where('questions.lang', $lang1)
                     ->where('questions.is_approve', 2);
                 })
                 ->limit(10)
