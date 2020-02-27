@@ -73,6 +73,7 @@ class RankingController extends Controller {
             SELECT SUM(is_correct) as correct_answer, user_id FROM `user_test_series_question_answers` WHERE is_correct = 1 GROUP BY user_id)
             as user_correct_ans GROUP BY user_id ORDER BY total_correct_answer DESC'));
         $dataArray = [];
+        $dataArray1 = [];
         $myRanking = 0;
         $myRankingNo = 0;
         if ($userAnswers) {
@@ -90,14 +91,14 @@ class RankingController extends Controller {
         } else {
             $dataArray['users_ranking'] = [];
         }
-
         $userDetail = User::find($request->user_id);
-        $dataArray['user']['id'] = $userDetail ? $userDetail->id : '';
-        $dataArray['user']['name'] = $userDetail ? $userDetail->name : 'User';
-        $dataArray['user']['profile_pic'] = $userDetail ? $userDetail->profile_pic : '';
-        $dataArray['user']['total_correct_answer'] = $myRanking;
-        $dataArray['user']['rank_number'] = $myRankingNo;
-        return $this->successResponse("Ranking list", $dataArray);
+        $dataArray1['users_leadership'] = array_slice($dataArray['users_ranking'],0,10);
+        $dataArray1['user']['id'] = $userDetail ? $userDetail->id : '';
+        $dataArray1['user']['name'] = $userDetail ? $userDetail->name : 'User';
+        $dataArray1['user']['profile_pic'] = $userDetail ? $userDetail->profile_pic : '';
+        $dataArray1['user']['total_correct_answer'] = $myRanking;
+        $dataArray1['user']['rank_number'] = $myRankingNo;
+        return $this->successResponse("Ranking list", $dataArray1);
     }
     /**
      * @api {get} /api/leadership Leadership
