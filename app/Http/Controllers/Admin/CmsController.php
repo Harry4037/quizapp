@@ -31,7 +31,6 @@ class CmsController extends Controller
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
-
             $query = Cms::query();
             if ($searchKeyword) {
                 $query->where("page_name", 'LIKE', "%$searchKeyword%");
@@ -39,7 +38,6 @@ class CmsController extends Controller
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $cms = $query->take($limit)->offset($offset)->latest()->get();
-
             $cmsArray = [];
             foreach ($cms as $k => $cms) {
                 $cmsArray[$k]['page_name'] = $cms->page_name;
@@ -48,7 +46,6 @@ class CmsController extends Controller
                 $cmsArray[$k]['email'] = $cms->email;
                 $cmsArray[$k]['action'] = '<a href="' . route('admin.cms.edit', $cms) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;';
             }
-
             $data['data'] = $cmsArray;
             return $data;
         } catch (\Exception $e) {
@@ -59,7 +56,6 @@ class CmsController extends Controller
     public function cmsEdit(Request $request, Cms $cms)
     {
         try {
-
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
                     'description' => [
@@ -70,18 +66,15 @@ class CmsController extends Controller
                 if ($validator->fails()) {
                     return redirect()->route('admin.cms.edit', $cms->id)->withErrors($validator)->withInput();
                 }
-
                 $cms->description = $request->description;
                 $cms->title = $request->mobile;
                 // $cms->email = $request->email;
-
                 if ($cms->save()) {
                     return redirect()->route('admin.cms.index')->with('status', 'CMS has been updated successfully.');
                 } else {
                     return redirect()->route('admin.cms.index')->with('error', 'Something went be wrong.');
                 }
             }
-
             return view('admin.cms.edit', [
                 'cms' => $cms,
             ]);
@@ -89,5 +82,4 @@ class CmsController extends Controller
             return redirect()->route('admin.cms.index')->with('error', $ex->getMessage());
         }
     }
-
 }

@@ -165,8 +165,9 @@ class QuestionController extends Controller
         if (!$request->user_id) {
 
             $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-                ->where(function ($query) use ($request) {
-                    $query->where('questions.is_approve', 2);
+                ->where(function ($query) use ($lang, $request) {
+                    $query->where('questions.lang', $lang)
+                    ->where('questions.is_approve', 2);
                 })
                 ->limit(10)
                 ->get();
