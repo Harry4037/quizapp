@@ -162,43 +162,44 @@ class QuestionController extends Controller {
             return $this->errorResponse("Flag is missing.");
         }
         if (!$request->user_id) {
+            $lang1 = $request->lang;
+        $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
+            ->where(function ($query) use ($lang1, $request) {
+                $query->where('questions.lang', $lang1)
+                ->where('questions.is_approve', 2);
+            })
+            ->limit(10)
+            ->get();
+        $dataArray = [];
+        $totatlTime = 0;
+        foreach ($questions as $k => $question) {
+            $answers = Answer::where("question_id", $question->id)->get();
+            $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
+            $user1 = User::where('id', $question->user_id)->withTrashed()->first();
+            $dataArray[$k]['id'] = $question->id;
+            $dataArray[$k]['user']['id'] = $user1 ? $user1->id : 0;
+            $dataArray[$k]['user']['name'] = $user1 ? $user1->name : '';
+            $dataArray[$k]['user']['profile_pic'] = $user1 ? $user1->profile_pic : '';
+            $dataArray[$k]['description'] = $question->description;
+            $dataArray[$k]['ques_image'] = $question->ques_image;
+            $dataArray[$k]['ques_time'] = $question->ques_time;
+            $dataArray[$k]['is_like'] = $isLike ? true : false;
 
-            $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-                    ->where(function($query)use($request) {
-                        $query->where('questions.is_approve', 2);
-                    })
-                    ->limit(10)
-                    ->get();
-            $dataArray = [];
-            $totatlTime = 0;
-            foreach ($questions as $k => $question) {
-                $answers = Answer::where("question_id", $question->id)->get();
-                $isLike = UserQuestionLike::where(["question_id" => $question->id, "user_id" => $request->user_id])->first();
-                $user1 = User::where('id', $question->user_id)->withTrashed()->first();
-                $dataArray[$k]['id'] = $question->id;
-                $dataArray[$k]['user']['id'] = $user1 ? $user1->id : 0;
-                $dataArray[$k]['user']['name'] = $user1 ? $user1->name : '';
-                $dataArray[$k]['user']['profile_pic'] = $user1 ? $user1->profile_pic : '';
-                $dataArray[$k]['description'] = $question->description;
-                $dataArray[$k]['ques_image'] = $question->ques_image;
-                $dataArray[$k]['ques_time'] = $question->ques_time;
-                $dataArray[$k]['is_like'] = $isLike ? true : false;
+            $date = Carbon::parse($question->created_at);
+            $date1 = $date->format("d-M-Y");
+            $time1 = $date->format("h:i A");
 
-                $date = Carbon::parse($question->created_at);
-                $date1 = $date->format("d-M-Y");
-                $time1 = $date->format("h:i A");
-
-                $dataArray[$k]['ques_date_time'] = $date1 . " at " . $time1;
-                $dataArray[$k]['answers'] = $answers;
-                $totatlTime += $question->ques_time;
-            }
-            shuffle($dataArray);
-            $data['question_time'] = $totatlTime;
-            $data['questions'] = $dataArray;
-            $data['page'] = 1;
-            return $this->successResponse("Question list.", $data);
+            $dataArray[$k]['ques_date_time'] = $date1 . " at " . $time1;
+            $dataArray[$k]['answers'] = $answers;
+            $totatlTime += $question->ques_time;
         }
+        shuffle($dataArray);
+        $data['question_time'] = $totatlTime;
+        $data['questions'] = $dataArray;
+        $data['page'] = 1;
+        return $this->successResponse("Question list.", $data);
 
+    }
         $user = User::find($request->user_id);
         $lang = 1;
         if ($user) {
