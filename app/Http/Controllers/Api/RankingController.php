@@ -92,7 +92,7 @@ class RankingController extends Controller {
             $dataArray['users_ranking'] = [];
         }
         $userDetail = User::find($request->user_id);
-        $dataArray1['users_leadership'] = array_slice($dataArray['users_ranking'],0,10);
+        $dataArray1['users_ranking'] = array_slice($dataArray['users_ranking'],0,10);
         $dataArray1['user']['id'] = $userDetail ? $userDetail->id : '';
         $dataArray1['user']['name'] = $userDetail ? $userDetail->name : 'User';
         $dataArray1['user']['profile_pic'] = $userDetail ? $userDetail->profile_pic : '';
