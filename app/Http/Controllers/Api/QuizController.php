@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Exception;
-use App\Models\Quiz;
-use App\Models\Question;
 use App\Models\Answer;
-use Carbon\Carbon;
+use App\Models\Question;
+use App\Models\Quiz;
 use App\Models\UserQuiz;
 use App\Models\UserQuizQuestionAnswer;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
 
-class QuizController extends Controller {
+class QuizController extends Controller
+{
 
     /**
      * @api {get} /api/quiz-detail  Quiz Detail
@@ -46,8 +47,9 @@ class QuizController extends Controller {
      *   }
      *
      */
-    public function quizDetail(Request $request) {
-        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->orderBy('start_date_time','DESC')->first();
+    public function quizDetail(Request $request)
+    {
+        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->orderBy('start_date_time', 'DESC')->first();
         //       $quiz = Quiz::where('id', 1)->first();
         if ($quiz) {
             $dataArray = [];
@@ -75,7 +77,7 @@ class QuizController extends Controller {
      * @apiGroup Quiz
      *
      * @apiParam {String} user_id User ID.
-     * 
+     *
      * @apiSuccess {String} success true
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Daily Quiz Found.
@@ -145,11 +147,12 @@ class QuizController extends Controller {
      *   }
      *
      */
-    public function startQuiz(Request $request) {
+    public function startQuiz(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing.");
         }
-        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->orderBy('start_date_time','DESC')->first();
+        $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->orderBy('start_date_time', 'DESC')->first();
 
         if ($quiz) {
 
@@ -236,7 +239,8 @@ class QuizController extends Controller {
      *   }
      *
      */
-    public function submitQuiz(Request $request) {
+    public function submitQuiz(Request $request)
+    {
         if (empty($request->input())) {
             return $this->errorResponse("Parameter Body Missing.");
         }

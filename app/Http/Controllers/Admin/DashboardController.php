@@ -3,21 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Question;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DashboardController extends Controller {
+class DashboardController extends Controller
+{
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
 
         $userAnswers = DB::select(DB::raw('SELECT SUM(correct_answer) as total_correct_answer, user_id
@@ -28,7 +29,7 @@ class DashboardController extends Controller {
         $rankingArray = [];
         if ($userAnswers) {
             foreach ($userAnswers as $k => $userAnswer) {
-                $user = User::where('id',$userAnswer->user_id)->withTrashed()->first();
+                $user = User::where('id', $userAnswer->user_id)->withTrashed()->first();
                 $rankingArray[$k]['user_id'] = $userAnswer->user_id;
                 $rankingArray[$k]['name'] = $user ? $user->name : 'User';
                 $rankingArray[$k]['profile_pic'] = $user ? $user->profile_pic : '';
@@ -38,7 +39,7 @@ class DashboardController extends Controller {
             $rankingArray = [];
         }
 
-        $totalQuestionCount = Question::where('deleted_at','=' ,NULL)->count();
+        $totalQuestionCount = Question::where('deleted_at', '=', null)->count();
         $usersCount = User::where('user_type_id', 3)->count();
         $creatorCount = User::where('user_type_id', 2)->count();
         return view('admin.dashboard.index', [

@@ -1,10 +1,13 @@
 <?php
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
 use App\Models\User;
 use Illuminate\Http\Request;
-class FeedbackController extends Controller {
+
+class FeedbackController extends Controller
+{
     /**
      * @api {get} /api/feedback  Feedback
      * @apiHeader {String} Accept application/json.
@@ -59,7 +62,8 @@ class FeedbackController extends Controller {
      *   }
      *
      */
-    public function addFeedback(Request $request) {
+    public function addFeedback(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User Id missing.");
         }
@@ -75,7 +79,7 @@ class FeedbackController extends Controller {
             $feedback->description = $request->context;
             $feedback->created_at = new \DateTime("now");
             $feedback->save();
-            return $this->successResponse("Feedback Sent.", (object)[]);
+            return $this->successResponse("Feedback Sent.", (object) []);
         }
     }
 }

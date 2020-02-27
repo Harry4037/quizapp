@@ -3,17 +3,17 @@
 use Illuminate\Http\Request;
 
 /*
-  |--------------------------------------------------------------------------
-  | API Routes
-  |--------------------------------------------------------------------------
-  |
-  | Here is where you can register API routes for your application. These
-  | routes are loaded by the RouteServiceProvider within a group which
-  | is assigned the "api" middleware group. Enjoy building your API!
-  |
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
  */
 
-Route::namespace("Api")->group(function() {
+Route::namespace ("Api")->group(function () {
 
     if (\Request::segment(1) == "api") {
         $myfile = fopen(__DIR__ . "/../storage/input_data.txt", "a") or die("Unable to open file!");
@@ -67,19 +67,17 @@ Route::namespace("Api")->group(function() {
     Route::post('/upload-test-series-images', 'TestSeriesController@uploadTestseriesImages');
 
     //QuestionController
-//    Route::post('/create-question', 'QuestionController@createQuestion');
+    //    Route::post('/create-question', 'QuestionController@createQuestion');
     Route::post('/create-single-question', 'QuestionController@createSingleQuestion');
     Route::get('/question-detail', 'QuestionController@quesDetail');
     Route::get('/year-list', 'QuestionController@yearList');
 
     Route::post('/submit-random-answer', 'QuestionController@submitRandomQuestion');
 
-
     Route::get('/follow', 'FollowController@follow');
 
     Route::post('/add-bookmark', 'BookmarkController@addBookmark');
     Route::get('/bookmark-list', 'BookmarkController@bookmarkList');
-
 
     Route::post('/creator-user-profile', 'UserController@CreatorUserProfile');
 

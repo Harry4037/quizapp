@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\UserAddress;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Validator;
 
-class LoginController extends Controller {
+class LoginController extends Controller
+{
 
     use AuthenticatesUsers;
 
@@ -29,7 +28,8 @@ class LoginController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    protected function credentials(Request $request) {
+    protected function credentials(Request $request)
+    {
         return $request->only($this->username(), 'password', 'user_type_id');
     }
 
@@ -38,7 +38,8 @@ class LoginController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function showLoginForm() {
+    public function showLoginForm()
+    {
 
         if (Auth::guard()->check()) {
             return redirect('/admin/dashboard');
@@ -52,7 +53,8 @@ class LoginController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function validateLogin(Request $request) {
+    public function validateLogin(Request $request)
+    {
         $this->validate($request, [
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -64,7 +66,8 @@ class LoginController extends Controller {
      *
      * @return string
      */
-    public function username() {
+    public function username()
+    {
         return 'email';
     }
 
@@ -76,7 +79,8 @@ class LoginController extends Controller {
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $this->validateLogin($request);
 
         if ($this->hasTooManyLoginAttempts($request)) {
@@ -99,22 +103,23 @@ class LoginController extends Controller {
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
 
         $this->guard()->logout();
         $request->session()->invalidate();
         return redirect()->route('admin.login');
     }
 
-
-    public function changePassword(Request $request) {
+    public function changePassword(Request $request)
+    {
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'old_password' => 'required',
-                        'new_password' => 'bail|required|regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,20}$/',
-                        'confirm_password' => 'required',
-                            ], [
-                        'new_password.regex' => "New password must be minimum six character, One numeric digit, One special character, One uppercase and One lowercase letter."
+                'old_password' => 'required',
+                'new_password' => 'bail|required|regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,20}$/',
+                'confirm_password' => 'required',
+            ], [
+                'new_password.regex' => "New password must be minimum six character, One numeric digit, One special character, One uppercase and One lowercase letter.",
             ]);
             if ($validator->fails()) {
                 return redirect()->route('admin.change-password')->withErrors($validator)->withInput();

@@ -2,28 +2,27 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\AttemptedTestSeries;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
-use Exception;
-use App\Models\User;
-use App\Models\Question;
-use App\Models\TestSeries;
-use App\Models\Subject;
 use App\Models\Answer;
-use App\Models\Exam;
-use Carbon\Carbon;
+use App\Models\AttemptedTestSeries;
 use App\Models\Bookmark;
+use App\Models\Exam;
 use App\Models\Invite;
-use App\Models\UserTestSeries;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\SearchHistory;
-use App\Models\UserTestSeriesQuestionAnswer;
+use App\Models\Question;
 use App\Models\QuestionExam;
+use App\Models\SearchHistory;
+use App\Models\Subject;
+use App\Models\TestSeries;
+use App\Models\User;
+use App\Models\UserTestSeries;
+use App\Models\UserTestSeriesQuestionAnswer;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class TestSeriesController extends Controller {
+class TestSeriesController extends Controller
+{
 
     /**
      * @api {post} /api/create-test-series  Create Test Series
@@ -129,7 +128,8 @@ class TestSeriesController extends Controller {
      *
      *
      */
-    public function createTestSeries(Request $request) {
+    public function createTestSeries(Request $request)
+    {
 
         if (!$request->input()) {
             return $this->errorResponse("Body Json not found.");
@@ -184,7 +184,7 @@ class TestSeriesController extends Controller {
                     $testSeriesQuestion->subject_id = $request->input("subject_id");
                     $testSeriesQuestion->description = $question["question_discription"];
                     $testSeriesQuestion->ques_image = '';
-                    $testSeriesQuestion->is_approve = NULL;
+                    $testSeriesQuestion->is_approve = null;
                     $testSeriesQuestion->ques_time = $question["time_per_question"];
                     $testSeriesQuestion->test_series_id = $testSeries->id;
                     if ($testSeriesQuestion->save()) {
@@ -262,7 +262,8 @@ class TestSeriesController extends Controller {
      *   }
      *
      */
-    public function testSeriesList(Request $request) {
+    public function testSeriesList(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
@@ -289,11 +290,11 @@ class TestSeriesController extends Controller {
             } else {
                 $dataArray[$k]['is_bookmark'] = false;
             }
-            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
-            if($attem){
-                $dataArray[$k]['is_attempted'] = TRUE;
-            }else{
-                $dataArray[$k]['is_attempted'] = FALSE;
+            $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
+            if ($attem) {
+                $dataArray[$k]['is_attempted'] = true;
+            } else {
+                $dataArray[$k]['is_attempted'] = false;
             }
             $dataArray[$k]['total_ques_no'] = $test->total_question;
         }
@@ -318,11 +319,11 @@ class TestSeriesController extends Controller {
             // } else {
             //     $dataArray1[$k]['is_attempted'] = FALSE;
             // }
-            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $test1->id)->first();
-            if($attem){
-                $dataArray1[$k]['is_attempted'] = TRUE;
-            }else{
-                $dataArray1[$k]['is_attempted'] = FALSE;
+            $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $test1->id)->first();
+            if ($attem) {
+                $dataArray1[$k]['is_attempted'] = true;
+            } else {
+                $dataArray1[$k]['is_attempted'] = false;
             }
             $result1 = UserTestSeriesQuestionAnswer::where("user_test_series_id", $test1->id)->get();
             $dataArray1[$k]['total_ques_no'] = count($result1);
@@ -342,11 +343,11 @@ class TestSeriesController extends Controller {
             } else {
                 $inviteArray[$k]['is_bookmark'] = false;
             }
-            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $invite->id)->first();
-            if($attem){
-                $inviteArray[$k]['is_attempted'] = TRUE;
-            }else{
-                $inviteArray[$k]['is_attempted'] = FALSE;
+            $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $invite->id)->first();
+            if ($attem) {
+                $inviteArray[$k]['is_attempted'] = true;
+            } else {
+                $inviteArray[$k]['is_attempted'] = false;
             }
         }
         $invites1 = Invite::where("invite_user_id", $request->user_id)->where("user_test_series_id", '!=', 0)->with('usertestseries')->get();
@@ -369,11 +370,11 @@ class TestSeriesController extends Controller {
             // } else {
             //     $inviteArray1[$k]['is_attempted'] = FALSE;
             // }
-            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $invite1->id)->first();
-            if($attem){
-                $inviteArray1[$k]['is_attempted'] = TRUE;
-            }else{
-                $inviteArray1[$k]['is_attempted'] = FALSE;
+            $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $invite1->id)->first();
+            if ($attem) {
+                $inviteArray1[$k]['is_attempted'] = true;
+            } else {
+                $inviteArray1[$k]['is_attempted'] = false;
             }
         }
 //        $res = array_merge($dataArray, $dataArray1);
@@ -429,7 +430,8 @@ class TestSeriesController extends Controller {
      *   }
      *
      */
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         if (!$request->name) {
             return $this->errorResponse("Input Missing.");
         }
@@ -449,11 +451,11 @@ class TestSeriesController extends Controller {
             $date = Carbon::parse($test->created_at);
             $dataArray[$k]['date'] = $date->format("d-M-Y");
             $dataArray[$k]['flag'] = 1;
-            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
-            if($attem){
-                $dataArray[$k]['is_attempted'] = TRUE;
-            }else{
-                $dataArray[$k]['is_attempted'] = FALSE;
+            $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $test->id)->first();
+            if ($attem) {
+                $dataArray[$k]['is_attempted'] = true;
+            } else {
+                $dataArray[$k]['is_attempted'] = false;
             }
             $fav = Bookmark::where('user_id', $request->user_id)->where("test_series_id", $test->id)->first();
             if ($fav) {
@@ -489,11 +491,11 @@ class TestSeriesController extends Controller {
             // } else {
             //     $dataArray1[$k]['is_attempted'] = FALSE;
             // }
-            $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $test1->id)->first();
-            if($attem){
-                $dataArray1[$k]['is_attempted'] = TRUE;
-            }else{
-                $dataArray1[$k]['is_attempted'] = FALSE;
+            $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $test1->id)->first();
+            if ($attem) {
+                $dataArray1[$k]['is_attempted'] = true;
+            } else {
+                $dataArray1[$k]['is_attempted'] = false;
             }
             $dataArray1[$k]['total_ques_no'] = $totalQuestions;
             $dataArray1[$k]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;
@@ -567,7 +569,8 @@ class TestSeriesController extends Controller {
      *   }
      *
      */
-    public function publishTestSeries(Request $request) {
+    public function publishTestSeries(Request $request)
+    {
         if (!$request->test_series_id) {
             return $this->errorResponse("Test Series ID Missing.");
         }
@@ -669,7 +672,8 @@ class TestSeriesController extends Controller {
      *   }
      *
      */
-    public function testSeries(Request $request) {
+    public function testSeries(Request $request)
+    {
         if (!$request->test_series_id) {
             return $this->errorResponse("Test series ID missing.");
         }
@@ -759,7 +763,6 @@ class TestSeriesController extends Controller {
                 }
                 $result1 = UserTestSeriesQuestionAnswer::where("user_test_series_id", $testSeries->id)->get();
 
-
                 $dataArray = [];
                 $dataArray['test_series']['id'] = $testSeries->id;
                 $dataArray['test_series']['name'] = $testSeries->name;
@@ -776,9 +779,9 @@ class TestSeriesController extends Controller {
                     $dataArray['test_series']['is_bookmark'] = false;
                 }
                 if ($testSeries->is_attempted == 1) {
-                    $dataArray['test_series']['is_attempted'] = TRUE;
+                    $dataArray['test_series']['is_attempted'] = true;
                 } else {
-                    $dataArray['test_series']['is_attempted'] = FALSE;
+                    $dataArray['test_series']['is_attempted'] = false;
                 }
 
                 $dataArray['test_series']['lang'] = $testSeries->lang == 1 ? "English" : "Hindi";
@@ -800,16 +803,16 @@ class TestSeriesController extends Controller {
             $dataArray['test_series']['total_question'] = count($result1);
             $dataArray['test_series']['question_time'] = $totalTime;
 
-                $attemp = new AttemptedTestSeries();
+            $attemp = new AttemptedTestSeries();
 
-                if ($request->flag == 2) {
-                    $attemp->test_series_id = 0;
-                    $attemp->user_test_series_id = $request->test_series_id;
-                }
-                $attemp->user_id = $request->user_id;
-                $attemp->flag = $request->flag;
-                $attemp->created_at = new \DateTime("now");
-                $attemp->save();
+            if ($request->flag == 2) {
+                $attemp->test_series_id = 0;
+                $attemp->user_test_series_id = $request->test_series_id;
+            }
+            $attemp->user_id = $request->user_id;
+            $attemp->flag = $request->flag;
+            $attemp->created_at = new \DateTime("now");
+            $attemp->save();
             return $this->successResponse("Test Series.", $dataArray);
         } else {
             return $this->errorResponse("Invalid Test Series ID.");
@@ -859,7 +862,8 @@ class TestSeriesController extends Controller {
      *   }
      *
      */
-    public function searchHistory(Request $request) {
+    public function searchHistory(Request $request)
+    {
         $trendSearchs = SearchHistory::limit(5)->orderBy("search_count", "DESC")->get();
         $recentSearchs = SearchHistory::limit(5)->orderBy("updated_at", "DESC")->get();
         $dataArrayTrending = [];
@@ -893,9 +897,9 @@ class TestSeriesController extends Controller {
                     $dataArrayRecent[$i]['name'] = $testSeries->name ? $testSeries->name : '';
                     $dataArrayRecent[$i]['flag'] = $trendSearch->flag;
                     if ($testSeries->is_attempted == 1) {
-                        $dataArrayRecent[$i]['is_attempted'] = TRUE;
+                        $dataArrayRecent[$i]['is_attempted'] = true;
                     } else {
-                        $dataArrayRecent[$i]['is_attempted'] = FALSE;
+                        $dataArrayRecent[$i]['is_attempted'] = false;
                     }
                     $i++;
                 }
@@ -960,7 +964,8 @@ class TestSeriesController extends Controller {
      *
      *
      */
-    public function myTestseries(Request $request) {
+    public function myTestseries(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
@@ -1018,7 +1023,8 @@ class TestSeriesController extends Controller {
      *
      *
      */
-    public function deleteTestseries(Request $request) {
+    public function deleteTestseries(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
@@ -1081,7 +1087,8 @@ class TestSeriesController extends Controller {
      *   }
      *
      */
-    public function testSeriesDetails(Request $request) {
+    public function testSeriesDetails(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
@@ -1123,7 +1130,7 @@ class TestSeriesController extends Controller {
                 $minut = $minut + $que->ques_time;
             }
             $dataArray['total_question'] = count($series);
-            ;
+
             $dataArray['total_time'] = $minut;
         }
         return $this->successResponse("Test Series Details.", $dataArray);
@@ -1153,7 +1160,8 @@ class TestSeriesController extends Controller {
      *   }
      *
      */
-    public function uploadTestseriesImages(Request $request) {
+    public function uploadTestseriesImages(Request $request)
+    {
         if (!$request->test_series_images) {
             return $this->errorResponse("Images missing.");
         }
@@ -1183,7 +1191,7 @@ class TestSeriesController extends Controller {
                     if (strpos($ques_file_name, ".")) {
                         $question->ques_image = $ques_file_name;
                     } else {
-                        $question->ques_image = NULL;
+                        $question->ques_image = null;
                     }
 
                     $question->save();
@@ -1195,7 +1203,7 @@ class TestSeriesController extends Controller {
         }
     }
 
-        /**
+    /**
      * @api {get} /api/validate-test-series Validate Test Series
      * @apiHeader {String} Accept application/json.
      * @apiName GetValidateTestSeries
@@ -1231,7 +1239,8 @@ class TestSeriesController extends Controller {
      *       "data": {}
      *   }
      */
-    public function validateTestseries(Request $request) {
+    public function validateTestseries(Request $request)
+    {
 
         if (!$request->user_id) {
             return $this->errorResponse("User Id not found.");
@@ -1245,10 +1254,10 @@ class TestSeriesController extends Controller {
         if (!$request->subject_id) {
             return $this->errorResponse("Subject id not found.");
         }
-        $validate = TestSeries::where('name',$request->series_name)->first();
-        if($validate){
+        $validate = TestSeries::where('name', $request->series_name)->first();
+        if ($validate) {
             return $this->errorResponse("Name Already exist.");
-        }else{
+        } else {
             return $this->successResponse("Name Available.", (object) []);
         }
 

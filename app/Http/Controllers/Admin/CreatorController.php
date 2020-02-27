@@ -3,22 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
-use App\Models\User;
-use Validator;
 use Illuminate\Validation\Rule;
+use Validator;
 
-class CreatorController extends Controller {
+class CreatorController extends Controller
+{
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
         return view('admin.creator.index', [
             'js' => $js,
@@ -26,7 +28,8 @@ class CreatorController extends Controller {
         ]);
     }
 
-    public function userList(Request $request) {
+    public function userList(Request $request)
+    {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
@@ -34,10 +37,10 @@ class CreatorController extends Controller {
 
             $query = User::query()->where("user_type_id", 2);
             if ($searchKeyword) {
-                $query->where(function($q) use($searchKeyword) {
+                $query->where(function ($q) use ($searchKeyword) {
                     $q->where("name", "LIKE", "%$searchKeyword%")
-                            ->orWhere("email", "LIKE", "%$searchKeyword%")
-                            ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                        ->orWhere("email", "LIKE", "%$searchKeyword%")
+                        ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
                 });
             }
             $data['recordsTotal'] = $query->count();
@@ -59,10 +62,10 @@ class CreatorController extends Controller {
                     $usersArray[$k]['approval'] = '<label class="btn btn-danger btn-xs disabled">Rejected</label>';
                 } else {
                     $usersArray[$k]['approval'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_creator" id="' . $user->id . '" data-status="' . $user->is_approve . '"><i class="fa fa-check"></i> Accept </a>&nbsp;&nbsp;'
-                            . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_creator" id="' . $user->id . '" data-status="' . $user->is_approve . '"><i class="fa fa-times"></i> Reject </a>';
+                    . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_creator" id="' . $user->id . '" data-status="' . $user->is_approve . '"><i class="fa fa-times"></i> Reject </a>';
                 }
                 $usersArray[$k]['action'] = '<a href="' . route('admin.creator.edit', $user) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;'
-                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $user->id . '" ><i class="fa fa-trash"></i> Delete </a>';
+                . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $user->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
             $data['data'] = $usersArray;
@@ -72,7 +75,8 @@ class CreatorController extends Controller {
         }
     }
 
-    public function userDelete(Request $request) {
+    public function userDelete(Request $request)
+    {
         try {
             $user = User::find($request->id);
             if ($user) {
@@ -86,16 +90,17 @@ class CreatorController extends Controller {
         }
     }
 
-    public function userEdit(Request $request, User $user) {
+    public function userEdit(Request $request, User $user)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'profile_pic' => ['mimes:jpeg,jpg,png'],
-                            'user_name' => ['required'],
-                            'lang_type' => ['required'],
-                            'dob' => ['required'],
-                            'user_email' => ['email'],
+                    'profile_pic' => ['mimes:jpeg,jpg,png'],
+                    'user_name' => ['required'],
+                    'lang_type' => ['required'],
+                    'dob' => ['required'],
+                    'user_email' => ['email'],
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.creator.edit', $user->id)->withErrors($validator)->withInput();
@@ -124,14 +129,15 @@ class CreatorController extends Controller {
             }
 
             return view('admin.creator.edit', [
-                'user' => $user
+                'user' => $user,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.creator.index')->with('error', $ex->getMessage());
         }
     }
 
-    public function userStatus(Request $request) {
+    public function userStatus(Request $request)
+    {
         try {
             if ($request->isMethod('post')) {
                 $user = User::findOrFail($request->record_id);
@@ -149,24 +155,25 @@ class CreatorController extends Controller {
         }
     }
 
-    public function userAdd(Request $request) {
+    public function userAdd(Request $request)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'mobile_number' => [
-                                'bail',
-                                'required',
-                                Rule::unique('users', 'mobile_number')->where(function ($query) use($request) {
-                                            return $query->where(['mobile_number' => $request->mobile_number, 'user_type_id' => 2])
-                                                            ->whereNull('deleted_at');
-                                        }),
-                            ],
-                            'profile_pic' => ['mimes:jpeg,jpg,png'],
-                            'user_name' => ['required'],
-                            'lang_type' => ['required'],
-                            'dob' => ['required'],
-                            'user_email' => ['email'],
+                    'mobile_number' => [
+                        'bail',
+                        'required',
+                        Rule::unique('users', 'mobile_number')->where(function ($query) use ($request) {
+                            return $query->where(['mobile_number' => $request->mobile_number, 'user_type_id' => 2])
+                                ->whereNull('deleted_at');
+                        }),
+                    ],
+                    'profile_pic' => ['mimes:jpeg,jpg,png'],
+                    'user_name' => ['required'],
+                    'lang_type' => ['required'],
+                    'dob' => ['required'],
+                    'user_email' => ['email'],
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.creator.add')->withErrors($validator)->withInput();
@@ -204,7 +211,8 @@ class CreatorController extends Controller {
         }
     }
 
-    public function checkMobileNumber(Request $request) {
+    public function checkMobileNumber(Request $request)
+    {
         $existing = User::where(['mobile_number' => $request->mobile_number, 'user_type_id' => 2])->first();
         if ($existing) {
             return response()->json(false);
@@ -213,7 +221,8 @@ class CreatorController extends Controller {
         }
     }
 
-    public function acceptCreator(Request $request) {
+    public function acceptCreator(Request $request)
+    {
         try {
             if ($request->isMethod('post')) {
                 $user = User::findOrFail($request->record_id);
@@ -236,7 +245,8 @@ class CreatorController extends Controller {
         }
     }
 
-    public function rejectCreator(Request $request) {
+    public function rejectCreator(Request $request)
+    {
         try {
             if ($request->isMethod('post')) {
                 $user = User::findOrFail($request->record_id);

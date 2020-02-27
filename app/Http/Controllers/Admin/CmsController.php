@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
 use App\Models\Cms;
+use Illuminate\Http\Request;
 use Validator;
 
-class CmsController extends Controller {
+class CmsController extends Controller
+{
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
         return view('admin.cms.index', [
             'js' => $js,
@@ -25,7 +25,8 @@ class CmsController extends Controller {
         ]);
     }
 
-    public function cmsList(Request $request) {
+    public function cmsList(Request $request)
+    {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
@@ -55,15 +56,16 @@ class CmsController extends Controller {
         }
     }
 
-    public function cmsEdit(Request $request, Cms $cms) {
+    public function cmsEdit(Request $request, Cms $cms)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'description' => [
-                                'bail',
-                                'required',
-                            ],
+                    'description' => [
+                        'bail',
+                        'required',
+                    ],
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.cms.edit', $cms->id)->withErrors($validator)->withInput();
@@ -81,7 +83,7 @@ class CmsController extends Controller {
             }
 
             return view('admin.cms.edit', [
-                'cms' => $cms
+                'cms' => $cms,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.cms.index')->with('error', $ex->getMessage());

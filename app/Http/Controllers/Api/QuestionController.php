@@ -3,25 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Exception;
-use App\Models\UserQuestionLike;
-use App\Models\Question;
-use Illuminate\Support\Facades\Storage;
-use App\Models\UserAnswer;
 use App\Models\Answer;
-use App\Models\TestSeries;
-use App\Models\Subject;
-use App\Models\Exam;
-use Carbon\Carbon;
 use App\Models\AttemptedTestSeries;
+use App\Models\Exam;
+use App\Models\Question;
+use App\Models\QuestionExam;
+use App\Models\Subject;
+use App\Models\TestSeries;
+use App\Models\User;
+use App\Models\UserAnswer;
+use App\Models\UserQuestionLike;
 use App\Models\UserTestSeries;
 use App\Models\UserTestSeriesQuestionAnswer;
-use App\Models\User;
-use App\Models\QuestionExam;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class QuestionController extends Controller {
+class QuestionController extends Controller
+{
 
     /**
      * @api {get} /api/question-list  Question list
@@ -157,18 +157,19 @@ class QuestionController extends Controller {
      *   }
      *
      */
-    public function questionList(Request $request) {
+    public function questionList(Request $request)
+    {
         if (!$request->flag) {
             return $this->errorResponse("Flag is missing.");
         }
         if (!$request->user_id) {
 
             $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-            ->where(function($query)use($request) {
-                $query->where('questions.is_approve', 2);
-            })
-            ->limit(10)
-            ->get();
+                ->where(function ($query) use ($request) {
+                    $query->where('questions.is_approve', 2);
+                })
+                ->limit(10)
+                ->get();
             $dataArray = [];
             $totatlTime = 0;
             foreach ($questions as $k => $question) {
@@ -224,37 +225,37 @@ class QuestionController extends Controller {
             $page = $user->page_no * 10;
 
             $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-                    ->where(function($query)use($lang, $request, $userQuestionIds) {
-                        $query->where('questions.lang', $lang)
+                ->where(function ($query) use ($lang, $request, $userQuestionIds) {
+                    $query->where('questions.lang', $lang)
                         ->where('questions.is_approve', 2);
 //                        ->whereNotIn("questions.id", $userQuestionIds);
-                    })
-                    ->offset($page)
-                    ->limit($limit)
-                    ->get();
+                })
+                ->offset($page)
+                ->limit($limit)
+                ->get();
 
             if ($questions->count() == 0) {
                 $page = $user->skip_page_no * 10;
                 $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-                        ->where(function($query)use($lang, $request, $userQuestionIds) {
-                            $query->where('questions.lang', $lang)
+                    ->where(function ($query) use ($lang, $request, $userQuestionIds) {
+                        $query->where('questions.lang', $lang)
                             ->where('questions.is_approve', 2)
                             ->whereNotIn("questions.id", $userQuestionIds);
+                    })
+                    ->offset($page)
+                    ->limit($limit)
+                    ->get();
+                if ($questions->count() == 0) {
+                    $page = 0;
+                    $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
+                        ->where(function ($query) use ($lang, $request, $userQuestionIds) {
+                            $query->where('questions.lang', $lang)
+                                ->where('questions.is_approve', 2)
+                                ->whereNotIn("questions.id", $userQuestionIds);
                         })
                         ->offset($page)
                         ->limit($limit)
                         ->get();
-                if ($questions->count() == 0) {
-                    $page = 0;
-                    $questions = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-                            ->where(function($query)use($lang, $request, $userQuestionIds) {
-                                $query->where('questions.lang', $lang)
-                                ->where('questions.is_approve', 2)
-                                ->whereNotIn("questions.id", $userQuestionIds);
-                            })
-                            ->offset($page)
-                            ->limit($limit)
-                            ->get();
                     $user->skip_page_no = $page + 1;
                     $user->save();
                 } else {
@@ -321,16 +322,16 @@ class QuestionController extends Controller {
             }
 
             $query = Question::select('questions.id', 'questions.user_id', 'questions.description', 'questions.ques_image', 'questions.ques_time', 'questions.created_at')
-                    ->join('question_exams', function ($join) use($request, $userQuestionIds) {
-                        $join->on('questions.id', '=', 'question_exams.question_id')
+                ->join('question_exams', function ($join) use ($request, $userQuestionIds) {
+                    $join->on('questions.id', '=', 'question_exams.question_id')
                         ->whereIn("question_exams.exam_id", $request->exam_id)
                         ->whereNotIn("question_exams.question_id", $userQuestionIds);
-                    })
-                    ->where(function($query)use($lang, $request) {
-                $query->where('questions.lang', $request->lang)
-                ->where('questions.is_approve', 2)
-                ->where('subject_id', $request->subject_id);
-            });
+                })
+                ->where(function ($query) use ($lang, $request) {
+                    $query->where('questions.lang', $request->lang)
+                        ->where('questions.is_approve', 2)
+                        ->where('subject_id', $request->subject_id);
+                });
             if ($request->year) {
                 $query->where('year', $request->year);
             }
@@ -361,12 +362,11 @@ class QuestionController extends Controller {
             $data['questions'] = $dataArray;
             $data['page'] = 0;
 
-
             $testSeries = new UserTestSeries();
             $testSeries->user_id = $request->user_id;
             $exam_name = Exam::where('id', $request->exam_id)->first();
             // $testSeries->name = $exam_name->name . "_" . time();
-            $testSeries->name = $exam_name->name . "_" ;
+            $testSeries->name = $exam_name->name . "_";
             $testSeries->exam_id = $request->exam_id[0];
             $testSeries->subject_id = $request->subject_id[0];
             $testSeries->lang = $request->lang;
@@ -377,22 +377,22 @@ class QuestionController extends Controller {
                     $UserTestSeriesQuestionAnswer->user_id = $request->user_id;
                     $UserTestSeriesQuestionAnswer->user_test_series_id = $testSeries->id;
                     $UserTestSeriesQuestionAnswer->question_id = $question->id;
-                    $UserTestSeriesQuestionAnswer->answer_id = NULL;
-                    $UserTestSeriesQuestionAnswer->is_correct = NULL;
+                    $UserTestSeriesQuestionAnswer->answer_id = null;
+                    $UserTestSeriesQuestionAnswer->is_correct = null;
                     $UserTestSeriesQuestionAnswer->status = 0;
                     $UserTestSeriesQuestionAnswer->save();
                 }
             }
-            UserTestSeries::where('id',$testSeries->id)->update(['name' => $exam_name->name . "_" . $testSeries->id]);
+            UserTestSeries::where('id', $testSeries->id)->update(['name' => $exam_name->name . "_" . $testSeries->id]);
             $data['test_series_id'] = $testSeries->id;
             $data['test_series_name'] = $exam_name->name . "_" . $testSeries->id;
-$attemp = new AttemptedTestSeries();
-    $attemp->test_series_id = 0;
-    $attemp->user_test_series_id = $testSeries->id;
-$attemp->user_id = $request->user_id;
-$attemp->flag = 2;
-$attemp->created_at = new \DateTime("now");
-$attemp->save();
+            $attemp = new AttemptedTestSeries();
+            $attemp->test_series_id = 0;
+            $attemp->user_test_series_id = $testSeries->id;
+            $attemp->user_id = $request->user_id;
+            $attemp->flag = 2;
+            $attemp->created_at = new \DateTime("now");
+            $attemp->save();
             return $this->successResponse("Question list.", $data);
         } else {
             return $this->errorResponse("Invlaid flag type.");
@@ -511,7 +511,8 @@ $attemp->save();
      *   }
      *
      */
-    public function submitQuestion(Request $request) {
+    public function submitQuestion(Request $request)
+    {
         if (empty($request->input())) {
             return $this->errorResponse("Parameter Body Missing.");
         }
@@ -567,8 +568,8 @@ $attemp->save();
                 foreach ($request->input("questions") as $k => $question) {
                     $UserTestSeriesQuestionAnswer = UserTestSeriesQuestionAnswer::where(["user_test_series_id" => $UserTestSeries->id, "question_id" => $question['question_id']])->first();
 //                    $UserTestSeriesQuestionAnswer = new UserTestSeriesQuestionAnswer();
-//                    $UserTestSeriesQuestionAnswer->user_test_series_id = $UserTestSeries->id;
-//                    $UserTestSeriesQuestionAnswer->question_id = $question['question_id'];
+                    //                    $UserTestSeriesQuestionAnswer->user_test_series_id = $UserTestSeries->id;
+                    //                    $UserTestSeriesQuestionAnswer->question_id = $question['question_id'];
                     $UserTestSeriesQuestionAnswer->answer_id = $question['answer_id'];
                     $UserTestSeriesQuestionAnswer->status = 1;
                     $UserTestSeriesQuestionAnswer->is_correct = $question['is_correct'];
@@ -597,7 +598,6 @@ $attemp->save();
                 $dataArray['test_series']['your_rank'] = "2300";
                 $dataArray['test_series']['total_rank'] = "5000";
                 $dataArray['test_series']['questions'] = $questions;
-
 
                 return $this->successResponse("Answer's submitted successfully.", $dataArray);
             } else {
@@ -632,7 +632,8 @@ $attemp->save();
      *   }
      *
      */
-    public function likeQuestion(Request $request) {
+    public function likeQuestion(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing.");
         }
@@ -655,72 +656,72 @@ $attemp->save();
     }
 
 //    public function createQuestion(Request $request) {
-//        if (!$request->description) {
-//            return $this->errorResponse("description missing");
-//        }
-//        if (!$request->ans1) {
-//            return $this->errorResponse("description missing");
-//        }
-//        if (!$request->ans2) {
-//            return $this->errorResponse("description missing");
-//        }
-//        if (!$request->ans3) {
-//            return $this->errorResponse("description missing");
-//        }
-//        if (!$request->ans4) {
-//            return $this->errorResponse("description missing");
-//        }
-//        if (!$request->correct_ans) {
-//            return $this->errorResponse("Correct Answer missing");
-//        }
-//        if (!$request->ques_time) {
-//            return $this->errorResponse("Question Time missing");
-//        }
-//        if (!$request->test_series_id) {
-//            return $this->errorResponse("Test Series Id missing");
-//        }
-//        $testSeries = TestSeries::find($request->test_series_id);
-//        if (!$testSeries) {
-//            return $this->errorResponse("Test Series not found.");
-//        }
-////        if (!$request->subject_id) {
-////            return $this->errorResponse("subject ID missing");
-////        }
-//        $question = new Question();
-//        if ($request->ques_pic) {
-//            if (!$request->hasFile("ques_pic")) {
-//                return $this->errorResponse("Question pic not valid file type.");
-//            }
-//            $ques_image = $request->file("ques_pic");
-//            $ques = Storage::disk('public')->put('ques_pic', $ques_image);
-//            $ques_file_name = basename($ques);
-//            $question->ques_image = $ques_file_name;
-//        } else {
-//            $question->ques_image = NULL;
-//        }
-//        $question->exam_id = $testSeries->exam_id;
-//        $question->user_id = $testSeries->user_id;
-//        $question->description = $request->description;
-//        $question->ques_time = $request->ques_time;
-//        $question->subject_id = $testSeries->subject_id;
-//        $question->test_series_id = $request->test_series_id;
-//        if ($question->save()) {
-//            for ($i = 1; $i <= 4; $i++) {
-//                $answer = new Answer();
-//                $answer->question_id = $question->id;
-//                $answer->description = $request->ans . $i;
-//                if ($request->correct_ans == "ans" . $i) {
-//                    $answer->is_answer = 1;
-//                } else {
-//                    $answer->is_answer = 0;
-//                }
-//                $answer->save();
-//            }
-//            return $this->successResponse("Question Added successfully", (object) []);
-//        } else {
-//            return $this->errorResponse("Something went wrong.");
-//        }
-//    }
+    //        if (!$request->description) {
+    //            return $this->errorResponse("description missing");
+    //        }
+    //        if (!$request->ans1) {
+    //            return $this->errorResponse("description missing");
+    //        }
+    //        if (!$request->ans2) {
+    //            return $this->errorResponse("description missing");
+    //        }
+    //        if (!$request->ans3) {
+    //            return $this->errorResponse("description missing");
+    //        }
+    //        if (!$request->ans4) {
+    //            return $this->errorResponse("description missing");
+    //        }
+    //        if (!$request->correct_ans) {
+    //            return $this->errorResponse("Correct Answer missing");
+    //        }
+    //        if (!$request->ques_time) {
+    //            return $this->errorResponse("Question Time missing");
+    //        }
+    //        if (!$request->test_series_id) {
+    //            return $this->errorResponse("Test Series Id missing");
+    //        }
+    //        $testSeries = TestSeries::find($request->test_series_id);
+    //        if (!$testSeries) {
+    //            return $this->errorResponse("Test Series not found.");
+    //        }
+    ////        if (!$request->subject_id) {
+    ////            return $this->errorResponse("subject ID missing");
+    ////        }
+    //        $question = new Question();
+    //        if ($request->ques_pic) {
+    //            if (!$request->hasFile("ques_pic")) {
+    //                return $this->errorResponse("Question pic not valid file type.");
+    //            }
+    //            $ques_image = $request->file("ques_pic");
+    //            $ques = Storage::disk('public')->put('ques_pic', $ques_image);
+    //            $ques_file_name = basename($ques);
+    //            $question->ques_image = $ques_file_name;
+    //        } else {
+    //            $question->ques_image = NULL;
+    //        }
+    //        $question->exam_id = $testSeries->exam_id;
+    //        $question->user_id = $testSeries->user_id;
+    //        $question->description = $request->description;
+    //        $question->ques_time = $request->ques_time;
+    //        $question->subject_id = $testSeries->subject_id;
+    //        $question->test_series_id = $request->test_series_id;
+    //        if ($question->save()) {
+    //            for ($i = 1; $i <= 4; $i++) {
+    //                $answer = new Answer();
+    //                $answer->question_id = $question->id;
+    //                $answer->description = $request->ans . $i;
+    //                if ($request->correct_ans == "ans" . $i) {
+    //                    $answer->is_answer = 1;
+    //                } else {
+    //                    $answer->is_answer = 0;
+    //                }
+    //                $answer->save();
+    //            }
+    //            return $this->successResponse("Question Added successfully", (object) []);
+    //        } else {
+    //            return $this->errorResponse("Something went wrong.");
+    //        }
+    //    }
 
     /**
      * @api {post} /api/create-single-question  Create Single Question
@@ -807,7 +808,8 @@ $attemp->save();
      *  }
      *
      */
-    public function createSingleQuestion(Request $request) {
+    public function createSingleQuestion(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing");
         }
@@ -862,7 +864,7 @@ $attemp->save();
             $ques_file_name = basename($ques);
             $question->ques_image = $ques_file_name;
         } else {
-            $question->ques_image = NULL;
+            $question->ques_image = null;
         }
         $question->lang = $request->lang;
         $question->user_id = $request->user_id;
@@ -926,7 +928,8 @@ $attemp->save();
      *
      *
      */
-    public function yearList(Request $request) {
+    public function yearList(Request $request)
+    {
         $years = Question::whereNotNull('year')->groupBy('year')->select('year')->get();
         return $this->successResponse("List of Years", $years);
     }
@@ -969,7 +972,8 @@ $attemp->save();
      *       "data": {}
      *
      */
-    public function submitRandomQuestion(Request $request) {
+    public function submitRandomQuestion(Request $request)
+    {
         if (empty($request->input())) {
             return $this->errorResponse("Parameter Body Missing.");
         }
@@ -1069,7 +1073,8 @@ $attemp->save();
      *   }
      *
      */
-    public function quesDetail(Request $request) {
+    public function quesDetail(Request $request)
+    {
         if (!$request->ques_id) {
             return $this->errorResponse("Questions Id Missing.");
         }

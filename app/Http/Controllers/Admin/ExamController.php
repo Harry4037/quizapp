@@ -3,23 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use App\Models\Exam;
-use App\Models\Question;
-use Carbon\Carbon;
-use Validator;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Validator;
 
-class ExamController extends Controller {
+class ExamController extends Controller
+{
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
         return view('admin.exam.index', [
             'js' => $js,
@@ -27,7 +26,8 @@ class ExamController extends Controller {
         ]);
     }
 
-    public function examList(Request $request) {
+    public function examList(Request $request)
+    {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
@@ -45,7 +45,7 @@ class ExamController extends Controller {
             foreach ($exams as $k => $exam) {
                 $examsArray[$k]['name'] = $exam->name;
                 $examsArray[$k]['action'] = '<a href="' . route('admin.exam.edit', $exam) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $exam->id . '" ><i class="fa fa-trash"></i> Delete </a>';
+                . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $exam->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
             $data['data'] = $examsArray;
@@ -55,7 +55,8 @@ class ExamController extends Controller {
         }
     }
 
-    public function examDelete(Request $request) {
+    public function examDelete(Request $request)
+    {
         try {
             $exam = Exam::find($request->id);
             if ($exam) {
@@ -69,19 +70,20 @@ class ExamController extends Controller {
         }
     }
 
-    public function examEdit(Request $request, Exam $exam) {
+    public function examEdit(Request $request, Exam $exam)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'exam_name' => [
-                                'bail',
-                                'required',
-                                Rule::unique('exams', 'name')->ignore($exam->id)->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->exam_name])
-                                                            ->whereNull('deleted_at');
-                                        }),
-                            ],
+                    'exam_name' => [
+                        'bail',
+                        'required',
+                        Rule::unique('exams', 'name')->ignore($exam->id)->where(function ($query) use ($request) {
+                            return $query->where(['name' => $request->exam_name])
+                                ->whereNull('deleted_at');
+                        }),
+                    ],
 
                 ]);
                 if ($validator->fails()) {
@@ -97,27 +99,28 @@ class ExamController extends Controller {
             }
 
             return view('admin.exam.edit', [
-                'exam' => $exam
+                'exam' => $exam,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.exam.index')->with('error', $ex->getMessage());
         }
     }
 
-    public function examAdd(Request $request) {
+    public function examAdd(Request $request)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'exam_name' => [
-                                'bail',
-                                'required',
-                                Rule::unique('exams', 'name')->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->exam_name])
-                                                            ->whereNull('deleted_at');
-                                        }),
-                            ],
-                    ]);
+                    'exam_name' => [
+                        'bail',
+                        'required',
+                        Rule::unique('exams', 'name')->where(function ($query) use ($request) {
+                            return $query->where(['name' => $request->exam_name])
+                                ->whereNull('deleted_at');
+                        }),
+                    ],
+                ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.exam.add')->withErrors($validator)->withInput();
                 }

@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AttemptedTestSeries;
-use App\Models\User;
-use Carbon\Carbon;
-use App\Models\TestSeries;
 use App\Models\Bookmark;
-use App\Models\Subject;
-use App\Models\UserTestSeries;
 use App\Models\Question;
+use App\Models\Subject;
+use App\Models\TestSeries;
+use App\Models\User;
+use App\Models\UserTestSeries;
 use App\Models\UserTestSeriesQuestionAnswer;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
-class BookmarkController extends Controller {
+class BookmarkController extends Controller
+{
 
     /**
      * @api {post} /api/add-bookmark  Bookmark
@@ -97,7 +98,8 @@ class BookmarkController extends Controller {
      *   }
      *
      */
-    public function addBookmark(Request $request) {
+    public function addBookmark(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User Id missing.");
         }
@@ -227,7 +229,8 @@ class BookmarkController extends Controller {
      *   }
      *
      */
-    public function bookmarkList(Request $request) {
+    public function bookmarkList(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User Id missing.");
         }
@@ -254,11 +257,11 @@ class BookmarkController extends Controller {
                 $bookmarkArray[$key]['lang'] = $bookmark->testseriesDetail->lang;
                 $subject = Subject::where("id", $bookmark->testseriesDetail->subject_id)->first();
                 $bookmarkArray[$key]['subject_name'] = $subject->name;
-                $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $bookmark->testseriesDetail->id)->first();
-                if($attem){
-                    $bookmarkArray[$key]['is_attempted'] = TRUE;
-                }else{
-                    $bookmarkArray[$key]['is_attempted'] = FALSE;
+                $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $bookmark->testseriesDetail->id)->first();
+                if ($attem) {
+                    $bookmarkArray[$key]['is_attempted'] = true;
+                } else {
+                    $bookmarkArray[$key]['is_attempted'] = false;
                 }
             }
 
@@ -280,11 +283,11 @@ class BookmarkController extends Controller {
                 // } else {
                 //     $bookmarkArray[$key]['is_attempted'] = FALSE;
                 // }
-                $attem =  AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $bookmark->usertestseriesDetail->id)->first();
-                if($attem){
-                    $bookmarkArray1[$key]['is_attempted'] = TRUE;
-                }else{
-                    $bookmarkArray1[$key]['is_attempted'] = FALSE;
+                $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $bookmark->usertestseriesDetail->id)->first();
+                if ($attem) {
+                    $bookmarkArray1[$key]['is_attempted'] = true;
+                } else {
+                    $bookmarkArray1[$key]['is_attempted'] = false;
                 }
                 $bookmarkArray1[$key]['total_question'] = $totalQuestion;
                 $bookmarkArray1[$key]['total_time'] = $totalTime == 0 ? 60 : (int) $totalTime;

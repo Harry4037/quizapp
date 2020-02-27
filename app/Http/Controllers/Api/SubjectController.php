@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Exception;
 use App\Models\Subject;
+use Illuminate\Http\Request;
 
-class SubjectController extends Controller {
+class SubjectController extends Controller
+{
 
     /**
      * @api {get} /api/subject-list  Subject List
@@ -48,7 +47,8 @@ class SubjectController extends Controller {
      *
      *
      */
-    public function subjectList(Request $request) {
+    public function subjectList(Request $request)
+    {
         $subjects = Subject::get();
         return $this->successResponse("List of Subjects", $subjects);
     }

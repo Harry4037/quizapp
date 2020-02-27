@@ -3,29 +3,29 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
-use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Exam;
-use App\Models\User;
-use App\Models\Subject;
-use Carbon\Carbon;
+use App\Models\Question;
 use App\Models\QuestionComment;
-use Validator;
-use Illuminate\Validation\Rule;
 use App\Models\QuestionExam;
+use App\Models\Subject;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Validator;
 
-class QuestionController extends Controller {
+class QuestionController extends Controller
+{
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $css = [
-            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'
+            'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'bower_components/datatables.net/js/jquery.dataTables.min.js',
-            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'
+            'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
         return view('admin.question.index', [
             'js' => $js,
@@ -33,18 +33,19 @@ class QuestionController extends Controller {
         ]);
     }
 
-    public function questionList(Request $request) {
+    public function questionList(Request $request)
+    {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = Question::query()->with('subject')->where('is_approve', '!=', NULL);
-            $query->where(function($query) {
+            $query = Question::query()->with('subject')->where('is_approve', '!=', null);
+            $query->where(function ($query) {
                 $query->where(["quiz_id" => 0]);
             });
             if ($searchKeyword) {
-                $query->whereHas("subject", function($query) use($searchKeyword) {
+                $query->whereHas("subject", function ($query) use ($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
                 });
             }
@@ -62,10 +63,10 @@ class QuestionController extends Controller {
                     $questionsArray[$k]['status'] = '<label class="btn btn-danger btn-xs disabled">Rejected</label>';
                 } else {
                     $questionsArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $question->id . '" data-status="' . $question->is_approve . '"><i class="fa fa-check"></i> Accept </a>&nbsp;&nbsp;'
-                            . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $question->id . '" data-status="' . $question->is_approve . '"><i class="fa fa-times"></i> Reject </a>';
+                    . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $question->id . '" data-status="' . $question->is_approve . '"><i class="fa fa-times"></i> Reject </a>';
                 }
                 $questionsArray[$k]['action'] = '<a href="' . route('admin.question.edit', $question) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;<a href="' . route('admin.question.comment-list', $question) . '" class="btn btn-warning btn-xs"><i class="fa fa-comment"></i> Comment </a>&nbsp;&nbsp;&nbsp;'
-                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $question->id . '" ><i class="fa fa-trash"></i> Delete </a>';
+                . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $question->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
             $data['data'] = $questionsArray;
@@ -75,7 +76,8 @@ class QuestionController extends Controller {
         }
     }
 
-    public function questionDelete(Request $request) {
+    public function questionDelete(Request $request)
+    {
         try {
             $question = Question::find($request->id);
             if ($question) {
@@ -91,20 +93,21 @@ class QuestionController extends Controller {
         }
     }
 
-    public function questionEdit(Request $request, Question $question) {
+    public function questionEdit(Request $request, Question $question)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'description' => [
-                                'bail',
-                                'required',
-                                'description' => ['required'],
-                                Rule::unique('questions', 'description')->ignore($question->id)->where(function ($query) use($request) {
-                                            return $query->where(['description' => $request->description])
-                                                            ->whereNull('deleted_at');
-                                        }),
-                            ],
+                    'description' => [
+                        'bail',
+                        'required',
+                        'description' => ['required'],
+                        Rule::unique('questions', 'description')->ignore($question->id)->where(function ($query) use ($request) {
+                            return $query->where(['description' => $request->description])
+                                ->whereNull('deleted_at');
+                        }),
+                    ],
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.question.edit', $question->id)->withErrors($validator)->withInput();
@@ -174,10 +177,10 @@ class QuestionController extends Controller {
             $questionExam = QuestionExam::where('question_id', $question->id)->pluck("exam_id")->toArray();
 //            dd($questionExam);
             $css = [
-                'bower_components/select2/dist/css/select2.min.css'
+                'bower_components/select2/dist/css/select2.min.css',
             ];
             $js = [
-                'bower_components/select2/dist/js/select2.min.js'
+                'bower_components/select2/dist/js/select2.min.js',
             ];
             return view('admin.question.edit', [
                 'question' => $question,
@@ -186,25 +189,26 @@ class QuestionController extends Controller {
                 'answers' => $answers,
                 'questionExam' => $questionExam,
                 'js' => $js,
-                'css' => $css
+                'css' => $css,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.question.index')->with('error', $ex->getMessage());
         }
     }
 
-    public function questionAdd(Request $request) {
+    public function questionAdd(Request $request)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'description' => [
-                                'required',
-                                Rule::unique('questions', 'description')->where(function ($query) use($request) {
-                                            return $query->where(['description' => $request->description])
-                                                            ->whereNull('deleted_at');
-                                        }),
-                            ],
+                    'description' => [
+                        'required',
+                        Rule::unique('questions', 'description')->where(function ($query) use ($request) {
+                            return $query->where(['description' => $request->description])
+                                ->whereNull('deleted_at');
+                        }),
+                    ],
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.question.add')->withErrors($validator)->withInput();
@@ -279,10 +283,10 @@ class QuestionController extends Controller {
                 return redirect()->route('admin.question.index')->with('status', 'Question has been updated successfully.');
             }
             $css = [
-                'bower_components/select2/dist/css/select2.min.css'
+                'bower_components/select2/dist/css/select2.min.css',
             ];
             $js = [
-                'bower_components/select2/dist/js/select2.min.js'
+                'bower_components/select2/dist/js/select2.min.js',
             ];
             $subjects = Subject::get();
             $exams = Exam::get();
@@ -290,14 +294,15 @@ class QuestionController extends Controller {
                 'subjects' => $subjects,
                 'exams' => $exams,
                 'js' => $js,
-                'css' => $css
+                'css' => $css,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.question.index')->with('error', $ex->getMessage());
         }
     }
 
-    public function acceptQues(Request $request) {
+    public function acceptQues(Request $request)
+    {
         try {
             if ($request->isMethod('post')) {
                 $question = Question::findOrFail($request->record_id);
@@ -320,7 +325,8 @@ class QuestionController extends Controller {
         }
     }
 
-    public function rejectQues(Request $request) {
+    public function rejectQues(Request $request)
+    {
         try {
             if ($request->isMethod('post')) {
                 $question = Question::findOrFail($request->record_id);
@@ -343,24 +349,26 @@ class QuestionController extends Controller {
         }
     }
 
-    public function comment(Request $request, Question $question) {
+    public function comment(Request $request, Question $question)
+    {
 
         $comm = QuestionComment::where('question_id', $question->id)->with(['user'])->get();
         return view('admin.question.comment-list', [
             'comments' => $comm,
-            'question' => $question
+            'question' => $question,
         ]);
     }
 
-    public function commentAdd(Request $request, Question $question) {
+    public function commentAdd(Request $request, Question $question)
+    {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'message' => [
-                                'bail',
-                                'required',
-                            ],
+                    'message' => [
+                        'bail',
+                        'required',
+                    ],
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.question.comment-list', $question)->withErrors($validator)->withInput();
@@ -372,8 +380,8 @@ class QuestionController extends Controller {
                 $quescom->description = $request->message;
 
                 if ($quescom->save()) {
-                    $comm = Question::where('id',$request->question->id)->first();
-                    $user = User::where('id',$comm->user_id)->first();
+                    $comm = Question::where('id', $request->question->id)->first();
+                    $user = User::where('id', $comm->user_id)->first();
                     if ($user && $user->device_token) {
                         $this->generateNotification($user->id, 1, "Quizz Application", "Admin Has Comment On Your Question.");
                         $this->androidPushNotification(2, "Quizz Application", "Admin Has Comment On Your Question.", $user->device_token, 5, $this->notificationCount($user->id), $request->question->id);
@@ -386,7 +394,7 @@ class QuestionController extends Controller {
             }
 
             return view('admin.question.comment-add', [
-                'question' => $question
+                'question' => $question,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.question.comment-list', $question)->with('error', $ex->getMessage());

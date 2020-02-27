@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Follow;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class FollowController extends Controller
 {
 
-     /**
+    /**
      * @api {get} /api/follow  Follow
      * @apiHeader {String} Accept application/json.
      * @apiName GetFollow
@@ -90,7 +90,8 @@ class FollowController extends Controller
      *   }
      *
      */
-    public function follow(Request $request) {
+    public function follow(Request $request)
+    {
         if (!$request->user_id) {
             return $this->errorResponse("User Id missing.");
         }
