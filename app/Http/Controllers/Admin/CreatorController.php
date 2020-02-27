@@ -119,7 +119,7 @@ class CreatorController extends Controller
                 $user->lang = $request->lang_type;
                 $user->designation = $request->designation;
                 $user->qualification = $request->qualification;
-                $user->dob = $request->dob;
+                $user->dob = date('Y-m-d', strtotime($request->dob));
                 $user->into_line = $request->about;
                 if ($user->save()) {
                     return redirect()->route('admin.creator.index')->with('status', 'Creator has been updated successfully.');
@@ -201,7 +201,7 @@ class CreatorController extends Controller
                 $user->lang = $request->lang_type;
                 $user->designation = $request->designation;
                 $user->qualification = $request->qualification;
-                $user->dob = $request->dob;
+                $user->dob = date('Y-m-d', strtotime($request->dob));
                 $user->into_line = $request->about;
                 $user->created_by = auth()->user()->id;
                 $user->updated_by = auth()->user()->id;
