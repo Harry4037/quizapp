@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -111,6 +112,43 @@ class LoginController extends Controller
         return redirect()->route('admin.login');
     }
 
+    public function profile(Request $request) {
+        try {
+
+            if ($request->isMethod("post")) {
+                $validator = Validator::make($request->all(), [
+                            'profile_pic' => ['mimes:jpeg,jpg,png'],
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.profile')->withErrors($validator)->withInput();
+                }
+
+                $user = User::find(auth()->user()->id);
+                if ($request->hasFile('profile_pic')) {
+                    $userImg = User::selectRaw('profile_pic img')->find($user->id);
+                    Storage::disk('public')->delete('profile_pic/' . $userImg->img);
+                    $profile_pic = $request->file("profile_pic");
+                    $userImage = Storage::disk('public')->put('profile_pic', $profile_pic);
+                    $user_file_name = basename($userImage);
+                    $user->profile_pic = $user_file_name;
+                }
+                $user->name = $request->name;
+                $user->designation = $request->designation;
+                $user->into_line = $request->into_line;
+
+                if ($user->save()) {
+
+                    return redirect()->route('admin.profile')->with('status', 'Profile has been updated successfully.');
+                } else {
+                    return redirect()->route('admin.profile')->with('error', 'Something went be wrong.');
+                }
+            }
+
+            return view('admin.profile');
+        } catch (\Exception $ex) {
+            return redirect()->route('admin.dashboard')->with('error', $ex->getMessage());
+        }
+    }
     public function changePassword(Request $request)
     {
         if ($request->isMethod("post")) {

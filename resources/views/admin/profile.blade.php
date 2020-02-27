@@ -26,7 +26,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-4 col-sm-4 col-xs-12">Name <span class="error">*</span></label>
                                 <div class="col-md-4 col-sm-6 col-xs-6">
-                                    <input placeholder="Name" type="text" class="form-control" name="user_name" id="user_name" value="{{auth()->user()->name}}">
+                                    <input placeholder="Name" type="text" class="form-control"  name="name" id="name" value="{{auth()->user()->name}}">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -42,52 +42,19 @@
                                 </div>
                             </div>
                             <div class="ln_solid"></div>
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12"><u>Restaurant Address</u></label>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-4 col-sm-4 col-xs-12">Address1 <span class="error">*</span></label>
-                                <div class="col-md-4 col-sm-6 col-xs-6">
-                                    <input placeholder="Address1" type="text" class="form-control" name="address1" id="address1" value="@if(isset($userAddress)){{$userAddress->address1}}@endif">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-4 col-sm-4 col-xs-12">Address2</label>
-                                <div class="col-md-4 col-sm-6 col-xs-6">
-                                    <input placeholder="Address2" type="text" class="form-control" name="address2" id="address2" value="@if(isset($userAddress)){{$userAddress->address2}}@endif">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-4 col-sm-4 col-xs-12">City <span class="error">*</span></label>
-                                <div class="col-md-4 col-sm-6 col-xs-6">
-                                    <input placeholder="City" type="text" class="form-control" name="city" id="city" value="@if(isset($userAddress)){{$userAddress->city}}@endif">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-4 col-sm-4 col-xs-12">State <span class="error">*</span></label>
-                                <div class="col-md-4 col-sm-6 col-xs-6">
-                                    <input placeholder="State" type="text" class="form-control" name="state" id="state" value="@if(isset($userAddress)){{$userAddress->state}}@endif">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-4 col-sm-4 col-xs-12">PinCode <span class="error">*</span></label>
-                                <div class="col-md-4 col-sm-6 col-xs-6">
-                                    <input placeholder="Pincode" type="text" class="form-control" name="pin_code" id="pin_code" value="@if(isset($userAddress)){{$userAddress->zip}}@endif">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-4 col-sm-4 col-xs-12">Latitude <span class="error">*</span></label>
-                                <div class="col-md-4 col-sm-6 col-xs-6">
-                                    <input placeholder="Latitude" type="text" class="form-control" name="lat" id="lat" value="@if(isset($userAddress)){{$userAddress->lat}}@endif">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-4 col-sm-4 col-xs-12">Longitude <span class="error">*</span></label>
-                                <div class="col-md-4 col-sm-6 col-xs-6">
-                                    <input placeholder="Longitude" type="text" class="form-control" name="long" id="long" value="@if(isset($userAddress)){{$userAddress->long}}@endif">
-                                </div>
-                            </div>
 
+                            <div class="form-group">
+                                <label class="control-label col-md-4 col-sm-4 col-xs-12">Designation <span class="error">*</span></label>
+                                <div class="col-md-4 col-sm-6 col-xs-6">
+                                    <input placeholder="Designation" type="text" class="form-control" name="designation" id="designation" value="{{auth()->user()->designation}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-4 col-sm-4 col-xs-12">into_line <span class="error">*</span></label>
+                                <div class="col-md-4 col-sm-6 col-xs-6">
+                                    <input placeholder="About Us" type="text" class="form-control" name="into_line" id="into_line" value="{{auth()->user()->into_line}}">
+                                </div>
+                            </div>
                             <div class="box-footer">
                                 <div class="form-group">
                                     <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-4">
