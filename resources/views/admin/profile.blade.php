@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-4 col-sm-4 col-xs-12">into_line <span class="error">*</span></label>
+                                <label class="control-label col-md-4 col-sm-4 col-xs-12">About Us <span class="error">*</span></label>
                                 <div class="col-md-4 col-sm-6 col-xs-6">
                                     <input placeholder="About Us" type="text" class="form-control" name="into_line" id="into_line" value="{{auth()->user()->into_line}}">
                                 </div>
