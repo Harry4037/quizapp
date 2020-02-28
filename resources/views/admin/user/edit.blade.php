@@ -41,6 +41,15 @@
 <script>
     $(document).ready(function () {
 
+        $('#dob').daterangepicker({
+            singleDatePicker: true,
+            maxDate: new Date(),
+            singleClasses: "picker_2",
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+        });
+
         $("#userForm").validate({
             rules: {
                 profile_pic: {

@@ -112,7 +112,7 @@ class UserController extends Controller
                 $user->lang = $request->lang_type;
                 $user->designation = $request->designation;
                 $user->qualification = $request->qualification;
-                $user->dob = $request->dob;
+                $user->dob = date('Y-m-d', strtotime($request->dob));
 
                 if ($user->save()) {
                     return redirect()->route('admin.user.index')->with('status', 'User has been updated successfully.');

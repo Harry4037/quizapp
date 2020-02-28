@@ -31,10 +31,21 @@
             <input placeholder="Email" type="text" class="form-control" name="user_email" id="user_email" value="@if(isset($user)){{$user->email}}@endif">
         </div>
     </div>
-    <div class="form-group">
+    {{-- <div class="form-group">
         <label class="control-label col-md-4 col-sm-4 col-xs-12">Dob <span class="error">*</span></label>
         <div class="col-md-4 col-sm-6 col-xs-6">
             <input type="date" class="form-control valid" name="dob" id="dob" placeholder="Date Of Birth" value="@if(isset($user)){{$user->dob}}@endif">
+        </div>
+    </div> --}}
+    <div class="form-group">
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Dob <span class="error">*</span></label>
+        <div class="col-md-4 col-sm-6 col-xs-6">
+            <div class="input-group date">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control pull-right" id="dob" name="dob" value="@if(isset($user)){{$user->dob}}@endif">
+            </div>
         </div>
     </div>
     <div class="form-group">
