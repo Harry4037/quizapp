@@ -42,6 +42,7 @@
     $(document).ready(function () {
         $('#dob').daterangepicker({
             singleDatePicker: true,
+            defaultDate: null,
             maxDate: new Date(),
             singleClasses: "picker_2",
             locale: {
