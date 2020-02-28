@@ -406,7 +406,8 @@ class QuestionController extends Controller {
             $testSeries = new UserTestSeries();
             $testSeries->user_id = $request->user_id;
             $exam_name = Exam::where('id', $request->exam_id)->first();
-            $testSeries->name = $exam_name->name . "_" . time();
+            // $testSeries->name = $exam_name->name . "_" . time();
+            $testSeries->name = $exam_name->name . "_" ;
             $testSeries->exam_id = $request->exam_id[0];
             $testSeries->subject_id = $request->subject_id[0];
             $testSeries->lang = $request->lang;
@@ -424,9 +425,9 @@ class QuestionController extends Controller {
                 }
             }
             $data['test_series_id'] = $testSeries->id;
-            $data['test_series_name'] = $testSeries->name;
+            UserTestSeries::where('id',$testSeries->id)->update(['name' => $exam_name->name . "_" . $testSeries->id]);
+            $data['test_series_name'] = $exam_name->name . "_" . $testSeries->id;
             $attemp = new AttemptedTestSeries();
-
             $attemp->test_series_id = 0;
             $attemp->user_test_series_id = $testSeries->id;
             $attemp->user_id = $request->user_id;
