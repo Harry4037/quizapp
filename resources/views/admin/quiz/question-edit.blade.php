@@ -41,7 +41,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-4 col-sm-4 col-xs-12">Question Img. Preview</label>
                                     <div class="col-md-4 col-sm-6 col-xs-6">
-                                        <img class="img-circle" src="{{$question->ques_image}}" style="width: 50%">
+                                        <img src="{{$question->ques_image}}" style="width: 50%">
                                     </div>
                                 </div>
                                 @endif
