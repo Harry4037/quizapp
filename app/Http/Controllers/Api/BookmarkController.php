@@ -241,7 +241,9 @@ class BookmarkController extends Controller
 
             $bookmarkArray = [];
             $bookmarkArray1 = [];
-            $bookmarks = Bookmark::where("user_id", $request->user_id)->where('test_series_id', '!=', 0)->with(['testseriesDetail'])->get();
+            $bookmarks = Bookmark::where("user_id", $request->user_id)->where('test_series_id', '!=', 0)->with(['testseriesDetail'])->whereHas("testseriesDetail", function($query) {
+                $query->whereNull("deleted_at");
+            })->get();
             foreach ($bookmarks as $key => $bookmark) {
                 $totalTime = Question::where("test_series_id", $bookmark->testseriesDetail->id)->sum("ques_time");
                 $bookmarkArray[$key]['id'] = $bookmark->id;
@@ -265,7 +267,9 @@ class BookmarkController extends Controller
                 }
             }
 
-            $userbookmarks = Bookmark::where("user_id", $request->user_id)->where('user_test_series_id', '!=', 0)->with(['usertestseriesDetail'])->get();
+            $userbookmarks = Bookmark::where("user_id", $request->user_id)->where('user_test_series_id', '!=', 0)->with(['usertestseriesDetail'])->whereHas("usertestseriesDetail", function($query) {
+                $query->whereNull("deleted_at");
+            })->get();
             foreach ($userbookmarks as $key => $bookmark) {
                 $totalQuestion = UserTestSeriesQuestionAnswer::where("user_test_series_id", $bookmark->usertestseriesDetail->id)->count();
                 $questionId = UserTestSeriesQuestionAnswer::where("user_test_series_id", $bookmark->usertestseriesDetail->id)->pluck("question_id", "question_id");
