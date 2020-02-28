@@ -689,7 +689,7 @@ class QuestionController extends Controller {
         $user = User::where('id', $question->user_id)->first();
         if ($user && $user->device_token) {
             $this->generateNotification($user->id, 1, "Quizz Application", "Your Question Is Liked.");
-            $this->androidPushNotification(2, "Quizz Application", "Your Question Is Liked By". $lik->name . ".", $user->device_token, 0, $this->notificationCount($user->id), $question->id);
+            $this->androidPushNotification(2, "Quizz Application", "Your Question Is Liked By ". $lik->name . ".", $user->device_token, 0, $this->notificationCount($user->id), $question->id);
         }
 
         return $this->successResponse("Question Liked.", (object) []);
