@@ -349,7 +349,7 @@ class TestSeriesController extends Controller
             } else {
                 $inviteArray[$k]['is_bookmark'] = false;
             }
-            $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $invite->id)->first();
+            $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 1)->where("test_series_id", $invite->testseries->id)->first();
             if ($attem) {
                 $inviteArray[$k]['is_attempted'] = true;
             } else {
@@ -377,7 +377,7 @@ class TestSeriesController extends Controller
             // } else {
             //     $inviteArray1[$k]['is_attempted'] = FALSE;
             // }
-            $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $invite1->id)->first();
+            $attem = AttemptedTestSeries::where("user_id", $request->user_id)->where("flag", 2)->where("user_test_series_id", $invite1->usertestseries->id)->first();
             if ($attem) {
                 $inviteArray1[$k]['is_attempted'] = true;
             } else {
