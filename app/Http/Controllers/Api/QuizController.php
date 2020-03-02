@@ -152,6 +152,11 @@ class QuizController extends Controller
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing.");
         }
+
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
+        }
         $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->orderBy('start_date_time', 'DESC')->first();
 
         if ($quiz) {

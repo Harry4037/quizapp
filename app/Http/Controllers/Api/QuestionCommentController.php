@@ -97,6 +97,11 @@ class QuestionCommentController extends Controller
         if (!$request->comment) {
             return $this->errorResponse("Comment missing");
         }
+
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
+        }
         $user = User::find($request->user_id);
         if (!$user) {
             return $this->errorResponse("User not found.");

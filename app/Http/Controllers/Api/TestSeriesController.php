@@ -137,6 +137,11 @@ class TestSeriesController extends Controller
         if (!$request->input("user_id")) {
             return $this->errorResponse("User ID Missing.");
         }
+
+        $valid =  $this->isActiveCheck($request->input("user_id"));
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
+        }
         if (!$request->input("series_name")) {
             return $this->errorResponse("Series Name Missing.");
         }
@@ -577,6 +582,11 @@ class TestSeriesController extends Controller
         if (!$request->user_id) {
             return $this->errorResponse("User ID Missing.");
         }
+
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
+        }
         $user = User::find($request->user_id);
         if (!$user) {
             return $this->errorResponse("Invalid User ID");
@@ -679,6 +689,11 @@ class TestSeriesController extends Controller
         }
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing.");
+        }
+
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
         }
         if (!in_array($request->flag, [1, 2])) {
             return $this->errorResponse("Select valid flag type");
@@ -1030,6 +1045,11 @@ class TestSeriesController extends Controller
         }
         if (!in_array($request->flag, [1, 2])) {
             return $this->errorResponse("Select valid flag type");
+        }
+
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
         }
         $user = User::find($request->user_id);
         if (!$user) {

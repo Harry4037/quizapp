@@ -199,6 +199,7 @@ class QuestionController extends Controller {
             $data['page'] = 1;
             return $this->successResponse("Question list.", $data);
         }
+
         $user = User::find($request->user_id);
         $lang = 1;
         if ($user) {
@@ -339,6 +340,10 @@ class QuestionController extends Controller {
 
             return $this->successResponse("Question list.", $data);
         } elseif ($request->flag == 2) {
+            $valid = $this->isActiveCheck($request->user_id);
+            if($valid){
+                return $this->errorResponse("You Are Blocked By Admin");
+            }
             if (!$request->exam_id) {
                 return $this->errorResponse("Exam Id missing.");
             }
@@ -680,6 +685,11 @@ class QuestionController extends Controller {
         if (!$request->question_id) {
             return $this->errorResponse("Question ID missing.");
         }
+
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
+        }
         $lik = User::where('id', $request->user_id)->first();
         $userQuesLike = new UserQuestionLike();
         $userQuesLike->user_id = $request->user_id;
@@ -851,6 +861,11 @@ class QuestionController extends Controller {
     public function createSingleQuestion(Request $request) {
         if (!$request->user_id) {
             return $this->errorResponse("User ID missing");
+        }
+
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
         }
         if (!$request->subject_id) {
             return $this->errorResponse("Subject ID missing");
@@ -1123,6 +1138,10 @@ class QuestionController extends Controller {
         }
         if (!$request->user_id) {
             return $this->errorResponse("User Id Missing.");
+        }
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
         }
         $question = Question::find($request->ques_id);
         if (!$question) {

@@ -82,6 +82,10 @@ class InviteController extends Controller
         if (!in_array($request->flag, [1, 2])) {
             return $this->errorResponse("Select valid flag type");
         }
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
+        }
         $user = User::find($request->user_id);
         if (!$user) {
             return $this->errorResponse("User not found.");

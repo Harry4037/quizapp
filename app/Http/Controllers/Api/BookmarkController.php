@@ -109,6 +109,10 @@ class BookmarkController extends Controller
         if (!$request->test_series_id) {
             return $this->errorResponse("test_series Id missing.");
         }
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
+        }
         if ($request->flag == 1) {
             $test_series = TestSeries::find($request->test_series_id);
             if (!$test_series) {

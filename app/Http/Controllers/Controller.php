@@ -11,6 +11,7 @@ use LaravelFCM\Facades\FCM;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
+use App\Models\User;
 
 class Controller extends BaseController
 {
@@ -98,6 +99,16 @@ class Controller extends BaseController
     {
         $nCount = Notification::where(["user_id" => $userId, "is_read" => 0])->count();
         return $nCount;
+    }
+
+    public function isActiveCheck($userId)
+    {
+        $check = User::find($userId);
+        if($check){
+            if($check->user_type_id == 2 && $check->is_active == 0){
+                return true;
+            }
+        }
     }
 
 }

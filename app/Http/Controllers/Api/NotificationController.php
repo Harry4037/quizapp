@@ -66,6 +66,7 @@ class NotificationController extends Controller
         if (!$request->user_id) {
             return $this->errorResponse("User Id missing.");
         }
+
         $user = User::find($request->user_id);
         if (!$user) {
             return $this->errorResponse("user not found.");

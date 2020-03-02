@@ -70,6 +70,10 @@ class FeedbackController extends Controller
         if (!$request->context) {
             return $this->errorResponse("Context missing.");
         }
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
+        }
         $user = User::find($request->user_id);
         if (!$user) {
             return $this->errorResponse("user not found.");

@@ -98,6 +98,10 @@ class FollowController extends Controller
         if (!$request->follow_user_id) {
             return $this->errorResponse("Follow User Id missing.");
         }
+        $valid = $this->isActiveCheck($request->user_id);
+        if($valid){
+            return $this->errorResponse("You Are Blocked By Admin");
+        }
         $follow_user_id = User::find($request->follow_user_id);
         if (!$follow_user_id) {
             return $this->errorResponse("Follow User not found.");
