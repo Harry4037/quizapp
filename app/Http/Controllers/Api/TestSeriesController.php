@@ -140,7 +140,7 @@ class TestSeriesController extends Controller
 
         $valid =  $this->isActiveCheck($request->input("user_id"));
         if($valid){
-            return $this->errorResponse("You Are Blocked By Admin");
+            return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
         }
         if (!$request->input("series_name")) {
             return $this->errorResponse("Series Name Missing.");
@@ -585,7 +585,7 @@ class TestSeriesController extends Controller
 
         $valid = $this->isActiveCheck($request->user_id);
         if($valid){
-            return $this->errorResponse("You Are Blocked By Admin");
+            return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
         }
         $user = User::find($request->user_id);
         if (!$user) {
@@ -693,7 +693,7 @@ class TestSeriesController extends Controller
 
         $valid = $this->isActiveCheck($request->user_id);
         if($valid){
-            return $this->errorResponse("You Are Blocked By Admin");
+            return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
         }
         if (!in_array($request->flag, [1, 2])) {
             return $this->errorResponse("Select valid flag type");
@@ -1049,7 +1049,7 @@ class TestSeriesController extends Controller
 
         $valid = $this->isActiveCheck($request->user_id);
         if($valid){
-            return $this->errorResponse("You Are Blocked By Admin");
+            return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
         }
         $user = User::find($request->user_id);
         if (!$user) {

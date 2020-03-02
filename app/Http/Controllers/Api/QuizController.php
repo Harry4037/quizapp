@@ -155,7 +155,7 @@ class QuizController extends Controller
 
         $valid = $this->isActiveCheck($request->user_id);
         if($valid){
-            return $this->errorResponse("You Are Blocked By Admin");
+            return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
         }
         $quiz = Quiz::whereDate('start_date_time', '=', date('Y-m-d'))->orderBy('start_date_time', 'DESC')->first();
 

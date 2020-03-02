@@ -111,7 +111,7 @@ class BookmarkController extends Controller
         }
         $valid = $this->isActiveCheck($request->user_id);
         if($valid){
-            return $this->errorResponse("You Are Blocked By Admin");
+            return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
         }
         if ($request->flag == 1) {
             $test_series = TestSeries::find($request->test_series_id);

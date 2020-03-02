@@ -100,7 +100,7 @@ class QuestionCommentController extends Controller
 
         $valid = $this->isActiveCheck($request->user_id);
         if($valid){
-            return $this->errorResponse("You Are Blocked By Admin");
+            return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
         }
         $user = User::find($request->user_id);
         if (!$user) {

@@ -342,7 +342,7 @@ class QuestionController extends Controller {
         } elseif ($request->flag == 2) {
             $valid = $this->isActiveCheck($request->user_id);
             if($valid){
-                return $this->errorResponse("You Are Blocked By Admin");
+                return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
             }
             if (!$request->exam_id) {
                 return $this->errorResponse("Exam Id missing.");
@@ -688,7 +688,7 @@ class QuestionController extends Controller {
 
         $valid = $this->isActiveCheck($request->user_id);
         if($valid){
-            return $this->errorResponse("You Are Blocked By Admin");
+            return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
         }
         $lik = User::where('id', $request->user_id)->first();
         $userQuesLike = new UserQuestionLike();
@@ -865,7 +865,7 @@ class QuestionController extends Controller {
 
         $valid = $this->isActiveCheck($request->user_id);
         if($valid){
-            return $this->errorResponse("You Are Blocked By Admin");
+            return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
         }
         if (!$request->subject_id) {
             return $this->errorResponse("Subject ID missing");
@@ -1141,7 +1141,7 @@ class QuestionController extends Controller {
         }
         $valid = $this->isActiveCheck($request->user_id);
         if($valid){
-            return $this->errorResponse("You Are Blocked By Admin");
+            return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
         }
         $question = Question::find($request->ques_id);
         if (!$question) {
