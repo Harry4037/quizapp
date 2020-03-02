@@ -40,14 +40,27 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        $('#dob').daterangepicker({
-            singleDatePicker: true,
-            maxDate: new Date(),
-            singleClasses: "picker_2",
-            locale: {
-                format: 'YYYY-MM-DD',
-            }
-        });
+        $(function() {
+
+            $('input[name="dob"]').daterangepicker({
+                singleDatePicker: true,
+                maxDate: new Date(),
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear',
+                    format: 'YYYY-MM-DD'
+                }
+            });
+
+            $('input[name="dob"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            });
+
+            $('input[name="dob"]').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+
+          });
         $("#userForm").validate({
             rules: {
                 mobile_number: {
@@ -71,10 +84,7 @@
                 profile_pic: {
                     accept: "image/*",
                 },
-                user_email: {
-                    email: true,
-                    required: true,
-                },
+
             },
             messages: {
                 mobile_number: {

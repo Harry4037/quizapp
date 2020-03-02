@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-md-4 col-sm-4 col-xs-12">Email <span class="error">*</span></label>
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Email </label>
         <div class="col-md-4 col-sm-6 col-xs-6">
             <input placeholder="Email" type="text" class="form-control" name="user_email" id="user_email" value="@if(isset($user)){{$user->email}}@endif">
         </div>
@@ -38,7 +38,7 @@
         </div>
     </div> --}}
     <div class="form-group">
-        <label class="control-label col-md-4 col-sm-4 col-xs-12">Dob <span class="error">*</span></label>
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Dob </label>
         <div class="col-md-4 col-sm-6 col-xs-6">
             <div class="input-group date">
                 <div class="input-group-addon">

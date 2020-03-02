@@ -64,10 +64,7 @@
                 profile_pic: {
                     accept: "image/*",
                 },
-                user_email: {
-                    email: true,
-                    required: true,
-                },
+
             },
             messages: {
                 mobile_number: {

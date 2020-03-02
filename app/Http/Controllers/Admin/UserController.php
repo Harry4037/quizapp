@@ -91,8 +91,6 @@ class UserController extends Controller
                     'profile_pic' => ['mimes:jpeg,jpg,png'],
                     'user_name' => ['required'],
                     'lang_type' => ['required'],
-                    'dob' => ['required'],
-                    'user_email' => ['email'],
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.user.edit', $user->id)->withErrors($validator)->withInput();

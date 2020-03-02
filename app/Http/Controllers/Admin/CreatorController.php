@@ -99,8 +99,7 @@ class CreatorController extends Controller
                     'profile_pic' => ['mimes:jpeg,jpg,png'],
                     'user_name' => ['required'],
                     'lang_type' => ['required'],
-                    'dob' => ['required'],
-                    'user_email' => ['email'],
+
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.creator.edit', $user->id)->withErrors($validator)->withInput();
@@ -180,8 +179,7 @@ class CreatorController extends Controller
                     'profile_pic' => ['mimes:jpeg,jpg,png'],
                     'user_name' => ['required'],
                     'lang_type' => ['required'],
-                    'dob' => ['required'],
-                    'user_email' => ['email'],
+
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.creator.add')->withErrors($validator)->withInput();
