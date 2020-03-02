@@ -214,7 +214,7 @@ class InviteController extends Controller
             }
             $vali = Invite::where('user_id', $request->pref_id)->where('test_series_id', $request->test_series_id)->where('invite_user_id', $request->user_id)->first();
             if($vali){
-                return $this->successResponse("Already Accepted", (object) []);
+                return $this->errorResponse("Already Accepted", (object) []);
             }
             if ($request->status == 1) {
                 $invite = Invite::where('user_id', $request->pref_id)->where('test_series_id', $request->test_series_id)->update(['status' => 1, 'invite_user_id' => $request->user_id]);
@@ -232,7 +232,7 @@ class InviteController extends Controller
             }
             $vali = Invite::where('user_id', $request->pref_id)->where('user_test_series_id', $request->test_series_id)->where('invite_user_id', $request->user_id)->first();
             if($vali){
-                return $this->successResponse("Already Accepted", (object) []);
+                return $this->errorResponse("Already Accepted", (object) []);
             }
             if ($request->status == 1) {
                 $invite = Invite::where('user_id', $request->pref_id)->where('user_test_series_id', $request->test_series_id)->update(['status' => 1, 'invite_user_id' => $request->user_id]);
