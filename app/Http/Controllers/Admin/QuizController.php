@@ -355,32 +355,33 @@ class QuizController extends Controller
             }
             $question->description = $request->description;
 
+
             if ($question->save()) {
                 if ($request->correct_answer == "opt1") {
-                    Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 1]);
-                    Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
-                    Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
-                    Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval1)->update(['description' => $request->ans1, 'is_answer' => 1]);
+                    Answer::where('id', $request->ansval2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval4)->update(['description' => $request->ans4, 'is_answer' => 0]);
                 }
                 if ($request->correct_answer == "opt2") {
-                    Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
-                    Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 1]);
-                    Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
-                    Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval2)->update(['description' => $request->ans2, 'is_answer' => 1]);
+                    Answer::where('id', $request->ansval3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval4)->update(['description' => $request->ans4, 'is_answer' => 0]);
                 }
                 if ($request->correct_answer == "opt3") {
-                    Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
-                    Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
-                    Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 1]);
-                    Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval3)->update(['description' => $request->ans3, 'is_answer' => 1]);
+                    Answer::where('id', $request->ansval4)->update(['description' => $request->ans4, 'is_answer' => 0]);
                 }
                 if ($request->correct_answer == "opt4") {
-                    Answer::where('id', $request->answer1)->update(['description' => $request->ans1, 'is_answer' => 0]);
-                    Answer::where('id', $request->answer2)->update(['description' => $request->ans2, 'is_answer' => 0]);
-                    Answer::where('id', $request->answer3)->update(['description' => $request->ans3, 'is_answer' => 0]);
-                    Answer::where('id', $request->answer4)->update(['description' => $request->ans4, 'is_answer' => 1]);
+                    Answer::where('id', $request->ansval1)->update(['description' => $request->ans1, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval2)->update(['description' => $request->ans2, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval3)->update(['description' => $request->ans3, 'is_answer' => 0]);
+                    Answer::where('id', $request->ansval4)->update(['description' => $request->ans4, 'is_answer' => 1]);
                 }
-                return redirect()->route('admin.quiz.index')->with('status', 'Question has been updated successfully.');
+                return redirect()->route('admin.test-series.index')->with('status', 'Question has been updated successfully.');
             }
         }
 

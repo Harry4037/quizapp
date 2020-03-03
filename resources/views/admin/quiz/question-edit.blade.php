@@ -50,7 +50,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-4 col-sm-4 col-xs-12">Option{{$k+1}} <span class="error">*</span></label>
                                     <div class="col-md-4 col-sm-6 col-xs-6">
-                                        <input type="text" class="form-control" name="ans{{$k+1}}" value="{{$answer->description}}">
+                                        <input type="text" class="form-control" id="ans{{$k+1}}" name="ans{{$k+1}}" value="{{$answer->description}}">
+                                        <input type="hidden" class="form-control" id="ansval{{$k+1}}" name="ansval{{$k+1}}" value="{{$answer->id}}">
                                     </div>
                                 </div>
                                 @endforeach

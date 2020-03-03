@@ -1048,7 +1048,6 @@ class TestSeriesController extends Controller
         if (!in_array($request->flag, [1, 2])) {
             return $this->errorResponse("Select valid flag type");
         }
-
         $valid = $this->isActiveCheck($request->user_id);
         if($valid){
             return $this->errorResponse("Your Status Has Been Blocked. Kindly Contact To Admin");
@@ -1060,24 +1059,48 @@ class TestSeriesController extends Controller
         if (!$request->test_series_id) {
             return $this->errorResponse("Test Series ID Missing.");
         }
-        if ($request->flag == 1) {
-            $testseries = TestSeries::find($request->test_series_id);
-            if (!$testseries) {
-                return $this->errorResponse("Invalid Test Series ID");
-            } else {
-                TestSeries::where("user_id", $request->user_id)->where("id", $request->test_series_id)->delete();
-                return $this->successResponse("test_series Removed.", (object) []);
+        if ($request->type == 1) {
+            // return $this->errorResponse("User ID Missing.");
+            if ($request->flag == 1) {
+                $testseries = TestSeries::find($request->test_series_id);
+                if (!$testseries) {
+                    return $this->errorResponse("Invalid Test Series ID");
+                } else {
+                    Invite::where("invite_user_id", $request->user_id)->where("test_series_id", $request->test_series_id)->delete();
+                    return $this->successResponse("test_series Removed.", (object) []);
+                }
+            }
+            if ($request->flag == 2) {
+                $testseries = UserTestSeries::find($request->test_series_id);
+                if (!$testseries) {
+                    return $this->errorResponse("Invalid Test Series ID");
+                } else {
+                    Invite::where("invite_user_id", $request->user_id)->where("user_test_series_id", $request->test_series_id)->delete();
+                    return $this->successResponse("test_series Removed.", (object) []);
+                }
+            }
+
+        }else{
+            if ($request->flag == 1) {
+                $testseries = TestSeries::find($request->test_series_id);
+                if (!$testseries) {
+                    return $this->errorResponse("Invalid Test Series ID");
+                } else {
+                    TestSeries::where("user_id", $request->user_id)->where("id", $request->test_series_id)->delete();
+                    return $this->successResponse("test_series Removed.", (object) []);
+                }
+            }
+            if ($request->flag == 2) {
+                $testseries = UserTestSeries::find($request->test_series_id);
+                if (!$testseries) {
+                    return $this->errorResponse("Invalid Test Series ID");
+                } else {
+                    UserTestSeries::where("user_id", $request->user_id)->where("id", $request->test_series_id)->delete();
+                    return $this->successResponse("test_series Removed.", (object) []);
+                }
             }
         }
-        if ($request->flag == 2) {
-            $testseries = UserTestSeries::find($request->test_series_id);
-            if (!$testseries) {
-                return $this->errorResponse("Invalid Test Series ID");
-            } else {
-                UserTestSeries::where("user_id", $request->user_id)->where("id", $request->test_series_id)->delete();
-                return $this->successResponse("test_series Removed.", (object) []);
-            }
-        }
+
     }
 
     /**
