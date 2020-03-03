@@ -51,8 +51,7 @@ class NotificationController extends Controller
         //     }
         // }
 
-        $tokens = User::where('user_type_id', '=', 3)
-            ->where("device_token", '!=', null)
+        $tokens = User::where("device_token", '!=', null)
             ->when($request->user_type == 2, function ($query) use ($request) {
                 return $query->whereIn('id', $request->notify_user);
             })
