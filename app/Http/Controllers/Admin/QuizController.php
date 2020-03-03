@@ -381,7 +381,7 @@ class QuizController extends Controller
                     Answer::where('id', $request->ansval3)->update(['description' => $request->ans3, 'is_answer' => 0]);
                     Answer::where('id', $request->ansval4)->update(['description' => $request->ans4, 'is_answer' => 1]);
                 }
-                return redirect()->route('admin.test-series.index')->with('status', 'Question has been updated successfully.');
+                return redirect()->route('admin.quiz.index')->with('status', 'Question has been updated successfully.');
             }
         }
 
