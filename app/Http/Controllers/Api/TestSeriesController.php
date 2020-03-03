@@ -1171,8 +1171,11 @@ class TestSeriesController extends Controller
             $minut = 0;
             $series = UserTestSeriesQuestionAnswer::where('user_test_series_id', $request->test_series_id)->get();
             foreach ($series as $k => $ser) {
-                $que = Question::find($ser->question_id)->withTrashed();
-                $minut = $minut + $que->ques_time;
+                $que = Question::where('id',$ser->question_id)->first();
+                if($que){
+                    $minut = $minut + $que->ques_time;
+                }
+
             }
             $dataArray['total_question'] = count($series);
 
