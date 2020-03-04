@@ -15,12 +15,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Validator;
+use Illuminate\Validation\Rule;
 
-class TestSeriesController extends Controller
-{
+class TestSeriesController extends Controller {
 
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $css = [
             'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
@@ -34,8 +33,7 @@ class TestSeriesController extends Controller
         ]);
     }
 
-    public function testSeriesList(Request $request)
-    {
+    public function testSeriesList(Request $request) {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
@@ -70,11 +68,11 @@ class TestSeriesController extends Controller
                     $testseriesArray[$k]['status'] = '<label class="btn btn-danger btn-xs disabled">Rejected</label>';
                 } else {
                     $testseriesArray[$k]['status'] = '<a href="javaScript:void(0);" class="btn btn-success btn-xs accept_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve . '"><i class="fa fa-check"></i> Accept </a>&nbsp;&nbsp;'
-                    . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve . '"><i class="fa fa-times"></i> Reject </a>';
+                            . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs reject_ques" id="' . $testseries->id . '" data-status="' . $testseries->is_approve . '"><i class="fa fa-times"></i> Reject </a>';
                 }
                 $testseriesArray[$k]['action'] = '<a href="' . route('admin.test-series.edit', $testseries) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>&nbsp;&nbsp;&nbsp;'
-                . '<a href="' . route('admin.test-series.question-list', $testseries) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> View Questions </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $testseries->id . '" ><i class="fa fa-trash"></i> Delete </a>';
+                        . '<a href="' . route('admin.test-series.question-list', $testseries) . '" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> View Questions </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $testseries->id . '" ><i class="fa fa-trash"></i> Delete </a>';
                 $testseriesArray[$k]['series_time'] = $count_time . " Sec";
             }
 
@@ -85,8 +83,7 @@ class TestSeriesController extends Controller
         }
     }
 
-    public function questionDelete(Request $request)
-    {
+    public function questionDelete(Request $request) {
         try {
             $question = Question::find($request->id);
             if ($question) {
@@ -100,8 +97,7 @@ class TestSeriesController extends Controller
         }
     }
 
-    public function testSeriesDelete(Request $request)
-    {
+    public function testSeriesDelete(Request $request) {
         try {
             $testseries = TestSeries::find($request->id);
             if ($testseries) {
@@ -121,16 +117,19 @@ class TestSeriesController extends Controller
         }
     }
 
-    public function testSeriesEdit(Request $request, Testseries $testseries)
-    {
+    public function testSeriesEdit(Request $request, Testseries $testseries) {
         try {
 
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                    'testseries_name' => [
-                        'bail',
-                        'required',
-                    ],
+                            'testseries_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('test_series', 'name')->ignore($testseries->id)->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->testseries_name])
+                                                            ->whereNull('deleted_at');
+                                        }),
+                            ],
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.test-series.edit', $testseries->id)->withErrors($validator)->withInput();
@@ -157,19 +156,23 @@ class TestSeriesController extends Controller
         }
     }
 
-    public function testSeriesAdd(Request $request)
-    {
+    public function testSeriesAdd(Request $request) {
         try {
 
             if ($request->isMethod("post")) {
-                // $validator = Validator::make($request->all(), [
-                //             'testseries_name' => [
-                //                 'required',
-                //             ],
-                //     ]);
-                // if ($validator->fails()) {
-                //     return redirect()->route('admin.test-series.add')->withErrors($validator)->withInput();
-                // }
+                $validator = Validator::make($request->all(), [
+                            'testseries_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('test_series', 'name')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->testseries_name])
+                                                            ->whereNull('deleted_at');
+                                        }),
+                            ],
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.test-series.add')->withErrors($validator)->withInput();
+                }
                 $testseries = new TestSeries();
                 $testseries->user_id = auth()->user()->id;
                 $testseries->is_approve = 2;
@@ -276,8 +279,7 @@ class TestSeriesController extends Controller
         }
     }
 
-    public function acceptTestSeries(Request $request)
-    {
+    public function acceptTestSeries(Request $request) {
         try {
             if ($request->isMethod('post')) {
                 $question = TestSeries::findOrFail($request->record_id);
@@ -306,8 +308,7 @@ class TestSeriesController extends Controller
         }
     }
 
-    public function rejectTestSeries(Request $request)
-    {
+    public function rejectTestSeries(Request $request) {
         try {
             if ($request->isMethod('post')) {
                 $question = TestSeries::findOrFail($request->record_id);
@@ -336,8 +337,7 @@ class TestSeriesController extends Controller
         }
     }
 
-    public function testSeriesQuestionList(Request $request, Testseries $testseries)
-    {
+    public function testSeriesQuestionList(Request $request, Testseries $testseries) {
         $css = [
             'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
@@ -355,8 +355,7 @@ class TestSeriesController extends Controller
         ]);
     }
 
-    public function testSeriesQuestionAdd(Request $request, Testseries $testseries)
-    {
+    public function testSeriesQuestionAdd(Request $request, Testseries $testseries) {
 
         if ($request->isMethod("post")) {
 
@@ -430,8 +429,7 @@ class TestSeriesController extends Controller
         ]);
     }
 
-    public function testSeriesQuestionEdit(Request $request, Question $question)
-    {
+    public function testSeriesQuestionEdit(Request $request, Question $question) {
 
         if ($request->isMethod('post')) {
             if ($request->hasFile('ques_image')) {
