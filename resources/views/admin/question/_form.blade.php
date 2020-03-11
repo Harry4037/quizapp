@@ -102,7 +102,7 @@
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Lang <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
         @if(isset($question))
-        <select class="form-control" id="lang_type" name="lang_type">
+        <select class="form-control" id="lang_type" name="lang_type" required>
             <option value="">Choose option</option>
             <option value="1" @if($question->lang == "1"){{'selected'}}@endif>English</option>
             <option value="2" @if($question->lang == "2"){{'selected'}}@endif>Hindi</option>
@@ -154,7 +154,7 @@
     <label class="control-label col-md-4 col-sm-4 col-xs-12">Correct Option <span class="error">*</span></label>
     <div class="col-md-4 col-sm-6 col-xs-6">
         @if(isset($answers))
-        <select class="form-control" id="correct_answer" name="correct_answer">
+        <select class="form-control" id="correct_answer" name="correct_answer" required>
             <option value="">Choose option</option>
             <option value="opt1" @if($answers[0]->is_answer == "1"){{'selected'}}@endif>option1</option>
             <option value="opt2" @if($answers[1]->is_answer == "1"){{'selected'}}@endif>option2</option>
@@ -162,7 +162,7 @@
             <option value="opt4" @if($answers[3]->is_answer == "1"){{'selected'}}@endif>option4</option>
         </select>
         @else
-        <select class="form-control" id="correct_answer" name="correct_answer">
+        <select class="form-control" id="correct_answer" name="correct_answer" required>
             <option value="">Choose option</option>
             <option value="opt1">option1</option>
             <option value="opt2">option2</option>

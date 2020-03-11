@@ -193,6 +193,7 @@ class CreatorController extends Controller
                 }
                 $user->user_type_id = 2;
                 $user->is_active = 1;
+                $user->is_approve = 2;
                 $user->mobile_number = $request->mobile_number;
                 $user->email = $request->user_email;
                 $user->name = $request->user_name;
