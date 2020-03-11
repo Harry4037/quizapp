@@ -108,7 +108,7 @@
             <option value="2" @if($question->lang == "2"){{'selected'}}@endif>Hindi</option>
         </select>
         @else
-        <select class="form-control" id="lang_type" name="lang_type">
+        <select class="form-control" id="lang_type" name="lang_type" required>
             <option value="">Choose option</option>
             <option value="1">English</option>
             <option value="2">Hindi</option>
