@@ -114,6 +114,7 @@ class CreatorController extends Controller
                     $user->profile_pic = $user_file_name;
                 }
                 $user->name = $request->user_name;
+                $user->experience = $request->experience;
                 $user->email = $request->user_email;
                 $user->lang = $request->lang_type;
                 $user->designation = $request->designation;
@@ -197,6 +198,7 @@ class CreatorController extends Controller
                 $user->mobile_number = $request->mobile_number;
                 $user->email = $request->user_email;
                 $user->name = $request->user_name;
+                $user->experience = $request->experience;
                 $user->lang = $request->lang_type;
                 $user->designation = $request->designation;
                 $user->qualification = $request->qualification;

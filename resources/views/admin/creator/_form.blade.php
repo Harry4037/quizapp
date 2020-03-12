@@ -62,6 +62,12 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="control-label col-md-4 col-sm-4 col-xs-12">Experience </label>
+        <div class="col-md-4 col-sm-6 col-xs-6">
+            <input placeholder="Experience" type="number" class="form-control" required name="experience" id="experience" value="@if(isset($user)){{$user->experience}}@endif">
+        </div>
+    </div>
+    <div class="form-group">
         <label class="control-label col-md-4 col-sm-4 col-xs-12">About Me </label>
         <div class="col-md-4 col-sm-6 col-xs-6">
             <input placeholder="about me" type="text" class="form-control" name="about" id="about" value="@if(isset($user)){{$user->into_line}}@endif">
