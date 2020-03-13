@@ -247,7 +247,7 @@ class BookmarkController extends Controller
             $bookmarkArray1 = [];
             $bookmarks = Bookmark::where("user_id", $request->user_id)->where('test_series_id', '!=', 0)->with(['testseriesDetail'])->whereHas("testseriesDetail", function($query) {
                 $query->whereNull("deleted_at");
-            })->get();
+            })->latest()->get();
             foreach ($bookmarks as $key => $bookmark) {
                 $totalTime = Question::where("test_series_id", $bookmark->testseriesDetail->id)->sum("ques_time");
                 $bookmarkArray[$key]['id'] = $bookmark->id;
